@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 ## Copy all src files
 
-COPY wheat_dashboard_iksan /usr/src/app
+COPY . /usr/src/app
 
 
 ## Install packages
