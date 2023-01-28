@@ -27,6 +27,7 @@
         * {
             box-sizing: border-box;
         }
+
         html,
         body {
             height: 100%;
@@ -36,6 +37,30 @@
         .menu {
             left: -300px;
         }
+
+
+        .wrap {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .tip1:hover + .fade-in {
+            opacity: 1;
+        }
+
+        .fade-out {
+            opacity: 1;
+            transition: 0.3s;
+        }
+
+        .tip2:hover + .fade-out {
+            opacity: 0;
+        }
     </style>
 
 </head>
@@ -43,7 +68,8 @@
     const menu = document.getElementById('jsMenu')
 
     function slideDown() {
-        menu.style.left = "-300px":
+        menu.style.left = "-300px";
+
     }
 
     function slideUp() {
