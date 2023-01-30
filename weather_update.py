@@ -7,7 +7,9 @@ from json import dumps
 from flask import Flask, request, escape, render_template
 from flask_cors import cross_origin
 
+# 플라스크 선언
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 
 try:
     from urllib import urlencode, unquote
@@ -54,12 +56,17 @@ if hour < 2:
 
 time_hour = f"{hour:02d}" + "00"
 
+
+# 지역별 파라미터
 new_param_namwon = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
              'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_namwon, 'ny': ny_namwon}
 
 new_param_iksan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
              'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_iksan, 'ny': ny_iksan}
 
+
+
+# 지역별 파라미터 + url 함수
 def add_url_params(url, params):
     url = unquote(url)
     parsed_url = urlparse(url)  # urlparse == url을 인코딩해줌
@@ -83,24 +90,9 @@ def add_url_params(url, params):
     return items
 
 
-@app.route("/")
-def home():
-    return render_template('iksan.html')
 
 
-@app.route("/weather/<city>")
-@cross_origin(origin='*')
-def weather(city):
-    print(city, city == "iksan")
-    if city == 'namwon':
-        return sky(new_param_namwon)
-    elif city == "iksan":
-        return sky(new_param_iksan)
-    else:
-        return "해당지역없음"
-
-
-
+# 날씨 정보 추출 함수
 def sky(loc):
     items = add_url_params(url, loc)
     weather_total = dict()
@@ -194,6 +186,27 @@ def sky(loc):
     #     json.dump(weather, f, ensure_ascii=False, indent=4)
 
     return weather
+
+
+# 플라스크
+@app.route("/")
+def home():
+    return render_template('landing.html')
+
+
+@app.route("/weather/<city>")
+@app.route("/weather",  methods=['GET'])
+@cross_origin(origin='*')
+def weather(city=None):
+    if request.method == 'GET':
+        city = request.args.get('city')
+    city = str(escape(city))
+    if city == '남원':
+        return sky(new_param_namwon)
+    elif city == "익산":
+        return sky(new_param_iksan)
+    else:
+        return "해당지역없음"
 
 
 def main():
