@@ -217,9 +217,9 @@ def weather(city=None):
         city = request.args.get('city')
     city = str(escape(city))
 
-    if city == '남원':
+    if city == 'namwon':
         today_weather = db.search((where('name') == "namwon") & (where('date') == today))
-    elif city == "익산":
+    elif city == 'iksan':
         today_weather = db.search((where('name') == "iksan") & (where('date') == today))
     else:
         today_weather = []
@@ -227,11 +227,11 @@ def weather(city=None):
     if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
         return today_weather[0]['json_content']
     else:
-        if city == '남원':
+        if city == 'namwon':
             json_content = sky(new_param_namwon)
             db.insert({"name": "namwon", "date": today, "json_content": json_content})
             return json_content
-        elif city == "익산":
+        elif city == "iksan":
             json_content = sky(new_param_iksan)
             db.insert({"name": "iksan", "date": today, "json_content": json_content})
             return json_content
