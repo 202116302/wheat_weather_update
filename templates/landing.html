@@ -15,7 +15,7 @@
     function post_query() {
     $.ajax({
       type: "GET",
-      url: "http://127.0.0.1:5000/weather",
+      url: "/weather",
       data: $("#form_id").serialize(),
       success: update_result,
       dataType: "html"
