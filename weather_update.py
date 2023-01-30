@@ -213,9 +213,9 @@ def weather(city=None):
     new_param_iksan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
                        'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_iksan, 'ny': ny_iksan}
 
-    if request.method == 'GET':
+    if request.method == 'GET' and city is None:
         city = request.args.get('city')
-    city = str(escape(city))
+        city = str(escape(city))
 
     if city == 'namwon':
         today_weather = db.search((where('name') == "namwon") & (where('date') == today))
