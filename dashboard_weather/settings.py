@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-795d%534s1_&t2bmsrfvfucpb^t6=jhgcnc)fxrbxa^=l9ld11
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ 'web01.taegon.kr', '127.0.0.1' ]
+ALLOWED_HOSTS = [ 'web01.taegon.kr', '127.0.0.1', 'jbnu-smartfarm.kr' ]
 
 # Application definition
 
