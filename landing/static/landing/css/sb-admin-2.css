@@ -12214,146 +12214,161 @@ input:checked + .slider:before {
 }
 
 .toggleSwitch {
-  width: 100px;
-  margin: 30px;
-  height: 50px;
-  display: block;
-  position: relative;
-  border-radius: 30px;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 0 0 16px 3px rgba(0 0 0 / 20%);
-  cursor: pointer;
+    width: 100px;
+    margin: 30px;
+    height: 50px;
+    display: block;
+    position: relative;
+    border-radius: 30px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 16px 3px rgba(0 0 0 / 20%);
+    cursor: pointer;
 }
 
 .toggleSwitch .toggleButton {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  top: 50%;
-  left: 4px;
-  transform: translateY(-50%);
-  border-radius: 50%;
-  background: #459d27;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #459d27;
 }
 
 #toggle:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
 
 #toggle1:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle1:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
 
 #toggle2:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle2:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
 
 #toggle3:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle3:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
 
 .toggleSwitch, .toggleButton {
-  transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
 }
 
 
-.on
-{
-  display: none;
+.on {
+    display: none;
 }
 
-.on, .off
-{
-  color: black;
-  position: absolute;
-  transform: translate(-50%,-50%);
-  top: 50%;
-  left: 50%;
-  font-size: 14px;
-  font-family: Verdana, Helvetica, monospace;
+.on, .off {
+    color: black;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    font-size: 14px;
+    font-family: Verdana, Helvetica, monospace;
 }
 
-#toggle:checked + .toggleSwitch .on
-{display: block;}
+#toggle:checked + .toggleSwitch .on {
+    display: block;
+}
 
-#toggle:checked + .toggleSwitch .off
-{display: none;}
+#toggle:checked + .toggleSwitch .off {
+    display: none;
+}
 
-#toggle1:checked + .toggleSwitch .on
-{display: block;}
+#toggle1:checked + .toggleSwitch .on {
+    display: block;
+}
 
-#toggle1:checked + .toggleSwitch .off
-{display: none;}
+#toggle1:checked + .toggleSwitch .off {
+    display: none;
+}
 
-#toggle2:checked + .toggleSwitch .on
-{display: block;}
+#toggle2:checked + .toggleSwitch .on {
+    display: block;
+}
 
-#toggle2:checked + .toggleSwitch .off
-{display: none;}
+#toggle2:checked + .toggleSwitch .off {
+    display: none;
+}
 
-#toggle3:checked + .toggleSwitch .on
+#toggle3:checked + .toggleSwitch .on {
+    display: block;
+}
 
-{display: block;}
-
-#toggle3:checked + .toggleSwitch .off
-{display: none;}
+#toggle3:checked + .toggleSwitch .off {
+    display: none;
+}
 
 
 #toggle1:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle1:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
 
 #toggle2:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle2:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
 
 #toggle3:checked ~ .toggleSwitch {
-  background: #449c28;
+    background: #449c28;
 }
 
 #toggle3:checked ~ .toggleSwitch .toggleButton {
-  left: calc(100% - 44px);
-  background: #fff;
+    left: calc(100% - 44px);
+    background: #fff;
 }
-
 
 
 /* Rounded sliders */
 
 .toggleSwitch.round {
-  border-radius: 34px;
+    border-radius: 34px;
 }
 
 .toggleSwitch.round:before {
-  border-radius: 50%;
+    border-radius: 50%;
+}
+
+
+.fade-in {
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.fade-out {
+    opacity: 1;
+    transition: 0.3s;
 }

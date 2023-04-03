@@ -24,7 +24,7 @@
     function weather() {
         $.ajax({
             type: "GET",
-            url: "http://web01.taegon.kr:5000/weather/iksan",
+            url: "http://jbnu-smartfarm.kr:5000/weather/iksan",
 
             success: update_weather,
             dataType: "json"
@@ -59,6 +59,28 @@
         $("#tmax5").html(data[6][data[0][4]])
     }
 
+    function imgup () {
+        document.getElementById('content1').style.zIndex = 2;
+        document.getElementById('content1').style.opacity = 1;
+        document.getElementById('content1').style.transition = '1s'
+
+        document.getElementById('content2').style.zIndex = 1;
+        document.getElementById('content2').style.opacity = 0.5;
+        document.getElementById('content2').style.transition = '1s'
+    }
+
+    function imgdown () {
+        document.getElementById('content1').style.zIndex = 1;
+        document.getElementById('content1').style.opacity = 0.5;
+        document.getElementById('content1').style.transition = '1s'
+
+        document.getElementById('content2').style.zIndex = 2;
+        document.getElementById('content2').style.opacity = 1;
+        document.getElementById('content2').style.transition = '1s'
+    }
+
+
+
 
 
 
@@ -78,10 +100,10 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <div class="row">
+                <div class="row justify-content-around">
                     <!-- Area Chart -->
-                    <div class="col-xl-5">
-                        <div class="card shadow mb-4">
+                    <div id="content1" class="col-xl-6" style="position: relative;" onclick="imgup()">
+                        <div class="card shadow mb-4" style="width: 765px;">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">포장배치도</h6>
@@ -109,7 +131,8 @@
                         </div>
                     </div>
                     <!-- Pie Chart -->
-                    <div class="col-xl-7">
+                    <div id="content2" class="col-xl-6 up" style="position: relative;" onclick="imgdown()">
+                        <div class="container-fluid">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card shadow mb-4">
@@ -128,6 +151,7 @@
                                                 <th scope="col">강수량</th>
                                                 <th scope="col">일사량</th>
                                                 <th scope="col">바람</th>
+                                            </thead>
                                             <tbody>
                                             <tr>
                                                 <td>
@@ -150,8 +174,6 @@
                                                 </td>
                                             </tr>
                                             </tbody>
-                                            </tr>
-                                            </thead>
                                         </table>
                                     </div>
                                 </div>
@@ -260,6 +282,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
 
