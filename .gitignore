@@ -1,4 +1,5 @@
 node_modules
 .idea
 __pycache__
+_static
 db.sqlite3
