@@ -12233,11 +12233,11 @@ input:checked + .slider:before {
     left: 4px;
     transform: translateY(-50%);
     border-radius: 50%;
-    background: #459d27;
+    background: #5a9ad4;
 }
 
 #toggle:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle:checked ~ .toggleSwitch .toggleButton {
@@ -12246,7 +12246,7 @@ input:checked + .slider:before {
 }
 
 #toggle1:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle1:checked ~ .toggleSwitch .toggleButton {
@@ -12255,7 +12255,7 @@ input:checked + .slider:before {
 }
 
 #toggle2:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle2:checked ~ .toggleSwitch .toggleButton {
@@ -12264,13 +12264,80 @@ input:checked + .slider:before {
 }
 
 #toggle3:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle3:checked ~ .toggleSwitch .toggleButton {
     left: calc(100% - 44px);
     background: #fff;
 }
+
+
+#toggle4:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle4:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+#toggle5:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle5:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle6:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle6:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle7:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle7:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle8:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle8:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle9:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle9:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
 
 .toggleSwitch, .toggleButton {
     transition: all 0.2s ease-in;
@@ -12323,9 +12390,84 @@ input:checked + .slider:before {
     display: none;
 }
 
+#toggle4:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle4:checked + .toggleSwitch .off {
+    display: none;
+}
+
+#toggle5:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle5:checked + .toggleSwitch .off {
+    display: none;
+}
+
+
+#toggle6:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle6:checked + .toggleSwitch .off {
+    display: none;
+}
+
+
+
+#toggle7:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle7:checked + .toggleSwitch .off {
+    display: none;
+}
+
+
+
+#toggle8:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle8:checked + .toggleSwitch .off {
+    display: none;
+}
+
+
+
+#toggle9:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle9:checked + .toggleSwitch .off {
+    display: none;
+}
+
+
+
+
+#toggle4:checked + .toggleSwitch .on {
+    display: block;
+}
+
+#toggle4:checked + .toggleSwitch .off {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
 
 #toggle1:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle1:checked ~ .toggleSwitch .toggleButton {
@@ -12334,7 +12476,7 @@ input:checked + .slider:before {
 }
 
 #toggle2:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle2:checked ~ .toggleSwitch .toggleButton {
@@ -12343,13 +12485,80 @@ input:checked + .slider:before {
 }
 
 #toggle3:checked ~ .toggleSwitch {
-    background: #449c28;
+    background: #5a9ad4;
 }
 
 #toggle3:checked ~ .toggleSwitch .toggleButton {
     left: calc(100% - 44px);
     background: #fff;
 }
+
+#toggle4:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle4:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+#toggle5:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle5:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle6:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle6:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle7:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle7:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle8:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle8:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+#toggle9:checked ~ .toggleSwitch {
+    background: #5a9ad4;
+}
+
+#toggle9:checked ~ .toggleSwitch .toggleButton {
+    left: calc(100% - 44px);
+    background: #fff;
+}
+
+
+
+
+
 
 
 /* Rounded sliders */
