@@ -127,7 +127,7 @@ def sky(loc):
         humid[f'{weather_date[i]}'] = f"{reh_mean:.1f}"
         pop[i].clear()
 
-    # 하늘 상태 0 ~ 5 맑음 , 6 ~ 8 구름 많음 , 9 ~ 10 흐림
+    # 하늘 상태 0 ~ 1 맑음 , 2 ~ 5 구름 많음 , 6 ~ 10 흐림
     for i in range(len(weather_date)):
         for x in items:
             if x['fcstDate'] == weather_date[i] and x["category"] == "SKY":
@@ -138,15 +138,15 @@ def sky(loc):
         sky_max = count_sky.most_common(1)
         max_sky = list(sky_max[0])[0]
         max_sky = int(max_sky)
-        if 0 <= max_sky < 6:
+        if 0 <= max_sky < 2:
             weather_total[f'{weather_date[i]}_sky'] = "맑음"
             sky[f'{weather_date[i]}'] = "맑음"
             pop[i].clear()
-        if 6 <= max_sky < 9:
+        if 2 <= max_sky < 6:
             weather_total[f'{weather_date[i]}_sky'] = "구름많음"
             sky[f'{weather_date[i]}'] = "구름많음"
             pop[i].clear()
-        if 9 <= max_sky:
+        if 6 <= max_sky:
             weather_total[f'{weather_date[i]}_sky'] = "흐림"
             sky[f'{weather_date[i]}'] = "흐림"
             pop[i].clear()
@@ -241,6 +241,7 @@ def weather(city=None):
 
 def main():
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+
 
 
 
