@@ -7,6 +7,8 @@ from json import dumps
 from flask import Flask, request, escape, render_template
 from flask_cors import cross_origin
 from tinydb import TinyDB, Query, where
+from datetime import datetime, timedelta
+
 
 # 플라스크 선언
 app = Flask(__name__)
@@ -183,10 +185,10 @@ def home():
     return render_template('landing.html')
 
 
-@app.route("/weather/<city>")
-@app.route("/weather",  methods=['GET'])
+@app.route("/weather_short/<city>")
+@app.route("/weather_short",  methods=['GET'])
 @cross_origin(origin='*')
-def weather(city=None):
+def weather_short(city=None):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
     today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
     y = datetime.date.today() - datetime.timedelta(days=1)
@@ -238,6 +240,12 @@ def weather(city=None):
         else:
             return "해당지역없음"
 
+#
+# @app.route("/weather_mid/<city>")
+# @app.route("/weather_mid",  methods=['GET'])
+# @cross_origin(origin='*')
+# def weather_mid(city=None):
+#
 
 def main():
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
