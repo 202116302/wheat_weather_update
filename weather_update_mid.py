@@ -68,9 +68,10 @@ for i in range(3, 8):
 
 df = pd.read_csv('weather_month.csv', encoding='euc-kr')
 
-print(df)
 
-
+df2 = df[['평균기온(℃)', '평균최고기온(℃)', '평균최저기온(℃)']]
+df2 = df2.rename(columns={'평균기온(℃)':'tavg', '평균최고기온(℃)':'tmax', '평균최저기온(℃)':'tmin'})
+df2.to_csv('weather_month_data.csv', encoding='utf-8-sig', index=False)
 
 
 
