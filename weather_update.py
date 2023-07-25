@@ -7,7 +7,7 @@ from json import dumps
 from flask import Flask, request, escape, render_template
 from flask_cors import cross_origin
 from tinydb import TinyDB, Query, where
-from datetime import datetime, timedelta
+import datetime
 
 
 # 플라스크 선언
@@ -240,12 +240,46 @@ def weather_short(city=None):
         else:
             return "해당지역없음"
 
-#
-# @app.route("/weather_mid/<city>")
-# @app.route("/weather_mid",  methods=['GET'])
-# @cross_origin(origin='*')
-# def weather_mid(city=None):
-#
+
+@app.route("/weather_past/<city>")
+@app.route("/weather_past",  methods=['GET'])
+@cross_origin(origin='*')
+def weather_past(city=None):
+    url3 = "https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionAjax.do"
+    header = {
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Cookie": "XTVID=A230711135728760398; _harry_lang=ko-KR; _harry_fid=hh1197145764; JSESSIONID=CC6ZWZPxhJPbAT4jcugELpg4ucAF38JzKRgpO018w0ii1B7vxoTu1GBB7RUZWCsD.was01_servlet_engine5; _harry_ref=; _harry_url=https^%^3A//data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do^%^3FpgmNo^%^3D179^%^26menuNo^%^3D440^%^26pageIndex^%^3D^%^26minTa^%^3D25.0^%^26stnGroupSns^%^3D^%^26selectType^%^3D1^%^26mddlClssCd^%^3DSFC01^%^26lastDayOfMonth^%^3D31^%^26startDt^%^3D20100101^%^26endDt^%^3D20230724^%^26schType^%^3D1^%^26txtStnNm^%^3D^%^26stnId^%^3D^%^26areaId^%^3D^%^26ureaType^%^3D1^%^26dataFormCd^%^3D2^%^26startYear^%^3D2013^%^26endYear^%^3D2023^%^26tempInputVal^%^3D1^%^26precInputVal^%^3D1^%^26windInputVal^%^3D1^%^26rhmInputVal^%^3D1^%^26icsrInputVal^%^3D1^%^26symbol^%^3D1^%^26inputInt^%^3D^%^26condit^%^3D^%^26symbol2^%^3D1^%^26inputInt2^%^3D^%^26monthCheck^%^3DY^%^26startMonth^%^3D01^%^26endMonth^%^3D12^%^26startDay^%^3D01^%^26endDay^%^3D31^%^26sesn^%^3D1; _harry_hsid=A230725023423777408; _harry_dsid=A230725023423778927; xloc=340X1080",
+        "Origin": "https ://data.kma.go.kr",
+        "Pragma": "no-cache",
+        "Referer": "https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do?curl^%^20^%^22https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionAjax.do^%^22^%^20^^^%^20-H^%^20^%^22Accept:^%^20application/json,^%^20text/javascript,^%^20*/*;^%^20q=0.01^%^22^%^20^^^%^20-H^%^20^%^22Accept-Language:^%^20ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7^%^22^%^20^^^%^20-H^%^20^%^22Cache-Control:^%^20no-cache^%^22^%^20^^^%^20-H^%^20^%^22Connection:^%^20keep-alive^%^22^%^20^^^%^20-H^%^20^%^22Content-Type:^%^20application/x-www-form-urlencoded;^%^20charset=UTF-8^%^22^%^20^^^%^20-H^%^20^%^22Cookie:^%^20XTVID=A230711135728760398;^%^20_harry_lang=ko-KR;^%^20_harry_fid=hh1197145764;^%^20JSESSIONID=CC6ZWZPxhJPbAT4jcugELpg4ucAF38JzKRgpO018w0ii1B7vxoTu1GBB7RUZWCsD.was01_servlet_engine5;^%^20_harry_ref=;^%^20_harry_url=https^^^%^^3A//data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do^^^%^^3FpgmNo^^^%^^3D179^^^%^^26menuNo^^^%^^3D440^^^%^^26pageIndex^^^%^^3D^^^%^^26minTa^^^%^^3D25.0^^^%^^26stnGroupSns^^^%^^3D^^^%^^26selectType^^^%^^3D1^^^%^^26mddlClssCd^^^%^^3DSFC01^^^%^^26lastDayOfMonth^^^%^^3D31^^^%^^26startDt^^^%^^3D20100101^^^%^^26endDt^^^%^^3D20230724^^^%^^26schType^^^%^^3D1^^^%^^26txtStnNm^^^%^^3D^^^%^^26stnId^^^%^^3D^^^%^^26areaId^^^%^^3D^^^%^^26ureaType^^^%^^3D1^^^%^^26dataFormCd^^^%^^3D2^^^%^^26startYear^^^%^^3D2013^^^%^^26endYear^^^%^^3D2023^^^%^^26tempInputVal^^^%^^3D1^^^%^^26precInputVal^^^%^^3D1^^^%^^26windInputVal^^^%^^3D1^^^%^^26rhmInputVal^^^%^^3D1^^^%^^26icsrInputVal^^^%^^3D1^^^%^^26symbol^^^%^^3D1^^^%^^26inputInt^^^%^^3D^^^%^^26condit^^^%^^3D^^^%^^26symbol2^^^%^^3D1^^^%^^26inputInt2^^^%^^3D^^^%^^26monthCheck^^^%^^3DY^^^%^^26startMonth^^^%^^3D01^^^%^^26endMonth^^^%^^3D12^^^%^^26startDay^^^%^^3D01^^^%^^26endDay^^^%^^3D31^^^%^^26sesn^^^%^^3D1;^%^20_harry_hsid=A230725023423777408;^%^20_harry_dsid=A230725023423778927;^%^20xloc=340X1080^%^22^%^20^^^%^20-H^%^20^%^22Origin:^%^20https://data.kma.go.kr^%^22^%^20^^^%^20-H^%^20^%^22Pragma:^%^20no-cache^%^22^%^20^^^%^20-H^%^20^%^22Referer:^%^20https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do?pgmNo=179&menuNo=440&pageIndex=&minTa=25.0&stnGroupSns=&selectType=1&mddlClssCd=SFC01&lastDayOfMonth=31&startDt=20100101&endDt=20230724&schType=1&txtStnNm=&stnId=&areaId=&ureaType=1&dataFormCd=2&startYear=2013&endYear=2023&tempInputVal=1&precInputVal=1&windInputVal=1&rhmInputVal=1&icsrInputVal=1&symbol=1&inputInt=&condit=&symbol2=1&inputInt2=&monthCheck=Y&startMonth=01&endMonth=12&startDay=01&endDay=31&sesn=1^%^22^%^20^^^%^20-H^%^20^%^22Sec-Fetch-Dest:^%^20empty^%^22^%^20^^^%^20-H^%^20^%^22Sec-Fetch-Mode:^%^20cors^%^22^%^20^^^%^20-H^%^20^%^22Sec-Fetch-Site:^%^20same-origin^%^22^%^20^^^%^20-H^%^20^%^22User-Agent:^%^20Mozilla/5.0^%^20(Linux;^%^20Android^%^206.0;^%^20Nexus^%^205^%^20Build/MRA58N)^%^20AppleWebKit/537.36^%^20(KHTML,^%^20like^%^20Gecko)^%^20Chrome/114.0.0.0^%^20Mobile^%^20Safari/537.36^%^22^%^20^^^%^20-H^%^20^%^22X-Requested-With:^%^20XMLHttpRequest^%^22^%^20^^^%^20-H^%^20^%^22sec-ch-ua:^%^20^^^\^\^^^%^22Not.A/Brand^^^\^\^^^%^22;v=^^^\^\^^^%^228^^^\^\^^^%^22,^%^20^^^\^\^^^%^22Chromium^^^\^\^^^%^22;v=^^^\^\^^^%^22114^^^\^\^^^%^22,^%^20^^^\^\^^^%^22Google^%^20Chrome^^^\^\^^^%^22;v=^^^\^\^^^%^22114^^^\^\^^^%^22^%^22^%^20^^^%^20-H^%^20^%^22sec-ch-ua-mobile:^%^20?1^%^22^%^20^^^%^20-H^%^20^%^22sec-ch-ua-platform:^%^20^^^\^\^^^%^22Android^^^\^\^^^%^22^%^22^%^20^^^%^20--data-raw^%^20^%^22fileType=&pgmNo=179&menuNo=440&pageIndex=&minTa=25.0&stnGroupSns=&selectType=1&mddlClssCd=SFC01&lastDayOfMonth=31&startDt=20100101&endDt=20230724&schType=1&txtStnNm=^^^%^^EB^^^%^^82^^^%^^A8^^^%^^EC^^^%^^9B^^^%^^90&stnId=247&areaId=&ureaType=1&dataFormCd=2&startYear=2013&endYear=2023&tempInputVal=1&precInputVal=1&windInputVal=1&rhmInputVal=1&icsrInputVal=1&symbol=1&inputInt=&condit=&symbol2=1&inputInt2=&monthCheck=Y&startMonth=01&endMonth=12&startDay=01&endDay=31&sesn=1",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36",
+        "X-Requested-With": "XMLHttpRequest",
+        "sec-ch-ua": 'Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": "Android",
+    }
+
+    if city == "namwon":
+        param = "fileType=&pgmNo=179&menuNo=440&pageIndex=&minTa=25.0&stnGroupSns=&selectType=1&mddlClssCd=SFC01&lastDayOfMonth=31&startDt=20000101&endDt=20230724&schType=1&txtStnNm=%EB%82%A8%EC%9B%90&stnId=247&areaId=&ureaType=1&dataFormCd=2&startYear=2003&endYear=2022&tempInputVal=1&precInputVal=1&windInputVal=1&rhmInputVal=1&icsrInputVal=1&symbol=1&inputInt=&condit=&symbol2=1&inputInt2=&monthCheck=Y&startMonth=01&endMonth=12&startDay=01&endDay=31&sesn=1"
+
+    response = requests.post(url3, headers=header, data=param)
+    result = response.text
+    data = json.loads(result)
+    content = data['data']
+    content_tavg = [x['avgTa'] for x in content]
+    content_tmax = [x['avgDmaxTa'] for x in content]
+    content_tmin = [x['avgDminTa'] for x in content]
+
+    namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin}
+
+    return namwon_20
 
 def main():
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)

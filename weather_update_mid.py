@@ -102,11 +102,16 @@ header = {
 #          'startYear': '2013', 'endYear': '2023', 'tempInputVal': '1', 'precInputVal': '1', 'windInputVal': '1', 'rhmInputVal': '1', 'icsrInputVal': '1', 'symbol': '1',
 #          'symbol2': '1', 'monthCheck': 'Y', 'startMonth': '01', 'endMonth': '12', 'startDay': '01', 'endDay': '31', 'sesn': '1'}
 
-data = "fileType=&pgmNo=179&menuNo=440&pageIndex=&minTa=25.0&stnGroupSns=&selectType=1&mddlClssCd=SFC01&lastDayOfMonth=31&startDt=20100101&endDt=20230724&schType=1&txtStnNm=%EB%82%A8%EC%9B%90&stnId=247&areaId=&ureaType=1&dataFormCd=2&startYear=2013&endYear=2023&tempInputVal=1&precInputVal=1&windInputVal=1&rhmInputVal=1&icsrInputVal=1&symbol=1&inputInt=&condit=&symbol2=1&inputInt2=&monthCheck=Y&startMonth=01&endMonth=12&startDay=01&endDay=31&sesn=1"
+data = "fileType=&pgmNo=179&menuNo=440&pageIndex=&minTa=25.0&stnGroupSns=&selectType=1&mddlClssCd=SFC01&lastDayOfMonth=31&startDt=20000101&endDt=20230724&schType=1&txtStnNm=%EB%82%A8%EC%9B%90&stnId=247&areaId=&ureaType=1&dataFormCd=2&startYear=2003&endYear=2022&tempInputVal=1&precInputVal=1&windInputVal=1&rhmInputVal=1&icsrInputVal=1&symbol=1&inputInt=&condit=&symbol2=1&inputInt2=&monthCheck=Y&startMonth=01&endMonth=12&startDay=01&endDay=31&sesn=1"
 response = requests.post(url3, headers=header, data=data)
 result = response.text
 data = json.loads(result)
 content = data['data']
-# content_namwon = [x for x in content if x['maxTaStnId'] == '남원']
+content_tavg = [x['avgTa'] for x in content]
+content_tmax = [x['avgDmaxTa'] for x in content]
+content_tmin = [x['avgDminTa'] for x in content]
 
-print(content)
+namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin}
+
+
+
