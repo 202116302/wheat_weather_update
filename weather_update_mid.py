@@ -110,8 +110,9 @@ content = data['data']
 content_tavg = [x['avgTa'] for x in content]
 content_tmax = [x['avgDmaxTa'] for x in content]
 content_tmin = [x['avgDminTa'] for x in content]
+date = [x['tma'] for x in content]
 
-namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin}
+namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin, 'date': date}
 
-
+print(date)
 
