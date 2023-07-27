@@ -16,6 +16,7 @@ app.config['JSON_AS_ASCII'] = False
 
 
 db = TinyDB('db.json')
+db2 = TinyDB('db_present.json')
 Station = Query()
 
 
@@ -197,6 +198,7 @@ def weather_short(city=None):
     now = datetime.datetime.now()  # 현재 날짜, 시각
     hour = now.hour  # 현재시각
 
+
     # ----요청 시각, 날짜 재조정
     for i in range(8):
         if i * 3 + 2 <= hour < (i + 1) * 3 + 2:
@@ -282,6 +284,41 @@ def weather_past(city=None):
 
 
     return namwon_20
+
+
+@app.route("/weather_now/<city>")
+@app.route("/weather_now",  methods=['GET'])
+@cross_origin(origin='*')
+def weather_now(city=None):
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    url4 = "https://www.weather.go.kr/w//renew2021/rest/main/current-weather-obs.do"
+
+    response_now = requests.get(url4)
+    result_now = response_now.text
+    data_now = json.loads(result_now)
+    content_now = data_now['data']
+    namwon_now = [x for x in content_now if x['stnKo'] == '남원']
+
+
+    if city == 'namwon':
+        today_weather = db.search((where('name') == "namwon") & (where('date') == time))
+    elif city == 'iksan':
+        today_weather = db.search((where('name') == "iksan") & (where('date') == time))
+    else:
+        today_weather = []
+
+    if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
+        return namwon_now[0]
+    else:
+        if city == 'namwon':
+            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_now[0]})
+            return namwon_now[0]
+        elif city == "iksan":
+            db2.insert({"name": "iksan", "date": time, "json_content": namwon_now[0]})
+            return "공사중"
+        else:
+            return "해당지역없음"
+
 
 def main():
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)

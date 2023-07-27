@@ -69,7 +69,7 @@ df2 = df2.rename(columns={'평균기온(℃)': 'tavg', '평균최고기온(℃)'
 # df2.to_csv('weather_month_data.csv', encoding='utf-8-sig', index=False)
 
 
-# --------------------------------------------
+# -------------------------------------------- 과거 기상 데이터 조회 -----------------
 url3 = "https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionAjax.do"
 header = {
     "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -114,5 +114,43 @@ date = [x['tma'] for x in content]
 
 namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin, 'date': date}
 
-print(date)
+
+
+#----------------------------------------------------현재 기상 데이터 ----------------------------------------
+
+
+
+url4 = "https://www.weather.go.kr/w//renew2021/rest/main/current-weather-obs.do"
+
+response_now = requests.get(url4)
+result_now = response_now.text
+data_now = json.loads(result_now)
+content_now = data_now['data']
+namwon_now = [x for x in content_now if x['stnKo'] == '남원']
+
+print(namwon_now)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
