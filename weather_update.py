@@ -299,24 +299,24 @@ def weather_now(city=None):
     content_now = data_now['data']
     namwon_now = [x for x in content_now if x['stnKo'] == '남원']
 
-    namwon_now = json.dumps(namwon_now[0], ensure_ascii=False)
+    namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
 
 
     if city == 'namwon':
-        today_weather = db.search((where('name') == "namwon") & (where('date') == time))
+        now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
     elif city == 'iksan':
-        today_weather = db.search((where('name') == "iksan") & (where('date') == time))
+        now_weather = db2.search((where('name') == "iksan") & (where('date') == time))
     else:
-        today_weather = []
+        now_weather = []
 
-    if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        return namwon_now[0]
+    if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
+        return now_weather[0]
     else:
         if city == 'namwon':
-            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_now[0]})
-            return namwon_now[0]
+            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json})
+            return namwon_json
         elif city == "iksan":
-            db2.insert({"name": "iksan", "date": time, "json_content": namwon_now[0]})
+            db2.insert({"name": "iksan", "date": time})
             return "공사중"
         else:
             return "해당지역없음"
