@@ -299,6 +299,8 @@ def weather_now(city=None):
     content_now = data_now['data']
     namwon_now = [x for x in content_now if x['stnKo'] == '남원']
 
+    namwon_now = json.dumps(namwon_now[0], ensure_ascii=False)
+
 
     if city == 'namwon':
         today_weather = db.search((where('name') == "namwon") & (where('date') == time))

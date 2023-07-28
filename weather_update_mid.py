@@ -128,7 +128,9 @@ data_now = json.loads(result_now)
 content_now = data_now['data']
 namwon_now = [x for x in content_now if x['stnKo'] == '남원']
 
-print(namwon_now)
+nam_json = json.dumps(namwon_now[0], ensure_ascii=False)
+
+print(nam_json)
 
 
 
