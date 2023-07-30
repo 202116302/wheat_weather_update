@@ -9,16 +9,13 @@ from flask_cors import cross_origin
 from tinydb import TinyDB, Query, where
 import datetime
 
-
 # 플라스크 선언
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
-
 db = TinyDB('db.json')
 db2 = TinyDB('db_present.json')
 Station = Query()
-
 
 try:
     from urllib import urlencode, unquote
@@ -44,15 +41,11 @@ datatype = "JSON"
 nx_namwon = '68'
 ny_namwon = '80'
 
-
 nx_iksan = '59'
 ny_iksan = '94'
 
 
-
 # 지역별 파라미터
-
-
 
 
 # 지역별 파라미터 + url 함수
@@ -79,8 +72,6 @@ def add_url_params(url, params):
     return items
 
 
-
-
 # 날씨 정보 추출 함수
 def sky(loc):
     items = add_url_params(url, loc)
@@ -99,12 +90,10 @@ def sky(loc):
     pop_4 = []
     pop = [pop_0, pop_1, pop_2, pop_3, pop_4]
 
-
     # 날짜 뽑기
     for x in items:
         if not x['fcstDate'] in weather_date:
             weather_date.append(x["fcstDate"])
-
 
     # 강수확률(%)
     for i in range(len(weather_date)):
@@ -161,7 +150,6 @@ def sky(loc):
                 weather_total[f'{weather_date[i]}_tmin'] = f"{x['fcstValue']}°C"
                 tmin[f'{weather_date[i]}'] = f"{x['fcstValue']}°C"
 
-
     # 일 최고 기온
     for i in range(len(weather_date)):
         for x in items:
@@ -187,7 +175,7 @@ def home():
 
 
 @app.route("/weather_short/<city>")
-@app.route("/weather_short",  methods=['GET'])
+@app.route("/weather_short", methods=['GET'])
 @cross_origin(origin='*')
 def weather_short(city=None):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
@@ -197,7 +185,6 @@ def weather_short(city=None):
     # ----발표 시각( 요청 시각 , 페이지 열 때? 시간)
     now = datetime.datetime.now()  # 현재 날짜, 시각
     hour = now.hour  # 현재시각
-
 
     # ----요청 시각, 날짜 재조정
     for i in range(8):
@@ -244,7 +231,7 @@ def weather_short(city=None):
 
 
 @app.route("/weather_past/<city>")
-@app.route("/weather_past",  methods=['GET'])
+@app.route("/weather_past", methods=['GET'])
 @cross_origin(origin='*')
 def weather_past(city=None):
     url3 = "https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionAjax.do"
@@ -282,12 +269,11 @@ def weather_past(city=None):
 
     namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin, 'date': date}
 
-
     return namwon_20
 
 
 @app.route("/weather_now/<city>")
-@app.route("/weather_now",  methods=['GET'])
+@app.route("/weather_now", methods=['GET'])
 @cross_origin(origin='*')
 def weather_now(city=None):
     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -298,10 +284,9 @@ def weather_now(city=None):
     data_now = json.loads(result_now)
     content_now = data_now['data']
     namwon_now = [x for x in content_now if x['stnKo'] == '남원']
+    namwon_now[0]['now_time'] = time
 
     namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
-
-
 
     if city == 'namwon':
         now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
@@ -311,11 +296,11 @@ def weather_now(city=None):
         now_weather = []
 
     if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        return [now_weather[0]['json_content'], now_weather[0]['date']]
+        return now_weather[0]['json_content']
     else:
         if city == 'namwon':
-            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json.replace("\"", "")})
-            return [namwon_json.replace("\"", ""), time]
+            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json})
+            return namwon_json
         elif city == "iksan":
             db2.insert({"name": "iksan", "date": time})
             return "공사중"
@@ -325,9 +310,6 @@ def weather_now(city=None):
 
 def main():
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
-
-
-
 
 
 if __name__ == '__main__':
