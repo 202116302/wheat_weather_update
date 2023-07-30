@@ -315,7 +315,7 @@ def weather_now(city=None):
     else:
         if city == 'namwon':
             db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json.replace("\"", "")})
-            return [namwon_json, time]
+            return [namwon_json.replace("\"", ""), time]
         elif city == "iksan":
             db2.insert({"name": "iksan", "date": time})
             return "공사중"
