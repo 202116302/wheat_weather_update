@@ -59,7 +59,8 @@ for i in range(3, 8):
          f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}"}
     weather_mid[f] = a
 
-# print(weather_mid)
+nam_weather_mid = json.dumps(weather_mid, ensure_ascii=False)
+print(nam_weather_mid)
 
 
 df = pd.read_csv('weather_month.csv', encoding='euc-kr')
@@ -129,6 +130,7 @@ content_now = data_now['data']
 namwon_now = [x for x in content_now if x['stnKo'] == '남원']
 
 nam_json = json.dumps(namwon_now[0], ensure_ascii=False)
+
 
 
 

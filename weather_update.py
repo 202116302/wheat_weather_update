@@ -2,12 +2,12 @@ import json
 from collections import Counter
 import statistics
 import requests
-import datetime
 from json import dumps
 from flask import Flask, request, escape, render_template
 from flask_cors import cross_origin
 from tinydb import TinyDB, Query, where
 import datetime
+import pandas as pd
 
 # 플라스크 선언
 app = Flask(__name__)
@@ -15,6 +15,7 @@ app.config['JSON_AS_ASCII'] = False
 
 db = TinyDB('db.json')
 db2 = TinyDB('db_present.json')
+db3 = TinyDB('db_future.json')
 Station = Query()
 
 try:
@@ -116,7 +117,7 @@ def sky(loc):
     for i in range(len(weather_date)):
         reh_mean = statistics.mean(pop[i])
         weather_total[f'{weather_date[i]}_humid'] = f"{reh_mean:.1f}"
-        humid[f'{weather_date[i]}'] = f"{reh_mean:.1f}"
+        humid[f'{weather_date[i]}'] = f"{reh_mean:.1f}%"
         pop[i].clear()
 
     # 하늘 상태 0 ~ 1 맑음 , 2 ~ 5 구름 많음 , 6 ~ 10 흐림
@@ -307,6 +308,85 @@ def weather_now(city=None):
         else:
             return "해당지역없음"
 
+
+
+@app.route("/weather_mid/<city>")
+@app.route("/weather_mid", methods=['GET'])
+@cross_origin(origin='*')
+def weather_mid(city=None):
+    today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
+    y = datetime.date.today() - datetime.timedelta(days=1)
+    f = datetime.date.today() + datetime.timedelta(days=3)
+    yesterday = y.strftime("%Y%m%d")  # 어제날짜
+    future = f.strftime("%Y%m%d")
+
+    now = datetime.datetime.now()  # 현재 날짜, 시각
+    hour = now.hour  # 현재시각
+
+    # ----요청 시각, 날짜 재조정
+    if hour < 6:
+        today = yesterday
+
+    # 중기육상예보(강수 확률, 날씨 예보)
+    url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst'
+    # 중기기온조희(예상최저, 최고 기온)
+    url2 = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa'
+
+    # 중기육상예보
+    # 전라북도 : 11F10000
+
+    params_url = {'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+                  'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+                  'regId': '11F10000', 'tmFc': f'{today}0600'}
+
+    # regIdd , 중기기온조회
+    # 남원 : 11F10401
+    # 익산 : 11F10202
+
+    params_url2 = {'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+                   'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+                   'regId': '11F10401', 'tmFc': f'{today}0600'}
+
+    response_land = requests.get(url, params=params_url)
+    response_midta = requests.get(url2, params=params_url2)
+
+    item_land = response_land.content.decode('utf-8')
+    item_midta = response_midta.content.decode('utf-8')
+
+    df_land = pd.read_json(item_land)
+    df_midta = pd.read_json(item_midta)
+    midta_value = df_midta['response']['body']['items']['item']
+    land_value = df_land['response']['body']['items']['item']
+
+    weather_mid = {}
+    for i in range(3, 8):
+        f = datetime.date.today() + datetime.timedelta(days=i)
+        f = f.strftime("%Y%m%d")
+        a = {f'rf_{i}_am': f"{land_value[0][f'rnSt{i}Am']}", f'rf_{i}_pm': f"{land_value[0][f'rnSt{i}Pm']}",
+             f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}",
+             f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}"}
+        weather_mid[f] = a
+
+    nam_weather_mid = json.dumps(weather_mid, ensure_ascii=False)
+
+    if city == 'namwon':
+        future_weather = db3.search((where('name') == "namwon") & (where('date') == today))
+    elif city == 'iksan':
+        future_weather = db3.search((where('name') == "iksan") & (where('date') == today))
+    else:
+        future_weather = []
+
+    if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
+        return future_weather[0]['json_content']
+    else:
+        if city == 'namwon':
+            db3.insert({"name": "namwon", "date": today, 'json_content': nam_weather_mid})
+            return nam_weather_mid
+        elif city == "iksan":
+            db3.insert({"name": "iksan", "date": today})
+            return "공사중"
+        else:
+            return "해당지역없음"
 
 def main():
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
