@@ -7,7 +7,6 @@ from flask import Flask, request, escape, render_template
 from flask_cors import cross_origin
 from tinydb import TinyDB, Query, where
 import datetime
-import pandas as pd
 
 # 플라스크 선언
 app = Flask(__name__)
