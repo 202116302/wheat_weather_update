@@ -302,6 +302,7 @@ def weather_now(city=None):
     namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
 
 
+
     if city == 'namwon':
         now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
     elif city == 'iksan':
@@ -313,7 +314,7 @@ def weather_now(city=None):
         return [now_weather[0]['json_content'], now_weather[0]['date']]
     else:
         if city == 'namwon':
-            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json})
+            db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json.replace("\"", "")})
             return [namwon_json, time]
         elif city == "iksan":
             db2.insert({"name": "iksan", "date": time})

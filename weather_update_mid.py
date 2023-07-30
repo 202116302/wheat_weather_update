@@ -130,8 +130,6 @@ namwon_now = [x for x in content_now if x['stnKo'] == '남원']
 
 nam_json = json.dumps(namwon_now[0], ensure_ascii=False)
 
-print(nam_json)
-
 
 
 
