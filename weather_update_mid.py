@@ -45,10 +45,11 @@ response_midta = requests.get(url2, params=params_url2)
 item_land = response_land.content.decode('utf-8')
 item_midta = response_midta.content.decode('utf-8')
 
-# df_land = pd.read_json(item_land)
-# df_midta = pd.read_json(item_midta)
-# midta_value = df_midta['response']['body']['items']['item']
-# land_value = df_land['response']['body']['items']['item']
+
+df_land = json.loads(item_land)
+df_midta = json.loads(item_midta)
+midta_value = df_midta['response']['body']['items']['item']
+land_value = df_land['response']['body']['items']['item']
 
 weather_mid = {}
 for i in range(3, 8):
