@@ -310,11 +310,11 @@ def weather_now(city=None):
         now_weather = []
 
     if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        return now_weather[0]
+        return [now_weather[0]['json_content'], now_weather[0]['date']]
     else:
         if city == 'namwon':
             db2.insert({"name": "namwon", "date": time, 'json_content': namwon_json})
-            return namwon_json
+            return [namwon_json, time]
         elif city == "iksan":
             db2.insert({"name": "iksan", "date": time})
             return "공사중"
