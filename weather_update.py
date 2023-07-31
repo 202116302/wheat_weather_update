@@ -179,7 +179,8 @@ def home():
 @cross_origin(origin='*')
 def weather_short(city=None):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
-    today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
+    KST = datetime.timezone(datetime.timedelta(hours=9))
+    today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
     y = datetime.date.today() - datetime.timedelta(days=1)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     # ----발표 시각( 요청 시각 , 페이지 열 때? 시간)
@@ -276,7 +277,8 @@ def weather_past(city=None):
 @app.route("/weather_now", methods=['GET'])
 @cross_origin(origin='*')
 def weather_now(city=None):
-    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    KST = datetime.timezone(datetime.timedelta(hours=9))
+    time = datetime.datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     url4 = "https://www.weather.go.kr/w//renew2021/rest/main/current-weather-obs.do"
 
     response_now = requests.get(url4)
