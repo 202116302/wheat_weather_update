@@ -375,12 +375,12 @@ def weather_mid(city=None):
 
     weather_mid['days'] = days
     weather_mid['date'] = date
-    nam_weather_mid = json.dumps(weather_mid, ensure_ascii=False)
+    nam_weather_mid = json.dumps(weather_mid, default=str, ensure_ascii=False)
 
     if city == 'namwon':
-        future_weather = db3.search((where('name') == "namwon") & (where('date') == now))
+        future_weather = db3.search((where('name') == "namwon") & (where('date') == today))
     elif city == 'iksan':
-        future_weather = db3.search((where('name') == "iksan") & (where('date') == now))
+        future_weather = db3.search((where('name') == "iksan") & (where('date') == today))
     else:
         future_weather = []
 
@@ -388,7 +388,7 @@ def weather_mid(city=None):
         return future_weather[0]['json_content']
     else:
         if city == 'namwon':
-            db3.insert({"name": "namwon", "date": now, 'json_content': nam_weather_mid})
+            db3.insert({"name": "namwon", "date": today, 'json_content': nam_weather_mid})
             return nam_weather_mid
         elif city == "iksan":
             db3.insert({"name": "iksan", "date": today})
