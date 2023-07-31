@@ -48,6 +48,7 @@ item_midta = response_midta.content.decode('utf-8')
 
 df_land = json.loads(item_land)
 df_midta = json.loads(item_midta)
+print(df_midta)
 midta_value = df_midta['response']['body']['items']['item']
 land_value = df_land['response']['body']['items']['item']
 

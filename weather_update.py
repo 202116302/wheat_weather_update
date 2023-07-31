@@ -315,7 +315,8 @@ def weather_now(city=None):
 @app.route("/weather_mid", methods=['GET'])
 @cross_origin(origin='*')
 def weather_mid(city=None):
-    today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
+    KST = datetime.timezone(datetime.timedelta(hours=9))
+    today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
     y = datetime.date.today() - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
