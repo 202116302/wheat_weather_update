@@ -316,13 +316,13 @@ def weather_now(city=None):
 @cross_origin(origin='*')
 def weather_mid(city=None):
     KST = datetime.timezone(datetime.timedelta(hours=9))
-    today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
+    today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
     y = datetime.date.today() - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     future = f.strftime("%Y%m%d")
 
-    now = datetime.datetime.now()  # 현재 날짜, 시각
+    now = datetime.datetime.now().astimezone(KST)  # 현재 날짜, 시각
     hour = now.hour  # 현재시각
 
     # ----요청 시각, 날짜 재조정
@@ -361,14 +361,20 @@ def weather_mid(city=None):
     land_value = df_land['response']['body']['items']['item']
 
     weather_mid = {}
+    days = []
+    date = []
     for i in range(3, 8):
         f = datetime.date.today() + datetime.timedelta(days=i)
+        days.append(f"{f.day}일")
         f = f.strftime("%Y%m%d")
+        date.append(f)
         a = {f'rf_{i}_am': f"{land_value[0][f'rnSt{i}Am']}", f'rf_{i}_pm': f"{land_value[0][f'rnSt{i}Pm']}",
              f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}",
              f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}"}
         weather_mid[f] = a
 
+    weather_mid['days'] = days
+    weather_mid['date'] = date
     nam_weather_mid = json.dumps(weather_mid, ensure_ascii=False)
 
     if city == 'namwon':
