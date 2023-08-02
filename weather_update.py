@@ -287,6 +287,8 @@ def weather_now(city=None):
     content_now = data_now['data']
     namwon_now = [x for x in content_now if x['stnKo'] == '남원']
     namwon_now[0]['now_time'] = time
+    namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
+
 
     namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
 
