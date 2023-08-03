@@ -129,19 +129,21 @@ def sky(loc):
         count_sky = Counter(pop[i])
         sky_max = count_sky.most_common(1)
         max_sky = list(sky_max[0])[0]
-        max_sky = int(max_sky)
-        if 0 <= max_sky < 2:
-            weather_total[f'{weather_date[i]}_sky'] = "맑음"
-            sky[f'{weather_date[i]}'] = "맑음"
-            pop[i].clear()
-        if 2 <= max_sky < 6:
-            weather_total[f'{weather_date[i]}_sky'] = "구름많음"
-            sky[f'{weather_date[i]}'] = "구름많음"
-            pop[i].clear()
-        if 6 <= max_sky:
-            weather_total[f'{weather_date[i]}_sky'] = "흐림"
-            sky[f'{weather_date[i]}'] = "흐림"
-            pop[i].clear()
+        weather_total[f'{weather_date[i]}_sky'] = max_sky
+        sky[f'{weather_date[i]}'] = max_sky
+        # max_sky = int(max_sky)
+        # if 0 <= max_sky < 2:
+        #     weather_total[f'{weather_date[i]}_sky'] = "맑음"
+        #     sky[f'{weather_date[i]}'] = "맑음"
+        #     pop[i].clear()
+        # if 2 <= max_sky < 6:
+        #     weather_total[f'{weather_date[i]}_sky'] = "구름많음"
+        #     sky[f'{weather_date[i]}'] = "구름많음"
+        #     pop[i].clear()
+        # if 6 <= max_sky:
+        #     weather_total[f'{weather_date[i]}_sky'] = "흐림"
+        #     sky[f'{weather_date[i]}'] = "흐림"
+        #     pop[i].clear()
 
     # 일 최저 기온
     for i in range(len(weather_date)):
@@ -368,11 +370,12 @@ def weather_mid(city=None):
     date = []
     for i in range(3, 8):
         f = datetime.date.today() + datetime.timedelta(days=i)
-        days.append(f"{f.day}일")
+
+        # days.append(f"{f.month}/{f.day}일 ({(lambda x : '월')}")
         f = f.strftime("%Y%m%d")
         date.append(f)
-        a = {f'rf_{i}_am': f"{land_value[0][f'rnSt{i}Am']}", f'rf_{i}_pm': f"{land_value[0][f'rnSt{i}Pm']}",
-             f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}",
+        a = {f'rf_{i}_am': f"{land_value[0][f'rnSt{i}Am']}%", f'rf_{i}_pm': f"{land_value[0][f'rnSt{i}Pm']}%",
+             f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}°C", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}°C",
              f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}"}
         weather_mid[f] = a
 
