@@ -375,8 +375,8 @@ def weather_mid(city=None):
         f = f.strftime("%Y%m%d")
         date.append(f)
         a = {f'rf_{i}_am': f"{land_value[0][f'rnSt{i}Am']}%", f'rf_{i}_pm': f"{land_value[0][f'rnSt{i}Pm']}%",
-             f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}°C", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}°C",
-             f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}"}
+             f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}",
+             f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}°C", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}°C"}
         weather_mid[f] = a
 
     weather_mid['days'] = days
