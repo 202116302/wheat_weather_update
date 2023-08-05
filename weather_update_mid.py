@@ -5,9 +5,9 @@ import requests
 import json
 from urllib.parse import urlparse, parse_qs
 import csv
-
-today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
-y = datetime.date.today() - datetime.timedelta(days=1)
+KST = datetime.timezone(datetime.timedelta(hours=9))
+today = datetime.datetime.today().astimezone(KST)  # 오늘날짜
+y = today - datetime.timedelta(days=1)
 f = datetime.date.today() + datetime.timedelta(days=3)
 yesterday = y.strftime("%Y%m%d")  # 어제날짜
 future = f.strftime("%Y%m%d")
@@ -15,6 +15,22 @@ future = f.strftime("%Y%m%d")
 now = datetime.datetime.now()  # 현재 날짜, 시각
 hour = now.hour  # 현재시각
 
+
+def what_day_is_it(date):
+    days = ['월', '화', '수', '목', '금', '토', '일']
+    day = date.weekday()
+    print(days[day])
+
+
+datetime_string = "20230806"
+datetime_format = "%Y%m%d"
+
+datetime_result = datetime.datetime.strptime(datetime_string, datetime_format)
+print(type(datetime_result)) # <class 'datetime.datetime'>
+print(datetime_result) #
+
+
+what_day_is_it(datetime_result)
 # ----요청 시각, 날짜 재조정
 if hour < 6:
     today = yesterday
@@ -50,7 +66,7 @@ df_land = json.loads(item_land)
 df_midta = json.loads(item_midta)
 midta_value = df_midta['response']['body']['items']['item']
 land_value = df_land['response']['body']['items']['item']
-print(land_value)
+# print(land_value)
 
 weather_mid = {}
 for i in range(3, 8):
@@ -62,7 +78,7 @@ for i in range(3, 8):
     weather_mid[f] = a
 
 nam_weather_mid = json.dumps(weather_mid, ensure_ascii=False)
-print(nam_weather_mid)
+# print(nam_weather_mid)
 
 
 df = pd.read_csv('weather_month.csv', encoding='euc-kr')

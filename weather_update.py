@@ -45,7 +45,12 @@ nx_iksan = '59'
 ny_iksan = '94'
 
 
-# 지역별 파라미터
+# 요일 나타내는 함수
+def what_day_is_it(date):
+    days = ['월', '화', '수', '목', '금', '토', '일']
+    day = date.weekday()
+
+    return days[day]
 
 
 # 지역별 파라미터 + url 함수
@@ -88,6 +93,7 @@ def sky(loc):
     pop_2 = []
     pop_3 = []
     pop_4 = []
+    time = []
     pop = [pop_0, pop_1, pop_2, pop_3, pop_4]
 
     # 날짜 뽑기
@@ -162,7 +168,16 @@ def sky(loc):
     for i in range(len(weather_date)):
         days.append(f"{weather_date[i][6:8]}일")
 
-    weather = [weather_date, days, rainfall, humid, sky, tmin, tmax]
+    for i in range(len(weather_date)):
+        datetime_string = f"{weather_date[i]}"
+        datetime_format = "%Y%m%d"
+        datetime_result = datetime.datetime.strptime(datetime_string, datetime_format)
+        m = datetime_result.month
+        d = datetime_result.day
+        w = what_day_is_it(datetime_result)
+        time.append(f"{m}/{d} ({w})")
+
+    weather = [weather_date, days, time, rainfall, humid, sky, tmin, tmax]
 
     # with open('./data.json', 'w', encoding='utf-8-sig') as f:
     #     json.dump(weather, f, ensure_ascii=False, indent=4)
@@ -183,11 +198,16 @@ def weather_short(city=None):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
     KST = datetime.timezone(datetime.timedelta(hours=9))
     today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
-    y = datetime.date.today() - datetime.timedelta(days=1)
+    date = datetime.datetime.today().astimezone(KST)
+    y = date - datetime.timedelta(days=1)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     # ----발표 시각( 요청 시각 , 페이지 열 때? 시간)
     now = datetime.datetime.now()  # 현재 날짜, 시각
     hour = now.hour  # 현재시각
+
+    m = date.month
+    d = date.day
+    w = what_day_is_it(date)
 
     # ----요청 시각, 날짜 재조정
     for i in range(8):
@@ -197,6 +217,9 @@ def weather_short(city=None):
     if hour < 2:
         hour = 23
         today = yesterday
+        m = y.month
+        d = y.day
+        w = what_day_is_it(y)
 
     time_hour = f"{hour:02d}" + "00"
 
@@ -321,8 +344,9 @@ def weather_now(city=None):
 @cross_origin(origin='*')
 def weather_mid(city=None):
     KST = datetime.timezone(datetime.timedelta(hours=9))
-    today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
-    y = datetime.date.today() - datetime.timedelta(days=1)
+    today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")
+    time = datetime.datetime.now().astimezone(KST)
+    y = time - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     future = f.strftime("%Y%m%d")
@@ -333,6 +357,8 @@ def weather_mid(city=None):
     # ----요청 시각, 날짜 재조정
     if hour < 6:
         today = yesterday
+        time = y
+
 
     # 중기육상예보(강수 확률, 날씨 예보)
     url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst'
@@ -366,20 +392,19 @@ def weather_mid(city=None):
     land_value = df_land['response']['body']['items']['item']
 
     weather_mid = {}
-    days = []
     date = []
     for i in range(3, 8):
-        f = datetime.date.today() + datetime.timedelta(days=i)
-
-        # days.append(f"{f.month}/{f.day}일 ({(lambda x : '월')}")
-        f = f.strftime("%Y%m%d")
-        date.append(f)
+        f = time + datetime.timedelta(days=i)
+        t = f.strftime("%Y%m%d")
+        w = what_day_is_it(f)
+        m = f.month
+        d = f.day
+        date.append(f"{m}/{d} ({w})")
         a = {f'rf_{i}_am': f"{land_value[0][f'rnSt{i}Am']}%", f'rf_{i}_pm': f"{land_value[0][f'rnSt{i}Pm']}%",
              f'wf_{i}_am': f"{land_value[0][f'wf{i}Am']}", f'wf_{i}_pm': f"{land_value[0][f'wf{i}Pm']}",
              f'tamin_{i}': f"{midta_value[0][f'taMin{i}']}°C", f'tamax_{i}': f"{midta_value[0][f'taMax{i}']}°C"}
-        weather_mid[f] = a
+        weather_mid[t] = a
 
-    weather_mid['days'] = days
     weather_mid['date'] = date
     nam_weather_mid = json.dumps(weather_mid, default=str, ensure_ascii=False)
 
