@@ -393,9 +393,11 @@ def weather_mid(city=None):
 
     weather_mid = {}
     date = []
+    name = []
     for i in range(3, 8):
         f = time + datetime.timedelta(days=i)
         t = f.strftime("%Y%m%d")
+        name.append(t)
         w = what_day_is_it(f)
         m = f.month
         d = f.day
@@ -406,6 +408,7 @@ def weather_mid(city=None):
         weather_mid[t] = a
 
     weather_mid['date'] = date
+    weather_mid['name'] = name
     nam_weather_mid = json.dumps(weather_mid, default=str, ensure_ascii=False)
 
     if city == 'namwon':
