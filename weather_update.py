@@ -187,36 +187,42 @@ def sky(loc):
 
 
 # 상위25, 하위25, 현재 기온, 강수량 추출 함수
-def analyze(a, b, c):
-    df_low = pd.read_csv(a)
+def rainfall():
+    # 강수량
+    df_low = pd.read_csv('data/rainlow10.csv')
+    df_max = pd.read_csv('data/rainmax10.csv')
 
-    df_low_idx = df_low[(df_low['year'] == 2022) | (df_low['year'] == 2023)].index
-    df_low2 = df_low.drop(df_low_idx)
-
-    l = df_low2.groupby('month').mean()[c]
-    l = l.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
-    l = list(l)
-
-    df_low3 = df_low[(df_low['year'] == 2022) | (df_low['year'] == 2023)]
-
-    p = df_low3.groupby('month').mean()[c]
-    p = p.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
-    p = list(p)
-
-    df_max = pd.read_csv(b)
-    df_max_idx = df_max[(df_max['year'] == 2022) | (df_max['year'] == 2023)].index
-    df_max2 = df_max.drop(df_low_idx)
-
-    m = df_max2.groupby('month').mean()[c]
-
+    m = df_max.groupby('month')['cumrain'].apply(lambda grp: grp.nlargest(7).min())
+    l = df_low.groupby(['year', 'month'])["cumrain"].max().groupby('month').apply(lambda grp: grp.nlargest(7).min())
     m = m.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
-
+    m_2023_4 = m.reindex([10, 11, 12, 1, 2, 3])
+    m_2023_4 = list(m_2023_4)
     m = list(m)
 
-    return l, p, m
+    l = l.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
+    l_2023_4 = l.reindex([10, 11, 12, 1, 2, 3])
+    l_2023_4 = list(l_2023_4)
+    l = list(l)
+
+    df_2023 = df_low[(df_low['year'] == 2022) | (df_low['year'] == 2023)]
+    p_2023 = df_2023.groupby('month')['cumrain'].max()
+    p_2023 = p_2023.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
+    p_2023_4 = p_2023.reindex([10, 11, 12, 1, 2, 3])
+    p_2023_4 = list(p_2023_4)
+    p_2023 = list(p_2023)
+
+    df_2022 = df_low[(df_low['year'] == 2021) | (df_low['year'] == 2022)]
+    p_2022 = df_2022.groupby('month')['cumrain'].max()
+    p_2022 = p_2022.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
+    p_2022 = list(p_2022)
+
+    rainfall_result = {"l": l, "m": m, "m_2023_4": m_2023_4, "p_2023": p_2023, "p_2023_4": p_2023_4,
+                       "l_2023_4": l_2023_4, "p_2022": p_2022}
+
+    return rainfall_result
 
 
-def generate_top_low():
+def generate_top_low(a, b):
     # 기온
     df = pd.read_csv("data/wheat_weather.csv")
     df["dd"] = df["datetime"] % 100
@@ -229,8 +235,8 @@ def generate_top_low():
     content_tmax = []
     content_tmin = []
     content_date = []
-    s_date = "2022/10/1"
-    e_date = "2023/6/30"
+    s_date = a
+    e_date = b
     for date_idx in pd.date_range(s_date, e_date):  # "2023/6/30"):
         monthday = int(date_idx.strftime("%m%d"))
         date = date_idx.strftime("%Y-%m-%d")
@@ -240,27 +246,10 @@ def generate_top_low():
         content_tmin.append(df_bottom10[monthday])
         content_date.append(date)
 
-    #강수량
-    df_low = pd.read_csv('data/rainlow10.csv')
-    df_max = pd.read_csv('data/rainmax10.csv')
-
-    m = df_max.groupby('month')['cumrain'].apply(lambda grp: grp.nlargest(7).min())
-    l = df_low.groupby(['year', 'month'])["cumrain"].max().groupby('month').apply(lambda grp: grp.nlargest(7).min())
-    m = m.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
-    m = list(m)
-    l = l.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
-    l = list(l)
-
-    p = df_low.groupby('month')['cumrain'].max()
-    p = p.reindex([10, 11, 12, 1, 2, 3, 4, 5, 6])
-    p = list(p)
-
     result = {'tavg': df[(df["timestamp"] >= s_date) & (df["timestamp"] <= e_date)]["tavg"].tolist(),
-              'tmax': content_tmax, 'tmin': content_tmin, 'rain': p, 'rain_m': m, 'rain_l': l, 'date': content_date}
+              'tmax': content_tmax, 'tmin': content_tmin, 'date': content_date}
 
-    result2 = json.dumps(result, ensure_ascii=False)
-
-    return result2
+    return result
 
 
 # 플라스크
@@ -374,18 +363,19 @@ def weather_past(city=None):
     # namwon_20 = {'tavg': content_tavg, 'tmax': content_tmax, 'tmin': content_tmin, 'date': date}
 
     if city == "namwon":
-        result = generate_top_low()
-        # tavg_p = analyze('data/tavglow10.csv', 'data/tavgtop10.csv', 'tavg')[1]
-        # tavg_m = analyze('data/tavglow10.csv', 'data/tavgtop10.csv', 'tavg')[2]
-        # tavg_l = analyze('data/tavglow10.csv', 'data/tavgtop10.csv', 'tavg')[0]
-        #
-        # rain_p = analyze('data/rainlow10.csv', 'data/rainmax10.csv', 'cumrain')[1]
-        # rain_m = analyze('data/rainlow10.csv', 'data/rainmax10.csv', 'cumrain')[2]
-        # rain_l = analyze('data/rainlow10.csv', 'data/rainmax10.csv', 'cumrain')[0]
+        # 온도
+        result_23 = generate_top_low("2022/10/01", "2023/6/30")
+        result_22 = generate_top_low("2021/10/01", "2022/6/30")
+        result_23_4 = generate_top_low("2022/10/01", "2023/4/10")
 
-        # past = {'tavg': tavg_p, 'tavg_m': tavg_m, 'tavg_l': tavg_l, 'rain': rain_p, 'rain_m': rain_m, 'rain_l': rain_l}
+        # 강수량
+        result_rain = rainfall()
 
-        return result
+        w = {"result_23": result_23, "result_22": result_22, "result_23_4": result_23_4, "result_rain": result_rain}
+
+        return json.dumps(w, ensure_ascii=False)
+
+
 
 
 @app.route("/weather_now/<city>")
@@ -403,14 +393,14 @@ def weather_now(city=None):
     data_now = json.loads(r_now)
     content = data_now[0]['tm']
     c = datetime.datetime.strptime(content, '%Y%m%d%H%M')
-    log = f"{c.year}-{c.month}-{c.day} ({what_day_is_it(c)}) {c.hour}:{c.minute}"
+    log = f"(업데이트 {c.month}/{c.day} {c.hour:02d}:{c.minute:02d})"
 
     response_now = requests.get(url4)
     result_now = response_now.text
     data_now = json.loads(result_now)
     content_now = data_now['data']
     namwon_now = [x for x in content_now if x['stnKo'] == '남원']
-    namwon_now[0]['now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.hour}:{time.minute}"
+    namwon_now[0]['now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
     namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
     namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
     namwon_now[0]['log'] = log
