@@ -263,9 +263,11 @@ def home():
 @cross_origin(origin='*')
 def weather_short(city=None):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
-    KST = datetime.timezone(datetime.timedelta(hours=9))
-    today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
-    date = datetime.datetime.today().astimezone(KST)
+    # KST = datetime.timezone(datetime.timedelta(hours=9))
+    # today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
+    # date = datetime.datetime.today().astimezone(KST)
+    today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
+    date = datetime.datetime.today()
     y = date - datetime.timedelta(days=1)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     # ----발표 시각( 요청 시각 , 페이지 열 때? 시간)
@@ -384,7 +386,7 @@ def weather_past(city=None):
 def weather_now(city=None):
     KST = datetime.timezone(datetime.timedelta(hours=9))
     time = datetime.datetime.now().astimezone(KST)
-    date_time = datetime.datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
+    date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     url4 = "https://www.weather.go.kr/w//renew2021/rest/main/current-weather-obs.do"
     url5 = 'https://www.weather.go.kr/wgis-nuri/aws/buoy?date='
 
@@ -431,9 +433,11 @@ def weather_now(city=None):
 @app.route("/weather_mid", methods=['GET'])
 @cross_origin(origin='*')
 def weather_mid(city=None):
-    KST = datetime.timezone(datetime.timedelta(hours=9))
-    today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")
-    time = datetime.datetime.now().astimezone(KST)
+    # KST = datetime.timezone(datetime.timedelta(hours=9))
+    # today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")
+    # time = datetime.datetime.now().astimezone(KST)
+    today = datetime.datetime.now().strftime("%Y%m%d")
+    time = datetime.datetime.now()
     y = time - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
