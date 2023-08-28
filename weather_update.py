@@ -443,7 +443,7 @@ def weather_mid(city=None):
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     future = f.strftime("%Y%m%d")
 
-    now = datetime.datetime.now().astimezone(KST)  # 현재 날짜, 시각
+    now = datetime.datetime.now()    # 현재 날짜, 시각
     hour = now.hour  # 현재시각
 
     # ----요청 시각, 날짜 재조정
