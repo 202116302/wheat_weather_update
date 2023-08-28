@@ -385,7 +385,7 @@ def weather_past(city=None):
 @cross_origin(origin='*')
 def weather_now(city=None):
     KST = datetime.timezone(datetime.timedelta(hours=9))
-    time = datetime.datetime.now()
+    time = datetime.datetime.now().astimezone(KST)
     date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     url4 = "https://www.weather.go.kr/w//renew2021/rest/main/current-weather-obs.do"
     url5 = 'https://www.weather.go.kr/wgis-nuri/aws/buoy?date='
