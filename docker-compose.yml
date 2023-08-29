@@ -5,9 +5,11 @@ services:
   web:
     build: .
 #    command: gunicorn dashboard_namwon.wsgi:application --bind 0.0.0.0:8001
-    command: python3 weather_update.py 
+    command: python3 -u weather_update.py 
     volumes:
       - ./:/usr/src/app/
     ports:
       - 5000:5000
+    environment:
+       TZ: Asia/Seoul
 
