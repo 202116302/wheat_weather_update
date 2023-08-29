@@ -438,6 +438,7 @@ def weather_mid(city=None):
     # time = datetime.datetime.now().astimezone(KST)
     today = datetime.datetime.now().strftime("%Y%m%d")
     time = datetime.datetime.now()
+    #print(time,today)	 
     y = time - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
@@ -525,7 +526,8 @@ def weather_mid(city=None):
 
 
 def main():
-    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+#    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
 
 
 if __name__ == '__main__':
