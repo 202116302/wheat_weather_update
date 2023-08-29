@@ -3,3 +3,4 @@ node_modules
 __pycache__
 _static
 db.sqlite3
+api_OUTput.csv
