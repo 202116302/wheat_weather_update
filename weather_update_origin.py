@@ -3,18 +3,20 @@ from collections import Counter
 import statistics
 import requests
 from json import dumps
+from flask import Flask, request, escape, render_template
+from flask_cors import cross_origin
 from tinydb import TinyDB, Query, where
 import datetime
 import pandas as pd
-import redis
-from fastapi import FastAPI, Request
-from fastapi.templating import Jinja2Templates
 
 # 플라스크 선언
-# app = Flask(__name__)
-# app.config['JSON_AS_ASCII'] = False
-#
+app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 
+db = TinyDB('db.json')
+db2 = TinyDB('db_present.json')
+db3 = TinyDB('db_future.json')
+Station = Query()
 
 try:
     from urllib import urlencode, unquote
@@ -250,101 +252,83 @@ def generate_top_low(a, b):
     return result
 
 
-app = FastAPI()
-
-db = TinyDB('db.json')
-db2 = TinyDB('db_present.json')
-db3 = TinyDB('db_future.json')
-Station = Query()
-
-r = redis.Redis(host='localhost', port=6379, db=0)
-
-templates = Jinja2Templates(directory="templates")
-
-
-
-
-
 # 플라스크
-@app.get("/")
-def home(request: Request):
-    return templates.TemplateResponse("landing.html", {"request": request})
+@app.route("/")
+def home():
+    return render_template('landing.html')
 
 
-@app.get("/weather_short/{city}")
-# @cross_origin(origin='*')
-async def weather_short(city: str):
+@app.route("/weather_short/<city>")
+@app.route("/weather_short", methods=['GET'])
+@cross_origin(origin='*')
+def weather_short(city=None):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
     # KST = datetime.timezone(datetime.timedelta(hours=9))
     # today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
     # date = datetime.datetime.today().astimezone(KST)
-        today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
-        date = datetime.datetime.today()
-        y = date - datetime.timedelta(days=1)
-        yesterday = y.strftime("%Y%m%d")  # 어제날짜
-        # ----발표 시각( 요청 시각 , 페이지 열 때? 시간)
-        now = datetime.datetime.now()  # 현재 날짜, 시각
-        hour = now.hour  # 현재시각
+    today = datetime.datetime.today().strftime("%Y%m%d")  # 오늘날짜
+    date = datetime.datetime.today()
+    y = date - datetime.timedelta(days=1)
+    yesterday = y.strftime("%Y%m%d")  # 어제날짜
+    # ----발표 시각( 요청 시각 , 페이지 열 때? 시간)
+    now = datetime.datetime.now()  # 현재 날짜, 시각
+    hour = now.hour  # 현재시각
 
-        m = date.month
-        d = date.day
-        w = what_day_is_it(date)
+    m = date.month
+    d = date.day
+    w = what_day_is_it(date)
 
-        # ----요청 시각, 날짜 재조정
-        for i in range(8):
-            if i * 3 + 2 <= hour < (i + 1) * 3 + 2:
-                hour = i * 3 + 2
+    # ----요청 시각, 날짜 재조정
+    for i in range(8):
+        if i * 3 + 2 <= hour < (i + 1) * 3 + 2:
+            hour = i * 3 + 2
 
-        if hour < 2:
-            hour = 23
-            today = yesterday
-            m = y.month
-            d = y.day
-            w = what_day_is_it(y)
+    if hour < 2:
+        hour = 23
+        today = yesterday
+        m = y.month
+        d = y.day
+        w = what_day_is_it(y)
 
-        time_hour = f"{hour:02d}" + "00"
+    time_hour = f"{hour:02d}" + "00"
 
-        new_param_namwon = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
-                            'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_namwon,
-                            'ny': ny_namwon}
+    new_param_namwon = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
+                        'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_namwon,
+                        'ny': ny_namwon}
 
-        new_param_iksan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
-                           'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_iksan, 'ny': ny_iksan}
+    new_param_iksan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
+                       'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_iksan, 'ny': ny_iksan}
 
-        # if request.method == 'GET' and city is None:
-        #     city = request.args.get('city')
-        #     city = str(escape(city))
+    if request.method == 'GET' and city is None:
+        city = request.args.get('city')
+        city = str(escape(city))
 
+    if city == 'namwon':
+        today_weather = db.search((where('name') == "namwon") & (where('date') == today))
+    elif city == 'iksan':
+        today_weather = db.search((where('name') == "iksan") & (where('date') == today))
+    else:
+        today_weather = []
+
+    if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
+        return today_weather[0]['json_content']
+    else:
         if city == 'namwon':
-            today_weather = db.search((where('name') == "namwon") & (where('date') == today))
-        elif city == 'iksan':
-            today_weather = db.search((where('name') == "iksan") & (where('date') == today))
+            json_content = sky(new_param_namwon)
+            db.insert({"name": "namwon", "date": today, "json_content": json_content})
+            return json_content
+        elif city == "iksan":
+            json_content = sky(new_param_iksan)
+            db.insert({"name": "iksan", "date": today, "json_content": json_content})
+            return json_content
         else:
-            today_weather = []
-
-        if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-            tdata = json.loads(today_weather[0]['json_content'])
-            pdata = json.dumps(tdata, ensure_ascii=False)
-            return pdata.replace("\"", "")
-        else:
-            if city == 'namwon':
-                json_content = sky(new_param_namwon)
-                db.insert({"name": "namwon", "date": today, "json_content": json_content})
-                tdata = json.loads(json_content)
-                pdata = json.dumps(tdata, ensure_ascii=False)
-                return pdata.replace("\"", "")
-            elif city == "iksan":
-                json_content = sky(new_param_iksan)
-                tdata = json.loads(json_content)
-                pdata = json.dumps(tdata, ensure_ascii=False)
-                return pdata.replace("\"", "")
-            else:
-                return "해당지역없음"
+            return "해당지역없음"
 
 
-@app.get("/weather_past/{city}")
-# @cross_origin(origin='*')
-def weather_past(city=str):
+@app.route("/weather_past/<city>")
+@app.route("/weather_past", methods=['GET'])
+@cross_origin(origin='*')
+def weather_past(city=None):
     # url3 = "https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionAjax.do"
     # header = {
     #     "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -391,12 +375,15 @@ def weather_past(city=str):
 
         w = {"result_23": result_23, "result_22": result_22, "result_23_4": result_23_4, "result_rain": result_rain}
 
-        return json.dumps(w, ensure_ascii=False).replace("\"", "")
+        return json.dumps(w, ensure_ascii=False)
 
 
-@app.get("/weather_now/{city}")
-# @cross_origin(origin='*')
-def weather_now(city=str):
+
+
+@app.route("/weather_now/<city>")
+@app.route("/weather_now", methods=['GET'])
+@cross_origin(origin='*')
+def weather_now(city=None):
     KST = datetime.timezone(datetime.timedelta(hours=9))
     time = datetime.datetime.now().astimezone(KST)
     date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -415,8 +402,7 @@ def weather_now(city=str):
     data_now = json.loads(result_now)
     content_now = data_now['data']
     namwon_now = [x for x in content_now if x['stnKo'] == '남원']
-    namwon_now[0][
-        'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+    namwon_now[0]['now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
     namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
     namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
     namwon_now[0]['log'] = log
@@ -431,15 +417,11 @@ def weather_now(city=str):
         now_weather = []
 
     if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        tdata = json.loads(now_weather[0]['json_content'])
-        pdata = json.dumps(tdata, ensure_ascii=False)
-        return pdata.replace("\"", "")
+        return now_weather[0]['json_content']
     else:
         if city == 'namwon':
             db2.insert({"name": "namwon", "date": date_time, 'json_content': namwon_json})
-            tdata = json.loads(namwon_json)
-            pdata = json.dumps(tdata, ensure_ascii=False)
-            return pdata.replace("\"", "")
+            return namwon_json
         elif city == "iksan":
             db2.insert({"name": "iksan", "date": date_time})
             return "공사중"
@@ -447,21 +429,22 @@ def weather_now(city=str):
             return "해당지역없음"
 
 
-@app.get("/weather_mid/{city}")
-# @cross_origin(origin='*')
-def weather_mid(city=str):
+@app.route("/weather_mid/<city>")
+@app.route("/weather_mid", methods=['GET'])
+@cross_origin(origin='*')
+def weather_mid(city=None):
     # KST = datetime.timezone(datetime.timedelta(hours=9))
     # today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")
     # time = datetime.datetime.now().astimezone(KST)
     today = datetime.datetime.now().strftime("%Y%m%d")
     time = datetime.datetime.now()
-    # print(time,today)
+    #print(time,today)	 
     y = time - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
     future = f.strftime("%Y%m%d")
 
-    now = datetime.datetime.now()  # 현재 날짜, 시각
+    now = datetime.datetime.now()    # 현재 날짜, 시각
     hour = now.hour  # 현재시각
 
     # ----요청 시각, 날짜 재조정
@@ -530,15 +513,11 @@ def weather_mid(city=str):
         future_weather = []
 
     if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        tdata = json.loads(future_weather[0]['json_content'])
-        pdata = json.dumps(tdata, ensure_ascii=False)
-        return pdata.replace("\"", "")
+        return future_weather[0]['json_content']
     else:
         if city == 'namwon':
             db3.insert({"name": "namwon", "date": today, 'json_content': nam_weather_mid})
-            tdata = json.loads(nam_weather_mid)
-            pdata = json.dumps(tdata, ensure_ascii=False)
-            return pdata.replace("\"", "")
+            return nam_weather_mid
         elif city == "iksan":
             db3.insert({"name": "iksan", "date": today})
             return "공사중"
@@ -547,10 +526,8 @@ def weather_mid(city=str):
 
 
 def main():
-    # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
-    # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+#    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
 
 
 if __name__ == '__main__':
