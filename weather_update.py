@@ -9,7 +9,7 @@ import pandas as pd
 import redis
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
-
+from fastapi.middleware.cors import CORSMiddleware
 # 플라스크 선언
 # app = Flask(__name__)
 # app.config['JSON_AS_ASCII'] = False
@@ -251,6 +251,19 @@ def generate_top_low(a, b):
 
 
 app = FastAPI()
+
+origins = [
+    "http://web01.taegon.kr:5000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 db = TinyDB('db.json')
 db2 = TinyDB('db_present.json')
