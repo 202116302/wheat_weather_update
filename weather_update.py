@@ -550,7 +550,7 @@ def main():
     # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
     # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
 
 
 if __name__ == '__main__':
