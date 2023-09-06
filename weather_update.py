@@ -253,7 +253,7 @@ def generate_top_low(a, b):
 app = FastAPI()
 
 origins = [
-    "http://web01.taegon.kr:5000",
+    "*",
 ]
 
 app.add_middleware(
