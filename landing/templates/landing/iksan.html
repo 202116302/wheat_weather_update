@@ -14,13 +14,14 @@
          }
 
         function now_result(data){
-            $("#now_name").html(data['stnKo'])
-            $("#now_sky").html(data['wwKo'])
-            $("#now_tem").html(data['ta'])
-            $("#now_wind_v").html(data['ws'])
-            $("#now_wind").html(data['wdKo'])
-            $("#now_time").html(data['now_time'])
-            $("#now_log").html(data['log'])
+            const data2 = JSON.parse(data);
+            $("#now_name").html(data2['stnKo'])
+            $("#now_sky").html(data2['wwKo'])
+            $("#now_tem").html(data2['ta'])
+            $("#now_wind_v").html(data2['ws'])
+            $("#now_wind").html(data2['wdKo'])
+            $("#now_time").html(data2['now_time'])
+            $("#now_log").html(data2['log'])
 
             const displayedImage = document.getElementById('displayedImage');
 
@@ -36,36 +37,37 @@
         }
 
         function short_result(data){
-            $("#date1").html(data[2][0])
-            $("#date2").html(data[2][1])
-            $("#date3").html(data[2][2])
-            $("#date4").html(data[2][3])
-            $("#date5").html(data[2][4])
-            $("#sky1").html(data[5][data[0][0]])
-            $("#sky2").html(data[5][data[0][1]])
-            $("#sky3").html(data[5][data[0][2]])
-            $("#sky4").html(data[5][data[0][3]])
-            $("#sky5").html(data[5][data[0][4]])
-            $("#rainfall1").html(data[3][data[0][0]])
-            $("#rainfall2").html(data[3][data[0][1]])
-            $("#rainfall3").html(data[3][data[0][2]])
-            $("#rainfall4").html(data[3][data[0][3]])
-            $("#rainfall5").html(data[3][data[0][4]])
-            $("#tmin1").html(data[6][data[0][0]])
-            $("#tmin2").html(data[6][data[0][1]])
-            $("#tmin3").html(data[6][data[0][2]])
-            $("#tmin4").html(data[6][data[0][3]])
-            $("#tmin5").html(data[6][data[0][4]])
-            $("#tmax1").html(data[7][data[0][0]])
-            $("#tmax2").html(data[7][data[0][1]])
-            $("#tmax3").html(data[7][data[0][2]])
-            $("#tmax4").html(data[7][data[0][3]])
-            $("#tmax5").html(data[7][data[0][4]])
-            $("#humid_now").html(data[4][data[0][0]])
-            $("#humid_now2").html(data[4][data[0][1]])
-            $("#humid_now3").html(data[4][data[0][2]])
-            $("#humid_now4").html(data[4][data[0][3]])
-            $("#humid_now5").html(data[4][data[0][4]])
+            const data2 = JSON.parse(data);
+            $("#date1").html(data2[2][0])
+            $("#date2").html(data2[2][1])
+            $("#date3").html(data2[2][2])
+            $("#date4").html(data2[2][3])
+            $("#date5").html(data2[2][4])
+            $("#sky1").html(data2[5][data2[0][0]])
+            $("#sky2").html(data2[5][data2[0][1]])
+            $("#sky3").html(data2[5][data2[0][2]])
+            $("#sky4").html(data2[5][data2[0][3]])
+            $("#sky5").html(data2[5][data2[0][4]])
+            $("#rainfall1").html(data2[3][data2[0][0]])
+            $("#rainfall2").html(data2[3][data2[0][1]])
+            $("#rainfall3").html(data2[3][data2[0][2]])
+            $("#rainfall4").html(data2[3][data2[0][3]])
+            $("#rainfall5").html(data2[3][data2[0][4]])
+            $("#tmin1").html(data2[6][data2[0][0]])
+            $("#tmin2").html(data2[6][data2[0][1]])
+            $("#tmin3").html(data2[6][data2[0][2]])
+            $("#tmin4").html(data2[6][data2[0][3]])
+            $("#tmin5").html(data2[6][data2[0][4]])
+            $("#tmax1").html(data2[7][data2[0][0]])
+            $("#tmax2").html(data2[7][data2[0][1]])
+            $("#tmax3").html(data2[7][data2[0][2]])
+            $("#tmax4").html(data2[7][data2[0][3]])
+            $("#tmax5").html(data2[7][data2[0][4]])
+            $("#humid_now").html(data2[4][data2[0][0]])
+            $("#humid_now2").html(data2[4][data2[0][1]])
+            $("#humid_now3").html(data2[4][data2[0][2]])
+            $("#humid_now4").html(data2[4][data2[0][3]])
+            $("#humid_now5").html(data2[4][data2[0][4]])
 
 
         }
@@ -80,34 +82,36 @@
              }
 
         function mid_result(date){
-            $("#date_mid2").html(date['date'][1])
-            $("#tmax_mid2").html(date[date['name'][1]]['tamax_4'])
-            $("#tmin_mid2").html(date[date['name'][1]]['tamin_4'])
-            $("#rainfall_mid2_am").html(date[date['name'][1]]['rf_4_am'])
-            $("#rainfall_mid2_pm").html(date[date['name'][1]]['rf_4_pm'])
-            $("#sky_mid2_am").html(date[date['name'][1]]['wf_4_am'])
-            $("#sky_mid2_pm").html(date[date['name'][1]]['wf_4_pm'])
-            $("#date_mid3").html(date['date'][2])
-            $("#tmax_mid3").html(date[date['name'][2]]['tamax_5'])
-            $("#tmin_mid3").html(date[date['name'][2]]['tamin_5'])
-            $("#rainfall_mid3_am").html(date[date['name'][2]]['rf_5_am'])
-            $("#rainfall_mid3_pm").html(date[date['name'][2]]['rf_5_pm'])
-            $("#sky_mid3_am").html(date[date['name'][2]]['wf_5_am'])
-            $("#sky_mid3_pm").html(date[date['name'][2]]['wf_5_pm'])
-            $("#date_mid4").html(date['date'][3])
-            $("#tmax_mid4").html(date[date['name'][3]]['tamax_6'])
-            $("#tmin_mid4").html(date[date['name'][3]]['tamin_6'])
-            $("#rainfall_mid4_am").html(date[date['name'][3]]['rf_6_am'])
-            $("#rainfall_mid4_pm").html(date[date['name'][3]]['rf_6_pm'])
-            $("#sky_mid4_am").html(date[date['name'][3]]['wf_6_am'])
-            $("#sky_mid4_pm").html(date[date['name'][3]]['wf_6_pm'])
-            $("#date_mid5").html(date['date'][4])
-            $("#tmax_mid5").html(date[date['name'][4]]['tamax_7'])
-            $("#tmin_mid5").html(date[date['name'][4]]['tamin_7'])
-            $("#rainfall_mid5_am").html(date[date['name'][4]]['rf_7_am'])
-            $("#rainfall_mid5_pm").html(date[date['name'][4]]['rf_7_pm'])
-            $("#sky_mid5_am").html(date[date['name'][4]]['wf_7_am'])
-            $("#sky_mid5_pm").html(date[date['name'][4]]['wf_7_pm'])
+            const data2 = JSON.parse(date);
+            console.log(data2)
+            $("#date_mid2").html(data2['date'][1])
+            $("#tmax_mid2").html(data2[data2['name'][1]]['tamax_4'])
+            $("#tmin_mid2").html(data2[data2['name'][1]]['tamin_4'])
+            $("#rainfall_mid2_am").html(data2[data2['name'][1]]['rf_4_am'])
+            $("#rainfall_mid2_pm").html(data2[data2['name'][1]]['rf_4_pm'])
+            $("#sky_mid2_am").html(data2[data2['name'][1]]['wf_4_am'])
+            $("#sky_mid2_pm").html(data2[data2['name'][1]]['wf_4_pm'])
+            $("#data_mid3").html(data2['date'][2])
+            $("#tmax_mid3").html(data2[data2['name'][2]]['tamax_5'])
+            $("#tmin_mid3").html(data2[data2['name'][2]]['tamin_5'])
+            $("#rainfall_mid3_am").html(data2[data2['name'][2]]['rf_5_am'])
+            $("#rainfall_mid3_pm").html(data2[data2['name'][2]]['rf_5_pm'])
+            $("#sky_mid3_am").html(data2[data2['name'][2]]['wf_5_am'])
+            $("#sky_mid3_pm").html(data2[data2['name'][2]]['wf_5_pm'])
+            $("#data_mid4").html(data2['date'][3])
+            $("#tmax_mid4").html(data2[data2['name'][3]]['tamax_6'])
+            $("#tmin_mid4").html(data2[data2['name'][3]]['tamin_6'])
+            $("#rainfall_mid4_am").html(data2[data2['name'][3]]['rf_6_am'])
+            $("#rainfall_mid4_pm").html(data2[data2['name'][3]]['rf_6_pm'])
+            $("#sky_mid4_am").html(data2[data2['name'][3]]['wf_6_am'])
+            $("#sky_mid4_pm").html(data2[data2['name'][3]]['wf_6_pm'])
+            $("#data_mid5").html(data2['date'][4])
+            $("#tmax_mid5").html(data2[data2['name'][4]]['tamax_7'])
+            $("#tmin_mid5").html(data2[data2['name'][4]]['tamin_7'])
+            $("#rainfall_mid5_am").html(data2[data2['name'][4]]['rf_7_am'])
+            $("#rainfall_mid5_pm").html(data2[data2['name'][4]]['rf_7_pm'])
+            $("#sky_mid5_am").html(data2[data2['name'][4]]['wf_7_am'])
+            $("#sky_mid5_pm").html(data2[data2['name'][4]]['wf_7_pm'])
 
     }
     </script>
@@ -313,7 +317,7 @@
 
                                         $.ajax({
                                             type: "GET",
-                                            url: "http://127.0.0.1:8000/weather_past/namwon",
+                                            url: "http://web01.taegon.kr:5000/weather_past/namwon",
                                             success: past_result,
                                             dataType:'json',
                                         });
@@ -322,6 +326,7 @@
                                     var myChart = echarts.init(document.getElementById('main'));
 
                                     function past_result(data) {
+                                        const data2 = JSON.parse(data);
                                         var option = {
                                             title: {
                                             },
@@ -353,7 +358,7 @@
                                             xAxis: {
                                                 type: 'category',
                                                 boundaryGap: false,
-                                                data: data['result_23']['date']
+                                                data: data2['result_23']['date']
                                             },
                                             yAxis: {
                                                 type: 'value',
@@ -373,7 +378,7 @@
                                                 {
                                                     name: '현재평균',
                                                     type: 'line',
-                                                    data: data['result_23']['tavg'],
+                                                    data: data2['result_23']['tavg'],
                                                     lineStyle: {normal: {color: '#74D36D'}},
                                                     itemStyle: {normal: {color: '#74D36D'}}
 
@@ -382,14 +387,14 @@
                                                 {
                                                     name: '상위25%',
                                                     type: 'line',
-                                                    data: data['result_23']['tmax'],
+                                                    data: data2['result_23']['tmax'],
                                                     lineStyle: {normal: {color: '#FF3636'}},
                                                     itemStyle: {normal: {color: '#FF3636'}}
                                                 },
                                                 {
                                                     name: '하위25%',
                                                     type: 'line',
-                                                    data: data['result_23']['tmin'],
+                                                    data: data2['result_23']['tmin'],
                                                     lineStyle: {normal: {color: '#6799FF'}},
                                                     itemStyle: {normal: {color: '#6799FF'}}
                                                 },
@@ -421,7 +426,7 @@
                                             success: past_result_rain,
                                             dataType:'json',
                                             error: function (request, status, error) {
-                                                alert("code = " + request.status + " error = " + error); // 실패 시 처리
+                                                alert("error"); // 실패 시 처리
                                             },
                                         });
                                     }
@@ -430,6 +435,7 @@
 
 
                                     function past_result_rain(data) {
+                                        const data2 = JSON.parse(data);
                                         const posList = [
                                            'left',
                                            'right',
@@ -529,7 +535,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: data['result_rain']['l'],
+                                                   data: data2['result_rain']['l'],
                                                     itemStyle: {
                                                         color: '#6e9dfe'
                                                     }
@@ -540,7 +546,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: data['result_rain']['p_2023'],
+                                                   data: data2['result_rain']['p_2023'],
                                                    itemStyle: {
                                                         color: '#55a431'
                                                     }
@@ -552,7 +558,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: data['result_rain']['m'],
+                                                   data: data2['result_rain']['m'],
                                                    itemStyle: {
                                                         color: '#bd4c4c'
                                                     }
