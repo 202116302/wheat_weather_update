@@ -336,21 +336,16 @@ async def weather_short(city: str):
             today_weather = []
 
         if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-            tdata = json.loads(today_weather[0]['json_content'])
-            pdata = json.dumps(tdata, ensure_ascii=False)
-            return pdata.replace("\"", "")
+            return today_weather[0]['json_content']
         else:
             if city == 'namwon':
                 json_content = sky(new_param_namwon)
                 db.insert({"name": "namwon", "date": today, "json_content": json_content})
-                tdata = json.loads(json_content)
-                pdata = json.dumps(tdata, ensure_ascii=False)
-                return pdata.replace("\"", "")
+                return json_content
             elif city == "iksan":
                 json_content = sky(new_param_iksan)
-                tdata = json.loads(json_content)
-                pdata = json.dumps(tdata, ensure_ascii=False)
-                return pdata.replace("\"", "")
+                db.insert({"name": "iksan", "date": today, "json_content": json_content})
+                return json_content
             else:
                 return "해당지역없음"
 
@@ -404,7 +399,7 @@ def weather_past(city=str):
 
         w = {"result_23": result_23, "result_22": result_22, "result_23_4": result_23_4, "result_rain": result_rain}
 
-        return json.dumps(w, ensure_ascii=False).replace("\"", "")
+        return json.dumps(w, ensure_ascii=False)
 
 
 @app.get("/weather_now/{city}")
@@ -444,15 +439,11 @@ def weather_now(city=str):
         now_weather = []
 
     if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        tdata = json.loads(now_weather[0]['json_content'])
-        pdata = json.dumps(tdata, ensure_ascii=False)
-        return pdata.replace("\"", "")
+        return now_weather[0]['json_content']
     else:
         if city == 'namwon':
             db2.insert({"name": "namwon", "date": date_time, 'json_content': namwon_json})
-            tdata = json.loads(namwon_json)
-            pdata = json.dumps(tdata, ensure_ascii=False)
-            return pdata.replace("\"", "")
+            return namwon_json
         elif city == "iksan":
             db2.insert({"name": "iksan", "date": date_time})
             return "공사중"
@@ -543,15 +534,13 @@ def weather_mid(city=str):
         future_weather = []
 
     if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        tdata = json.loads(future_weather[0]['json_content'])
-        pdata = json.dumps(tdata, ensure_ascii=False)
-        return pdata.replace("\"", "")
+        return nam_weather_mid
     else:
         if city == 'namwon':
             db3.insert({"name": "namwon", "date": today, 'json_content': nam_weather_mid})
-            tdata = json.loads(nam_weather_mid)
-            pdata = json.dumps(tdata, ensure_ascii=False)
-            return pdata.replace("\"", "")
+            return nam_weather_mid
+
+
         elif city == "iksan":
             db3.insert({"name": "iksan", "date": today})
             return "공사중"
@@ -563,7 +552,8 @@ def main():
     # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
     # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    # uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
 if __name__ == '__main__':
