@@ -20,6 +20,7 @@
             $("#now_wind_v").html(data['ws'])
             $("#now_wind").html(data['wdKo'])
             $("#now_time").html(data['now_time'])
+            $("#now_log").html(data['log'])
 
             const displayedImage = document.getElementById('displayedImage');
 
@@ -70,46 +71,45 @@
         }
 
         function weather_mid() {
-
-                                            $.ajax({
-                                                type: "GET",
-                                                url: "http://web01.taegon.kr:5000/weather_mid/namwon",
-                                                success: mid_result,
-                                                dataType: "json"
-                                            });
-                                         }
+                $.ajax({
+                    type: "GET",
+                    url: "http://web01.taegon.kr:5000/weather_mid/namwon",
+                    success: mid_result,
+                    dataType: "json"
+                });
+             }
 
         function mid_result(date){
-                                                $("#date_mid2").html(date['date'][1])
-                                                $("#tmax_mid2").html(date[date['name'][1]]['tamax_4'])
-                                                $("#tmin_mid2").html(date[date['name'][1]]['tamin_4'])
-                                                $("#rainfall_mid2_am").html(date[date['name'][1]]['rf_4_am'])
-                                                $("#rainfall_mid2_pm").html(date[date['name'][1]]['rf_4_pm'])
-                                                $("#sky_mid2_am").html(date[date['name'][1]]['wf_4_am'])
-                                                $("#sky_mid2_pm").html(date[date['name'][1]]['wf_4_pm'])
-                                                $("#date_mid3").html(date['date'][2])
-                                                $("#tmax_mid3").html(date[date['name'][2]]['tamax_5'])
-                                                $("#tmin_mid3").html(date[date['name'][2]]['tamin_5'])
-                                                $("#rainfall_mid3_am").html(date[date['name'][2]]['rf_5_am'])
-                                                $("#rainfall_mid3_pm").html(date[date['name'][2]]['rf_5_pm'])
-                                                $("#sky_mid3_am").html(date[date['name'][2]]['wf_5_am'])
-                                                $("#sky_mid3_pm").html(date[date['name'][2]]['wf_5_pm'])
-                                                $("#date_mid4").html(date['date'][3])
-                                                $("#tmax_mid4").html(date[date['name'][3]]['tamax_6'])
-                                                $("#tmin_mid4").html(date[date['name'][3]]['tamin_6'])
-                                                $("#rainfall_mid4_am").html(date[date['name'][3]]['rf_6_am'])
-                                                $("#rainfall_mid4_pm").html(date[date['name'][3]]['rf_6_pm'])
-                                                $("#sky_mid4_am").html(date[date['name'][3]]['wf_6_am'])
-                                                $("#sky_mid4_pm").html(date[date['name'][3]]['wf_6_pm'])
-                                                $("#date_mid5").html(date['date'][4])
-                                                $("#tmax_mid5").html(date[date['name'][4]]['tamax_7'])
-                                                $("#tmin_mid5").html(date[date['name'][4]]['tamin_7'])
-                                                $("#rainfall_mid5_am").html(date[date['name'][4]]['rf_7_am'])
-                                                $("#rainfall_mid5_pm").html(date[date['name'][4]]['rf_7_pm'])
-                                                $("#sky_mid5_am").html(date[date['name'][4]]['wf_7_am'])
-                                                $("#sky_mid5_pm").html(date[date['name'][4]]['wf_7_pm'])
+            $("#date_mid2").html(date['date'][1])
+            $("#tmax_mid2").html(date[date['name'][1]]['tamax_4'])
+            $("#tmin_mid2").html(date[date['name'][1]]['tamin_4'])
+            $("#rainfall_mid2_am").html(date[date['name'][1]]['rf_4_am'])
+            $("#rainfall_mid2_pm").html(date[date['name'][1]]['rf_4_pm'])
+            $("#sky_mid2_am").html(date[date['name'][1]]['wf_4_am'])
+            $("#sky_mid2_pm").html(date[date['name'][1]]['wf_4_pm'])
+            $("#date_mid3").html(date['date'][2])
+            $("#tmax_mid3").html(date[date['name'][2]]['tamax_5'])
+            $("#tmin_mid3").html(date[date['name'][2]]['tamin_5'])
+            $("#rainfall_mid3_am").html(date[date['name'][2]]['rf_5_am'])
+            $("#rainfall_mid3_pm").html(date[date['name'][2]]['rf_5_pm'])
+            $("#sky_mid3_am").html(date[date['name'][2]]['wf_5_am'])
+            $("#sky_mid3_pm").html(date[date['name'][2]]['wf_5_pm'])
+            $("#date_mid4").html(date['date'][3])
+            $("#tmax_mid4").html(date[date['name'][3]]['tamax_6'])
+            $("#tmin_mid4").html(date[date['name'][3]]['tamin_6'])
+            $("#rainfall_mid4_am").html(date[date['name'][3]]['rf_6_am'])
+            $("#rainfall_mid4_pm").html(date[date['name'][3]]['rf_6_pm'])
+            $("#sky_mid4_am").html(date[date['name'][3]]['wf_6_am'])
+            $("#sky_mid4_pm").html(date[date['name'][3]]['wf_6_pm'])
+            $("#date_mid5").html(date['date'][4])
+            $("#tmax_mid5").html(date[date['name'][4]]['tamax_7'])
+            $("#tmin_mid5").html(date[date['name'][4]]['tamin_7'])
+            $("#rainfall_mid5_am").html(date[date['name'][4]]['rf_7_am'])
+            $("#rainfall_mid5_pm").html(date[date['name'][4]]['rf_7_pm'])
+            $("#sky_mid5_am").html(date[date['name'][4]]['wf_7_am'])
+            $("#sky_mid5_pm").html(date[date['name'][4]]['wf_7_pm'])
 
-                                        }
+    }
     </script>
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -135,22 +135,7 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <div>
-                                    <img src="{% static 'landing/img/layout2.png' %}" width="1000">
-                                    {#                                    <img src="{% static 'landing/img/map3.png' %}" usemap="#field_map" width="723">#}
-                                    {#                                    <map name="field_map">#}
-                                    {#                                        <area target="" alt="" title="" href="javascript:alert('field1')"#}
-                                    {#                                              coords="132,165,213,95,393,314,313,382" shape="poly">#}
-                                    {#                                        <area target="" alt="" title="" href="javascript:alert('field2')"#}
-                                    {#                                              coords="48,234,127,170,306,387,226,452" shape="poly">#}
-                                    {#                                        <area target="" alt="" title="" href="javascript:alert('field3')"#}
-                                    {#                                              coords="235,474,316,406,495,624,411,690" shape="poly">#}
-                                    {#                                        <area target="" alt="" title="" href="javascript:alert('field4')"#}
-                                    {#                                              coords="322,402,401,335,578,554,498,616" shape="poly">#}
-                                    {#                                        <area target="" alt="" title="" href="javascript:alert('field5')"#}
-                                    {#                                              coords="481,260,406,327,584,542,663,474" shape="poly">#}
-                                    </map>
-                                </div>
+                                <img src="{% static 'landing/img/layout2.png' %}" width="1000" alt="map">
                             </div>
                         </div>
                     </div>
@@ -162,39 +147,36 @@
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h6>
+                                            <h6 class='mb-0 mt-1' id='now_log'></h6>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
-                                            <table class="table fs-5 text-center"
-                                                   style="border-color:#f8f9fa; border-collapse:unset">
+                                            <table class="table fs-5 text-center" style="border-color:#f8f9fa; border-collapse:unset">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">온도</th>
                                                     <th scope="col">습도</th>
-                                                    <th scope="col">강수량</th>
-                                                    <th scope="col">일사량</th>
-                                                    <th scope="col">바람</th>
+                                                    <th scope="col">날씨</th>
+                                                    <th scope="col">풍향</th>
+                                                    <th scope="col">풍속</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td>
                                                         <div id="now_tem"></div>
-                                                        <span class="fs-6">°C</span>
                                                     </td>
                                                     <td>
-                                                        <div id="humid"></div>
-                                                        <span class="fs-6">%</span>
+                                                        <div id="humid_now"></div>
                                                     </td>
                                                     <td>
-                                                        <div id="rainfall"></div>
-                                                        <span class="fs-6">mm</span></td>
-                                                    <td>
-                                                        <div id="sunshine"></div>
-                                                        <span class="fs-6">w/m<sup>2</sup></span></td>
+                                                        <div id="now_sky"></div>
+                                                    </td>
                                                     <td>
                                                         <div id="now_wind"></div>
-                                                        <span class="fs-6">m/s</span><br>북서풍
+                                                    </td>
+                                                    <td>
+                                                        <div id="now_wind_v"></div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -206,7 +188,7 @@
 
 
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-6">
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -214,85 +196,96 @@
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">일자</th>
-                                                    <th scope="col">
-                                                        <div id="date1"></div>
-                                                    </th>
-                                                    <th scope="col">
-                                                        <div id="date2"></div>
-                                                    </th>
-                                                    <th scope="col">
-                                                        <div id="date3"></div>
-                                                    </th>
-                                                    <th scope="col">
-                                                        <div id="date4"></div>
-                                                    </th>
-                                                    <th scope="col">
-                                                        <div id="date5"></div>
-                                                    </th>
-                                                </tr>
-                                                <tbody>
-                                                <tr>
-                                                    <th scope="row">날씨</th>
-                                                    <td>
-                                                        <div id="sky1"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="sky2"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="sky3"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="sky4"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="sky5"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">강수확률</th>
-                                                    <td>
-                                                        <div id="rainfall1"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="rainfall2"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="rainfall3"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="rainfall4"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div id="rainfall5"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">최저 기온</th>
-                                                    <td>
-                                                        <div class="block" id="tmin1"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="block" id="tmin2"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="block" id="tmin3"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="block" id="tmin4"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="block" id="tmin5"></div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                                </tr>
-                                                </thead>
-                                            </table>
+                                            <table class="table fs-6 text-center" style="border-color:#f8f9fa; border-collapse:unset">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col" class="px-1">최고기온</th>
+                                                <th scope="col" class="px-1">최저기온</th>
+                                                <th scope="col" class="px-1">습도</th>
+                                                <th scope="col" class="px-1">강수확률</th>
+                                                <th scope="col" class="px-1">구름양</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="py-4"><div id="date2"></div></td>
+                                                <td class="py-4"><div id="tmax2"></div></td>
+                                                <td class="py-4"><div id="tmin2"></div></td>
+                                                <td class="py-4"><div id="humid_now2"></div></td>
+                                                <td class="py-4"><div id="rainfall2"></div></td>
+                                                <td class="py-4"><div id="sky2"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div id="date3"></div></td>
+                                                <td class="py-4"><div id="tmax3"></div></td>
+                                                <td class="py-4"><div id="tmin3"></div></td>
+                                                <td class="py-4"><div id="humid_now3"></div></td>
+                                                <td class="py-4"><div id="rainfall3"></div></td>
+                                                <td class="py-4"><div id="sky3"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div id="date4"></div></td>
+                                                <td class="py-4"><div id="tmax4"></div></td>
+                                                <td class="py-4"><div id="tmin4"></div></td>
+                                                <td class="py-4"><div id="humid_now4"></div></td>
+                                                <td class="py-4"><div id="rainfall4"></div></td>
+                                                <td class="py-4"><div id="sky4"></div></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">중기 기상 데이터</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <table class="table text-center fs-5">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col" class="px-1">최고기온</th>
+                                                <th scope="col" class="px-1">최저기온</th>
+                                                <th scope="col" class="px-1">강수확률</th>
+                                                <th scope="col" class="px-1">날씨</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="py-4"><div id="date_mid2"></div></td>
+                                                <td class="py-4"><div id="tmax_mid2"></div></td>
+                                                <td class="py-4"><div id="tmin_mid2"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid2_pm"></div></td>
+                                                <td class="py-4"><div id="sky_mid2_pm"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div id="date_mid3"></div></td>
+                                                <td class="py-4"><div id="tmax_mid3"></div></td>
+                                                <td class="py-4"><div id="tmin_mid3"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid3_pm"></div></td>
+                                                <td class="py-4"><div id="sky_mid3_pm"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div id="date_mid4"></div></td>
+                                                <td class="py-4"><div id="tmax_mid4"></div></td>
+                                                <td class="py-4"><div id="tmin_mid4"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid4_pm"></div></td>
+                                                <td class="py-4"><div id="sky_mid4_pm"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div id="date_mid5"></div></td>
+                                                <td class="py-4"><div id="tmax_mid5"></div></td>
+                                                <td class="py-4"><div id="tmin_mid5"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid5_pm"></div></td>
+                                                <td class="py-4"><div id="sky_mid5_pm"></div></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                         </div>
                                     </div>
                                 </div>
@@ -300,6 +293,309 @@
                         </div>
                     </div>
                 </div>
+                <div class="row px-3 mt-3">
+                  <h1 style="font-weight: bolder;">과거기상비교
+                            <a target="_blank" href="https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do?pgmNo=179">
+                             <img id='btn' src="{% static 'landing/img/page_click2.png' %}" alt="graph" width="35px">
+                         </a>
+                  </h1>
+                </div>
+                     <div class="row mt-2 mb-4">
+                     <div class="col-lg-6 col-xxl-6">
+                        <div class="card text-center shadow">
+                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h3 class="m-0 font-weight-bold text-primary">월평균 기온</h3>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="main" class="mt-4" style="width: 900px; height:400px; text-align: center;"></div>
+                                <script>
+                                    function weather_past() {
+
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "http://127.0.0.1:8000/weather_past/namwon",
+                                            success: past_result,
+                                            dataType:'json',
+                                        });
+                                    }
+
+                                    var myChart = echarts.init(document.getElementById('main'));
+
+                                    function past_result(data) {
+                                        var option = {
+                                            title: {
+                                            },
+                                            tooltip: {
+                                                trigger: 'axis',
+                                                position: function (pt) {
+                                                    return [pt[0], '100%'];
+                                                },
+
+                                            },
+                                            legend: {
+                                                data: ['하위25%', '현재평균', '상위25%'],
+                                            },
+                                            grid: {
+                                                left: '3%',
+                                                right: '4%',
+                                                bottom: '50',
+                                                containLabel: true
+                                            },
+                                            toolbox: {
+                                                feature: {
+                                                    dataZoom: {
+                                                        yAxisIndex: 'none'
+                                                    },
+                                                    restore: {},
+                                                    saveAsImage: {}
+                                                }
+                                            },
+                                            xAxis: {
+                                                type: 'category',
+                                                boundaryGap: false,
+                                                data: data['result_23']['date']
+                                            },
+                                            yAxis: {
+                                                type: 'value',
+                                                boundaryGap: [0, '100%'],
+                                                min: -10,
+                                                max: 30
+                                            },
+                                            dataZoom: [
+                                                {
+                                                    show: true,
+                                                },
+                                                {
+                                                    type: 'inside',
+                                                }
+                                            ],
+                                            series: [
+                                                {
+                                                    name: '현재평균',
+                                                    type: 'line',
+                                                    data: data['result_23']['tavg'],
+                                                    lineStyle: {normal: {color: '#74D36D'}},
+                                                    itemStyle: {normal: {color: '#74D36D'}}
+
+
+                                                },
+                                                {
+                                                    name: '상위25%',
+                                                    type: 'line',
+                                                    data: data['result_23']['tmax'],
+                                                    lineStyle: {normal: {color: '#FF3636'}},
+                                                    itemStyle: {normal: {color: '#FF3636'}}
+                                                },
+                                                {
+                                                    name: '하위25%',
+                                                    type: 'line',
+                                                    data: data['result_23']['tmin'],
+                                                    lineStyle: {normal: {color: '#6799FF'}},
+                                                    itemStyle: {normal: {color: '#6799FF'}}
+                                                },
+                                            ]
+                                        };
+
+                                        // 위에서 설정한 속성을 차트에 반영합니다.
+                                            myChart.setOption(option);
+
+                                       }
+                                    </script>
+                            </div>
+                        </div>
+                    </div>
+ {#                         -------------------강수량 그래프 ---------------#}
+                     <div class="col-lg-6 col-xxl-6">
+                        <div class="card shadow">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h3 class="m-0 font-weight-bold text-primary">월평균 강수량</h3>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="rain" class="mt-4" style="width: 900px; height:400px; text-align: center;"></div>
+                                <script>
+                                    function weather_past_rain() {
+
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "http://web01.taegon.kr:5000/weather_past/namwon",
+                                            success: past_result_rain,
+                                            dataType:'json',
+                                            error: function (request, status, error) {
+                                                alert("code = " + request.status + " error = " + error); // 실패 시 처리
+                                            },
+                                        });
+                                    }
+
+                                    var rainfall = echarts.init(document.getElementById('rain'));
+
+
+                                    function past_result_rain(data) {
+                                        const posList = [
+                                           'left',
+                                           'right',
+                                           'top',
+                                           'bottom',
+                                           'inside',
+                                           'insideTop',
+                                           'insideLeft',
+                                           'insideRight',
+                                           'insideBottom',
+                                           'insideTopLeft',
+                                           'insideTopRight',
+                                           'insideBottomLeft',
+                                           'insideBottomRight'
+
+                                       ];
+
+                                       rainfall.configParameters = {
+                                           rotate: {
+                                               min: -90,
+                                               max: 90
+                                           },
+                                           align: {
+                                               options: {
+                                                   left: 'left',
+                                                   center: 'center',
+                                                   right: 'right'
+                                               }
+                                           },
+                                           verticalAlign: {
+                                               options: {
+                                                   top: 'top',
+                                                   middle: 'middle',
+                                                   bottom: 'bottom'
+                                               }
+                                           },
+                                           position: {
+                                               options: posList.reduce(function (map, pos) {
+                                                   map[pos] = pos;
+                                                   return map;
+                                               }, {})
+                                           },
+                                           distance: {
+                                               min: 0,
+                                               max: 100
+                                           }
+                                       };
+
+                                       rainfall.config = {
+                                           rotate: 90,
+                                           align: 'left',
+                                           verticalAlign: 'middle',
+                                           position: 'insideBottom',
+                                           distance: 15,
+                                       };
+                                       option = {
+                                           title: {
+                                           },
+                                           tooltip: {
+                                               trigger: 'axis',
+                                               axisPointer: {
+                                                   type: 'shadow'
+                                               }
+                                           },
+                                           legend: {
+                                               data: ['하위25%', '현재', '상위25%']
+                                           },
+                                           toolbox: {
+                                               show: true,
+                                               orient: 'vertical',
+                                               left: 'right',
+                                               top: 'center',
+                                               feature: {
+                                                   mark: {show: true},
+                                                   dataView: {show: true, readOnly: false},
+                                                   magicType: {show: true, type: ['line', 'bar', 'stack']},
+                                                   restore: {show: true},
+                                                   saveAsImage: {show: true}
+                                               }
+                                           },
+                                           xAxis: [
+                                               {
+                                                   type: 'category',
+                                                   axisTick: {show: false},
+                                                   data: ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월']
+                                               }
+                                           ],
+                                           yAxis: [
+                                               {
+                                                   type: 'value'
+                                               }
+                                           ],
+                                           series: [
+                                                {
+                                                   name: '하위25%',
+                                                   type: 'bar',
+                                                   emphasis: {
+                                                       focus: 'series'
+                                                   },
+                                                   data: data['result_rain']['l'],
+                                                    itemStyle: {
+                                                        color: '#6e9dfe'
+                                                    }
+                                               },
+                                               {
+                                                   name: '현재',
+                                                   type: 'bar',
+                                                   emphasis: {
+                                                       focus: 'series'
+                                                   },
+                                                   data: data['result_rain']['p_2023'],
+                                                   itemStyle: {
+                                                        color: '#55a431'
+                                                    }
+                                               },
+                                               {
+                                                   name: '상위25%',
+                                                   type: 'bar',
+                                                   barGap: 0,
+                                                   emphasis: {
+                                                       focus: 'series'
+                                                   },
+                                                   data: data['result_rain']['m'],
+                                                   itemStyle: {
+                                                        color: '#bd4c4c'
+                                                    }
+                                               },
+                                           ],
+
+                                       };
+
+                                       rainfall.setOption(option);
+
+                                       }
+                                    </script>
+                            </div>
+                        </div>
+                        </div>
+                     </div>
+
+                <div class="row px-3">
+                     <h1 style="font-weight: bolder;">모델예측</h1>
+                </div>
+                     <div class="row mt-2 mb-3">
+                        <div class="col-lg-6 col-xxl-6 mb-5">
+                            <div class="card shadow">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h3 class="m-0 font-weight-bold text-primary">생산량</h3>
+                            </div>
+                        <div class="card-body text-center">
+                            <img src="{% static 'landing/img/model_202308.png' %}" width="750px" alt="map">
+                        </div>
+                    </div>
+                        </div>
+                        <div class="col-lg-6 col-xxl-6 mb-5">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h3 class="m-0 font-weight-bold text-primary">수분함량</h3>
+                                </div>
+                        <div class="card-body text-center">
+                            <img src="{% static 'landing/img/dashboard_rain_sws_namwon_current.png' %}" width="750px" alt="map">
+                        </div>
+                        </div>
+                    </div>
+                 </div>
+            <div>
                 <h2>Matric potential sensor</h2>
                 <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -787,31 +1083,7 @@
                         </div>
                     </div>
             </div>
+            </div>
         </div>
     </div>
-    </div>
 {% endblock %}
-<!-- End of Page Wrapper -->
-
-<!--&lt;!&ndash; Scroll to Top Button&ndash;&gt;-->
-<!--<a class="scroll-to-top rounded" href="#page-top">-->
-<!--    <i class="fas fa-angle-up"></i>-->
-<!--</a>-->
-
-
-<!-- Bootstrap core JavaScript-->
-<!--<script src="vendor/jquery/jquery.min.js"></script>-->
-<!--<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-
-<!--&lt;!&ndash; Core plugin JavaScript&ndash;&gt;-->
-<!--<script src="vendor/jquery-easing/jquery.easing.min.js"></script>-->
-
-<!--&lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
-<!--<script src="js/sb-admin-2.min.js"></script>-->
-
-<!--&lt;!&ndash; Page level plugins &ndash;&gt;-->
-<!--<script src="vendor/chart.js/Chart.min.js"></script>-->
-
-<!--&lt;!&ndash; Page level custom scripts &ndash;&gt;-->
-<!--<script src="js/demo/chart-area-demo.js"></script>-->
-<!--<script src="js/demo/chart-pie-demo.js"></script>-->
