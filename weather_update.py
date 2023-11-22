@@ -10,6 +10,7 @@ import redis
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+
 # 플라스크 선언
 # app = Flask(__name__)
 # app.config['JSON_AS_ASCII'] = False
@@ -43,6 +44,14 @@ ny_namwon = '80'
 nx_iksan = '59'
 ny_iksan = '94'
 
+# 평창군 대화면
+nx_pyeongchang = '85'
+ny_pyeongchang = '126'
+
+# 부안군 백산면
+nx_buan = '57'
+ny_buan = '86'
+
 
 # 요일 나타내는 함수
 def what_day_is_it(date):
@@ -50,7 +59,6 @@ def what_day_is_it(date):
     day = date.weekday()
 
     return days[day]
-
 
 # 지역별 파라미터 + url 함수
 def add_url_params(url, params):
@@ -422,21 +430,38 @@ def weather_now(city=str):
     result_now = response_now.text
     data_now = json.loads(result_now)
     content_now = data_now['data']
-    namwon_now = [x for x in content_now if x['stnKo'] == '남원']
-    namwon_now[0][
-        'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
-    namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
-    namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
-    namwon_now[0]['log'] = log
+    if city == "namwon":
+        namwon_now = [x for x in content_now if x['stnKo'] == '남원']
+        namwon_now[0][
+            'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+        namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
+        namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
+        namwon_now[0]['log'] = log
 
-    namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
+        namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
 
-    if city == 'namwon':
+
         now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
+
     elif city == 'iksan':
+        iksan_now = [x for x in content_now if x['stnKo'] == '익산']
+        iksan_now[0][
+            'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+        iksan_now[0]['ta'] = iksan_now[0]['ta'] + "°C"
+        iksan_now[0]['ws'] = iksan_now[0]['ws'] + "m/s"
+        iksan_now[0]['log'] = log
+
+        iksan_json = json.dumps(iksan_now[0], ensure_ascii=False)
         now_weather = db2.search((where('name') == "iksan") & (where('date') == time))
     else:
         now_weather = []
+
+    # if city == 'namwon':
+    #     now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
+    # elif city == 'iksan':
+    #     now_weather = db2.search((where('name') == "iksan") & (where('date') == time))
+    # else:
+    #     now_weather = []
 
     if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
         return now_weather[0]['json_content']
@@ -445,8 +470,8 @@ def weather_now(city=str):
             db2.insert({"name": "namwon", "date": date_time, 'json_content': namwon_json})
             return namwon_json
         elif city == "iksan":
-            db2.insert({"name": "iksan", "date": date_time})
-            return "공사중"
+            db2.insert({"name": "iksan", "date": date_time, 'json_content': iksan_json})
+            return iksan_json
         else:
             return "해당지역없음"
 
@@ -495,8 +520,18 @@ def weather_mid(city=str):
         'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
         'regId': '11F10401', 'tmFc': f'{today}0600'}
 
+    params_url3 = {
+        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+        'regId': '11F10202', 'tmFc': f'{today}0600'}
+
     response_land = requests.get(url, params=params_url)
-    response_midta = requests.get(url2, params=params_url2)
+
+    if city == "namwon":
+        response_midta = requests.get(url2, params=params_url2)
+    elif city == "iksan":
+        response_midta = requests.get(url2, params=params_url3)
+
 
     item_land = response_land.content.decode('utf-8')
     item_midta = response_midta.content.decode('utf-8')
@@ -524,7 +559,7 @@ def weather_mid(city=str):
 
     weather_mid['date'] = date
     weather_mid['name'] = name
-    nam_weather_mid = json.dumps(weather_mid, default=str, ensure_ascii=False)
+    weather_mid = json.dumps(weather_mid, default=str, ensure_ascii=False)
 
     if city == 'namwon':
         future_weather = db3.search((where('name') == "namwon") & (where('date') == today))
@@ -534,16 +569,16 @@ def weather_mid(city=str):
         future_weather = []
 
     if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        return nam_weather_mid
+        return weather_mid
     else:
         if city == 'namwon':
-            db3.insert({"name": "namwon", "date": today, 'json_content': nam_weather_mid})
-            return nam_weather_mid
+            db3.insert({"name": "namwon", "date": today, 'json_content': weather_mid})
+            return weather_mid
 
 
         elif city == "iksan":
-            db3.insert({"name": "iksan", "date": today})
-            return "공사중"
+            db3.insert({"name": "iksan", "date": today, 'json_content': weather_mid})
+            return weather_mid
         else:
             return "해당지역없음"
 
@@ -552,8 +587,8 @@ def main():
     # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
     # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
 if __name__ == '__main__':
