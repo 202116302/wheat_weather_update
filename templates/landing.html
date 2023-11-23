@@ -6,25 +6,69 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <form id="form_id" action="javascript:post_query()">
-        <input type="text" name="city" value="namwon">
-        <button type="submit">click</button>
-    </form>
-    <div id="results"></div>
+    <label for="loc">지역 입력</label>
+    <input type="text" id=loc name="city" placeholder="(ex. namwon)">
+    <button onclick="weather()">click</button>
+    <p>현재기상</p>
+    <div id="results_now"></div>
+    <p>단기예보</p>
+    <div id="results_short"></div>
+    <p>중기예보</p>
+    <div id="results_mid"></div>
 <script>
-    function post_query() {
+
+
+    function weather() {
+        weather_now();
+        weather_short();
+        weather_mid();
+    }
+
+    function weather_now() {
+    var cityName = document.getElementById('loc').value;
     $.ajax({
       type: "GET",
-      url: "/weather_short",
-      data: $("#form_id").serialize(),
-      success: update_result,
+      url: "/weather_now/" + cityName,
+      success: update_now,
       dataType: "html"
-    });
-}
+        });
+    }
 
-function update_result(data) {
-    $("#results").html(data);
-}
+    function update_now(data) {
+        data = JSON.parse(data)
+        $("#results_now").html(data);
+    }
+
+
+    function weather_short() {
+    var cityName = document.getElementById('loc').value;
+    $.ajax({
+      type: "GET",
+      url: "/weather_short/" + cityName,
+      success: update_short,
+      dataType: "html"
+        });
+    }
+
+    function update_short(data) {
+        data = JSON.parse(data)
+        $("#results_short").html(data);
+    }
+
+    function weather_mid() {
+    var cityName = document.getElementById('loc').value;
+    $.ajax({
+      type: "GET",
+      url: "/weather_mid/" + cityName,
+      success: update_mid,
+      dataType: "html"
+        });
+    }
+
+    function update_mid(data) {
+        data = JSON.parse(data)
+        $("#results_mid").html(data);
+    }
 </script>
 </body>
 </html>
