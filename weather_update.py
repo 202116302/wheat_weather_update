@@ -332,14 +332,21 @@ async def weather_short(city: str):
         new_param_iksan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
                            'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_iksan, 'ny': ny_iksan}
 
-        # if request.method == 'GET' and city is None:
-        #     city = request.args.get('city')
-        #     city = str(escape(city))
+
+        new_param_pyeongchang = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
+                   'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_pyeongchang, 'ny': nx_pyeongchang}
+
+        new_param_buan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
+                          'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_buan, 'ny': nx_buan}
 
         if city == 'namwon':
             today_weather = db.search((where('name') == "namwon") & (where('date') == today))
         elif city == 'iksan':
             today_weather = db.search((where('name') == "iksan") & (where('date') == today))
+        elif city == 'pyeongchang':
+            today_weather = db.search((where('name') == "pyeongchang") & (where('date') == today))
+        elif city == 'buan':
+            today_weather = db.search((where('name') == "buan") & (where('date') == today))
         else:
             today_weather = []
 
@@ -353,6 +360,14 @@ async def weather_short(city: str):
             elif city == "iksan":
                 json_content = sky(new_param_iksan)
                 db.insert({"name": "iksan", "date": today, "json_content": json_content})
+                return json_content
+            elif city == "pyeongchang":
+                json_content = sky(new_param_pyeongchang)
+                db.insert({"name": "pyeongchang", "date": today, "json_content": json_content})
+                return json_content
+            elif city == "buan":
+                json_content = sky(new_param_buan)
+                db.insert({"name": "buan", "date": today, "json_content": json_content})
                 return json_content
             else:
                 return "해당지역없음"
@@ -430,109 +445,64 @@ def weather_now(city=str):
     result_now = response_now.text
     data_now = json.loads(result_now)
     content_now = data_now['data']
+
+
     if city == "namwon":
-        namwon_now = [x for x in content_now if x['stnKo'] == '남원']
-        namwon_now[0][
+        w_now = [x for x in content_now if x['stnKo'] == '남원']
+        w_now[0][
             'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
-        namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
-        namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
-        namwon_now[0]['log'] = log
+        w_now[0]['ta'] = w_now[0]['ta'] + "°C"
+        w_now[0]['ws'] = w_now[0]['ws'] + "m/s"
+        w_now[0]['log'] = log
 
-        namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
-
-
-        now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
-
-    elif city == 'iksan':
-        iksan_now = [x for x in content_now if x['stnKo'] == '익산']
-        iksan_now[0][
+        w_json = json.dumps(w_now[0], ensure_ascii=False)
+    elif city == "buan":
+        w_now = [x for x in content_now if x['stnKo'] == '부안']
+        w_now[0][
             'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
-        iksan_now[0]['ta'] = iksan_now[0]['ta'] + "°C"
-        iksan_now[0]['ws'] = iksan_now[0]['ws'] + "m/s"
-        iksan_now[0]['log'] = log
+        w_now[0]['ta'] = w_now[0]['ta'] + "°C"
+        w_now[0]['ws'] = w_now[0]['ws'] + "m/s"
+        w_now[0]['log'] = log
 
-        iksan_json = json.dumps(iksan_now[0], ensure_ascii=False)
-        now_weather = db2.search((where('name') == "iksan") & (where('date') == time))
+        w_json = json.dumps(w_now[0], ensure_ascii=False)
     else:
-        now_weather = []
+        pass
 
-    # if city == 'namwon':
-    #     now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
     # elif city == 'iksan':
+    #     iksan_now = [x for x in content_now if x['stnKo'] == '익산']
+    #     iksan_now[0][
+    #         'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+    #     iksan_now[0]['ta'] = iksan_now[0]['ta'] + "°C"
+    #     iksan_now[0]['ws'] = iksan_now[0]['ws'] + "m/s"
+    #     iksan_now[0]['log'] = log
+    #
+    #     iksan_json = json.dumps(iksan_now[0], ensure_ascii=False)
     #     now_weather = db2.search((where('name') == "iksan") & (where('date') == time))
     # else:
     #     now_weather = []
+
+    if city == 'namwon':
+        now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
+    elif city == 'iksan':
+        now_weather = db2.search((where('name') == "buan") & (where('date') == time))
+    else:
+        now_weather = []
 
     if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
         return now_weather[0]['json_content']
     else:
         if city == 'namwon':
-            db2.insert({"name": "namwon", "date": date_time, 'json_content': namwon_json})
-            return namwon_json
-        elif city == "iksan":
-            db2.insert({"name": "iksan", "date": date_time, 'json_content': iksan_json})
-            return iksan_json
+            db2.insert({"name": "namwon", "date": date_time, 'json_content': w_json})
+            return w_json
+        elif city == "buan":
+            db2.insert({"name": "buan", "date": date_time, 'json_content': w_json})
+            return w_json
         else:
             return "해당지역없음"
 
 
-@app.get("/weather_mid/{city}")
-# @cross_origin(origin='*')
-def weather_mid(city=str):
-    # KST = datetime.timezone(datetime.timedelta(hours=9))
-    # today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")
-    # time = datetime.datetime.now().astimezone(KST)
-    today = datetime.datetime.now().strftime("%Y%m%d")
+def filter_mid(response_land, response_midta):
     time = datetime.datetime.now()
-    # print(time,today)
-    y = time - datetime.timedelta(days=1)
-    f = datetime.date.today() + datetime.timedelta(days=3)
-    yesterday = y.strftime("%Y%m%d")  # 어제날짜
-    future = f.strftime("%Y%m%d")
-
-    now = datetime.datetime.now()  # 현재 날짜, 시각
-    hour = now.hour  # 현재시각
-
-    # ----요청 시각, 날짜 재조정
-    if hour < 6:
-        today = yesterday
-        time = y
-
-    # 중기육상예보(강수 확률, 날씨 예보)
-    url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst'
-    # 중기기온조희(예상최저, 최고 기온)
-    url2 = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa'
-
-    # 중기육상예보
-    # 전라북도 : 11F10000
-
-    params_url = {
-        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
-        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
-        'regId': '11F10000', 'tmFc': f'{today}0600'}
-
-    # regIdd , 중기기온조회
-    # 남원 : 11F10401
-    # 익산 : 11F10202
-
-    params_url2 = {
-        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
-        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
-        'regId': '11F10401', 'tmFc': f'{today}0600'}
-
-    params_url3 = {
-        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
-        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
-        'regId': '11F10202', 'tmFc': f'{today}0600'}
-
-    response_land = requests.get(url, params=params_url)
-
-    if city == "namwon":
-        response_midta = requests.get(url2, params=params_url2)
-    elif city == "iksan":
-        response_midta = requests.get(url2, params=params_url3)
-
-
     item_land = response_land.content.decode('utf-8')
     item_midta = response_midta.content.decode('utf-8')
 
@@ -559,12 +529,99 @@ def weather_mid(city=str):
 
     weather_mid['date'] = date
     weather_mid['name'] = name
+
     weather_mid = json.dumps(weather_mid, default=str, ensure_ascii=False)
+
+    return weather_mid
+
+@app.get("/weather_mid/{city}")
+# @cross_origin(origin='*')
+def weather_mid(city=str):
+    # KST = datetime.timezone(datetime.timedelta(hours=9))
+    # today = datetime.datetime.now().astimezone(KST).strftime("%Y%m%d")
+    # time = datetime.datetime.now().astimezone(KST)
+    today = datetime.datetime.now().strftime("%Y%m%d")
+    time = datetime.datetime.now()
+    y = time - datetime.timedelta(days=1)
+    f = datetime.date.today() + datetime.timedelta(days=3)
+    yesterday = y.strftime("%Y%m%d")  # 어제날짜
+
+    now = datetime.datetime.now()  # 현재 날짜, 시각
+    hour = now.hour  # 현재시각
+
+    # ----요청 시각, 날짜 재조정
+    if hour < 6:
+        today = yesterday
+        time = y
+
+    # 중기육상예보(강수 확률, 날씨 예보)
+    url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst'
+    # 중기기온조희(예상최저, 최고 기온)
+    url2 = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa'
+
+    # 중기육상예보
+    # 전라북도 : 11F10000
+
+    params_url = {
+        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+        'regId': '11F10000', 'tmFc': f'{today}0600'}
+
+    # regIdd , 중기기온조회
+    # 남원 : 11F10401
+    # 익산 : 11F10202
+    # 평창 : 11D10503
+    # 부안 : 21F10602
+
+    params_url_namwon = {
+        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+        'regId': '11F10401', 'tmFc': f'{today}0600'}
+
+    params_url_iksan = {
+        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+        'regId': '11F10202', 'tmFc': f'{today}0600'}
+
+    params_url_pyeongchang = {
+        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+        'regId': '11D10503', 'tmFc': f'{today}0600'}
+
+    params_url_buan = {
+        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
+        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
+        'regId': '21F10602', 'tmFc': f'{today}0600'}
+
+
+
+    if city == "namwon":
+        response_land = requests.get(url, params=params_url_namwon)
+        response_midta = requests.get(url2, params=params_url_namwon)
+        weather_mid = filter_mid(response_land, response_midta)
+    elif city == "iksan":
+        response_land = requests.get(url, params=params_url_iksan)
+        response_midta = requests.get(url2, params=params_url_iksan)
+        weather_mid = filter_mid(response_land, response_midta)
+    elif city == "pyeongchang":
+        response_land = requests.get(url, params=params_url_pyeongchang)
+        response_midta = requests.get(url2, params=params_url_pyeongchang)
+        weather_mid = filter_mid(response_land, response_midta)
+    elif city == "buan":
+        response_land = requests.get(url, params=params_url_buan)
+        response_midta = requests.get(url2, params=params_url_buan)
+        weather_mid = filter_mid(response_land, response_midta)
+    else:
+        pass
 
     if city == 'namwon':
         future_weather = db3.search((where('name') == "namwon") & (where('date') == today))
     elif city == 'iksan':
         future_weather = db3.search((where('name') == "iksan") & (where('date') == today))
+    elif city == 'pyeongchang':
+        future_weather = db3.search((where('name') == "pyeongchang") & (where('date') == today))
+    elif city == 'buan':
+        future_weather = db3.search((where('name') == "buan") & (where('date') == today))
     else:
         future_weather = []
 
@@ -574,10 +631,14 @@ def weather_mid(city=str):
         if city == 'namwon':
             db3.insert({"name": "namwon", "date": today, 'json_content': weather_mid})
             return weather_mid
-
-
         elif city == "iksan":
             db3.insert({"name": "iksan", "date": today, 'json_content': weather_mid})
+            return weather_mid
+        elif city == "pyeongchang":
+            db3.insert({"name": "pyeongchang", "date": today, 'json_content': weather_mid})
+            return weather_mid
+        elif city == "buan":
+            db3.insert({"name": "buan", "date": today, 'json_content': weather_mid})
             return weather_mid
         else:
             return "해당지역없음"
