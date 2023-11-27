@@ -811,12 +811,14 @@ a.deletelink:focus, a.deletelink:hover {
 }
 
 .main > .content {
-    flex:  1 0;
+    flex:  10;
     max-width: 100%;
 }
 
 #content {
     padding: 20px 40px;
+    display: flex;
+    max-width: 100%;
 }
 
 .dashboard #content {

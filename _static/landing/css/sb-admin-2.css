@@ -10620,6 +10620,8 @@ a:focus {
 
 #wrapper {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
 }
 
 #wrapper #content-wrapper {
@@ -10995,6 +10997,7 @@ a:focus {
 
 .topbar {
     height: 4.375rem;
+    width: 100%;
 }
 
 .topbar #sidebarToggleTop {
@@ -11304,8 +11307,8 @@ a:focus {
 .sidebar .sidebar-heading {
     text-align: center;
     padding: 0 1rem;
-    font-weight: 800;
-    font-size: 0.65rem;
+    font-weight: bolder;
+    font-size: 1rem;
 }
 
 .sidebar .sidebar-card {

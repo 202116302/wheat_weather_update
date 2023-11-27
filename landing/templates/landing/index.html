@@ -38,76 +38,17 @@
           --side-bar-height: 90vh;
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-        }
-
-        .menu {
-            left: -300px;
-        }
-
-
-        .wrap {
-            border: 1px solid black;
-            padding: 10px;
-        }
-
-        .fade-in {
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .tip1:hover + .fade-in {
-            opacity: 1;
-        }
-
-        .fade-out {
-            opacity: 1;
-            transition: 0.3s;
-        }
-
-        .tip2:hover + .fade-out {
-            opacity: 0;
-        }
-
-        #btn{
-            filter: drop-shadow(1px 1px 1px #2c2a2a);
-
-            }
-
-        #btn:active{
-                filter: drop-shadow(0px 0px 0px #2c2a2a);
-
-        }
 
         /* 사이드바 너비의 80%만큼 왼쪽으로 이동 */
-        .side-bar {
-          border-radius: 20px;
-          transform: translate(calc(var(--side-bar-width) * -0.8), 0);  /* X축 이동, Y축 고정 */
-          transition: .5s;
-        }
-
-        .content-wrapper {
-          border-radius: 20px;
-          transform: translate(calc(var(--side-bar-width) * -0.8), 0);  /* X축 이동, Y축 고정 */
-          transition: .5s;
-        }
-
-
-        /* 마우스 인식 시 원래의 위치로 이동 */
-        .content-wrapper {
-            transform: translate(-10px, 0);
-        }/* 둥근 모서리의 너비만큼 X축 이동, Y축 고정 */
-
-        .side-bar:hover {
-            transform: translate(-10px, 0);
-        }/* 둥근 모서리의 너비만큼 X축 이동, Y축 고정 */
+        {#.side-bar {#}
+        {#  border-radius: 20px;#}
+        {#  transform: translate(calc(var(--side-bar-width) * -0.8), 0);  /* X축 이동, Y축 고정 */#}
+        {#  transition: .5s;#}
+        {#}#}
+        {##}
+        {#.side-bar:hover {#}
+        {#    transform: translate(-10px, 0);#}
+        {#}/* 둥근 모서리의 너비만큼 X축 이동, Y축 고정 */#}
 
     </style>
 
@@ -142,10 +83,10 @@
 {#</script>#}
 <body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain()">
 
-<div id="wrapper" style="width: 100%; align-items: stretch;">
+<div id="wrapper">
 
     <!-- 사이드바 -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark menu side-bar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark menu side-bar" id="nav-sidebar">
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
@@ -212,7 +153,7 @@
     <!-- 사이드바 끝 -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column" style="max-width: 100%;">
+    <div id="content-wrapper" class="d-flex flex-column">
 
         {% block main_area %}
         {% endblock %}

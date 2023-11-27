@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>밀 생산성 향상 디지털농업 모델 개발</title>
     <link href="{% static 'landing/vendor/fontawesome-free/css/all.css' %}" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -53,7 +53,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "http://web01.taegon.kr:5000/weather_now/namwon",
+                url: "http://web01.taegon.kr:5000/weather_now/buan",
                 success: now_result,
                 dataType: "json"
             });
@@ -76,7 +76,7 @@
         function weather_short(){
              $.ajax({
               type: "GET",
-              url: "http://web01.taegon.kr:5000/weather_short/iksan",
+              url: "http://web01.taegon.kr:5000/weather_short/buan",
               success: short_result,
               dataType: "json"
             });
@@ -121,7 +121,7 @@
         function weather_mid() {
                 $.ajax({
                     type: "GET",
-                    url: "http://web01.taegon.kr:5000/weather_mid/iksan",
+                    url: "http://web01.taegon.kr:5000/weather_mid/buan",
                     success: mid_result,
                     dataType: "json"
                 });
@@ -184,8 +184,8 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">일자</h6>
-                        <a class="collapse-item" href="buttons.html">과거현황(2023-03-15)</a>
-                        <a class="collapse-item" href="cards.html">과거현황(2023-06-20)</a>
+                        <a class="collapse-item" href="/">과거현황(2023-03-15)</a>
+                        <a class="collapse-item" href="/2">과거현황(2023-06-20)</a>
                     </div>
                 </div>
             </li>
@@ -201,7 +201,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">일자</h6>
-                        <a class="collapse-item" href="utilities-color.html">현재(2023-10)</a>
+                        <a class="collapse-item" href="/buan">현재</a>
                     </div>
                 </div>
             </li>
@@ -223,16 +223,16 @@
 
             <!-- Nav Item - Charts -->
              <li class="nav-item">
-                <a class="nav-link" href="http://web01.taegon.kr:8504/">
+                <a class="nav-link" href="http://web01.taegon.kr:8505/">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>위성 NDVI</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="http://web01.taegon.kr:8507/">
+                <a class="nav-link" href="/buan">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>토양수분 계측 자료</span></a>
+                    <span>토양수분 계측 자료 (X)</span></a>
             </li>
 
         </ul>
@@ -243,7 +243,7 @@
             <div id="content">
 
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <h3 class="mt-3">익산함라권역저장창고</h3>
+                <h3 class="mt-3">부안 백산면 대수리</h3>
                 <div class="topbar-divider d-sm-block"></div>
                 <h4 class="mt-3" id="now_time"></h4>
             </nav>
@@ -260,7 +260,7 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <img class="img-fluid" src="{% static 'landing/img/layout2.png' %}" width="100%;" alt="map">
+                                <img class="img-fluid" src="{% static 'landing/img/buan.JPG' %}" width="100%;" alt="map">
                             </div>
                         </div>
                     </div>
@@ -733,8 +733,9 @@
                     </div>
                  </div>
                     <div>
-                    <h2 style="font-weight: bolder;">수분 포텐셜 센서</h2>
-                    <div class="row">
+                        <div style="opacity: 0.4;">
+                        <h2 style="font-weight: bolder;">수분 포텐셜 센서</h2>
+                        <div class="row">
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-body">
@@ -1059,6 +1060,7 @@
                         </div>
                     </div>
                 </div>
+                        </div>
                 <div style="opacity: 0.4;">
                 <h2 style="font-weight: bolder;">토양 수분 센서</h2>
                     <div class="row">
