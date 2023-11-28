@@ -245,26 +245,27 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                 <h3 class="mt-3">익산함라권역저장창고</h3>
                 <div class="topbar-divider d-sm-block"></div>
-                <h4 class="mt-3" id="now_time"></h4>
+                <h4 class="mt-3">2023년 3월 15일 (수) 18:22</h4>
             </nav>
 
                 <div class="container-fluid">
 
                     <div class="row justify-content-around">
                     <!-- Area Chart -->
-                    <div id="content1" class="col-xl-4" style="position: relative;">
-                        <div class="card shadow mb-4">
+                    <div id="content1" class="col-xl-6" style="position: relative;">
+                        <div class="card shadow">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">포장배치도</h6>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
+                                <img class="img-fluid" src="{% static 'landing/img/layout1.png' %}" width="100%;" alt="map2">
                                 <img class="img-fluid" src="{% static 'landing/img/layout2.png' %}" width="100%;" alt="map">
                             </div>
                         </div>
                     </div>
-                    <div id="content2" class="col-xl-8" style="position: relative;">
+                    <div id="content2" class="col-xl-6" style="position: relative;">
 
                             <div class="row">
                                 <div class="col-xl-12">
@@ -272,7 +273,7 @@
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h6>
-                                            <h6 class='mb-0 mt-1' id='now_log'></h6>
+                                            <h6 class='mb-0 mt-1'>(업데이트 3/15 18:00)</h6>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
@@ -289,19 +290,19 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        <div id="now_tem"></div>
+                                                        <div>12.5°C</div>
                                                     </td>
                                                     <td>
-                                                        <div id="humid_now"></div>
+                                                        <div>40%</div>
                                                     </td>
                                                     <td>
-                                                        <div id="now_sky"></div>
+                                                        <div>맑음</div>
                                                     </td>
                                                     <td>
-                                                        <div id="now_wind"></div>
+                                                        <div>남서</div>
                                                     </td>
                                                     <td>
-                                                        <div id="now_wind_v"></div>
+                                                        <div>0.8m/s</div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -311,7 +312,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-6">
+                                <div class="col-xl-12">
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -332,35 +333,37 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="py-4"><div id="date2"></div></td>
-                                                <td class="py-4"><div id="tmax2"></div></td>
-                                                <td class="py-4"><div id="tmin2"></div></td>
-                                                <td class="py-4"><div id="humid_now2"></div></td>
-                                                <td class="py-4"><div id="rainfall2"></div></td>
-                                                <td class="py-4"><div id="sky2"></div></td>
+                                                <td class="py-4"><div>3/16 (목)</div></td>
+                                                <td class="py-4"><div>13.0°C</div></td>
+                                                <td class="py-4"><div>2.2°C</div></td>
+                                                <td class="py-4"><div>30%</div></td>
+                                                <td class="py-4"><div>13%</div></td>
+                                                <td class="py-4"><div>2</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date3"></div></td>
-                                                <td class="py-4"><div id="tmax3"></div></td>
-                                                <td class="py-4"><div id="tmin3"></div></td>
-                                                <td class="py-4"><div id="humid_now3"></div></td>
-                                                <td class="py-4"><div id="rainfall3"></div></td>
-                                                <td class="py-4"><div id="sky3"></div></td>
+                                                <td class="py-4"><div>3/17 (금)</div></td>
+                                                <td class="py-4"><div>11.5°C</div></td>
+                                                <td class="py-4"><div>3.7°C</div></td>
+                                                <td class="py-4"><div>35%</div></td>
+                                                <td class="py-4"><div>25%</div></td>
+                                                <td class="py-4"><div>2</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date4"></div></td>
-                                                <td class="py-4"><div id="tmax4"></div></td>
-                                                <td class="py-4"><div id="tmin4"></div></td>
-                                                <td class="py-4"><div id="humid_now4"></div></td>
-                                                <td class="py-4"><div id="rainfall4"></div></td>
-                                                <td class="py-4"><div id="sky4"></div></td>
+                                                <td class="py-4"><div>3/18 (토)</div></td>
+                                                <td class="py-4"><div>15.0°C</div></td>
+                                                <td class="py-4"><div>4.9°C</div></td>
+                                                <td class="py-4"><div>37%</div></td>
+                                                <td class="py-4"><div>25%</div></td>
+                                                <td class="py-4"><div>4</div></td>
                                             </tr>
                                             </tbody>
                                         </table>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-6">
+                                </div>
+                                <div class="row">
+                                <div class="col-xl-12">
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -380,32 +383,32 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid2"></div></td>
-                                                <td class="py-4"><div id="tmax_mid2"></div></td>
-                                                <td class="py-4"><div id="tmin_mid2"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid2_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid2_pm"></div></td>
+                                                <td class="py-4"><div>3/19 (일)</div></td>
+                                                <td class="py-4"><div>16.9°C</div></td>
+                                                <td class="py-4"><div>1.2°C</div></td>
+                                                <td class="py-4"><div>32.5%</div></td>
+                                                <td class="py-4"><div>흐림</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid3"></div></td>
-                                                <td class="py-4"><div id="tmax_mid3"></div></td>
-                                                <td class="py-4"><div id="tmin_mid3"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid3_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid3_pm"></div></td>
+                                                <td class="py-4"><div>3/20 (월)</div></td>
+                                                <td class="py-4"><div>18.9°C</div></td>
+                                                <td class="py-4"><div>2.2°C</div></td>
+                                                <td class="py-4"><div>28.8%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid4"></div></td>
-                                                <td class="py-4"><div id="tmax_mid4"></div></td>
-                                                <td class="py-4"><div id="tmin_mid4"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid4_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid4_pm"></div></td>
+                                                <td class="py-4"><div>3/21 (화)</div></td>
+                                                <td class="py-4"><div>14.6°C</div></td>
+                                                <td class="py-4"><div>5.9°C</div></td>
+                                                <td class="py-4"><div>30.0%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid5"></div></td>
-                                                <td class="py-4"><div id="tmax_mid5"></div></td>
-                                                <td class="py-4"><div id="tmin_mid5"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid5_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid5_pm"></div></td>
+                                                <td class="py-4"><div>3/22 (화)</div></td>
+                                                <td class="py-4"><div>12.4°C</div></td>
+                                                <td class="py-4"><div>9.3°C</div></td>
+                                                <td class="py-4"><div>19.7%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -413,7 +416,6 @@
                                     </div>
                                 </div>
                             </div>
-
                     </div>
                 </div>
 
@@ -454,7 +456,7 @@
                                             tooltip: {
                                                 trigger: 'axis',
                                                 position: function (pt) {
-                                                    return [pt[0], '100%'];
+                                                    return [pt[0], '50%'];
                                                 },
 
                                             },
@@ -647,7 +649,7 @@
                                                {
                                                    type: 'category',
                                                    axisTick: {show: false},
-                                                   data: ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월']
+                                                   data: ['10월', '11월', '12월', '1월', '2월', '3월']
                                                }
                                            ],
                                            yAxis: [
