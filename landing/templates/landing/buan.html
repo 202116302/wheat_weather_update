@@ -46,6 +46,12 @@
         .side-bar:hover {
             transform: translate(-10px, 0);
         }/* 둥근 모서리의 너비만큼 X축 이동, Y축 고정 */
+
+        {#@media (max-width: 768px) {#}
+        {#    .auto-resize-btn {#}
+        {#width: 100%;#}
+        {#  }#}
+        {#}#}
     </style>
 </head>
 <script>
@@ -253,10 +259,10 @@
                     <div class="row justify-content-around">
                     <!-- Area Chart -->
                     <div id="content1" class="col-xl-6" style="position: relative;">
-                        <div class="card shadow">
+                        <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">포장배치도</h6>
+                                <h4 class="m-0 font-weight-bold text-primary">포장배치도</h4>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
@@ -271,8 +277,8 @@
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h6>
-                                            <h6 class='mb-0 mt-1' id='now_log'></h6>
+                                            <h4 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h4>
+                                            <h5 class='mb-0 mt-1'>(업데이트 3/15 18:00)</h5>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
@@ -289,19 +295,19 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        <div id="now_tem"></div>
+                                                        <div>12.5°C</div>
                                                     </td>
                                                     <td>
-                                                        <div id="humid_now"></div>
+                                                        <div>40%</div>
                                                     </td>
                                                     <td>
-                                                        <div id="now_sky"></div>
+                                                        <div>맑음</div>
                                                     </td>
                                                     <td>
-                                                        <div id="now_wind"></div>
+                                                        <div>남서</div>
                                                     </td>
                                                     <td>
-                                                        <div id="now_wind_v"></div>
+                                                        <div>0.8m/s</div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -315,7 +321,7 @@
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-primary">단기 기상 데이터</h6>
+                                            <h4 class="m-0 font-weight-bold text-primary">단기 기상 데이터</h4>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
@@ -332,28 +338,28 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="py-4"><div id="date2"></div></td>
-                                                <td class="py-4"><div id="tmax2"></div></td>
-                                                <td class="py-4"><div id="tmin2"></div></td>
-                                                <td class="py-4"><div id="humid_now2"></div></td>
-                                                <td class="py-4"><div id="rainfall2"></div></td>
-                                                <td class="py-4"><div id="sky2"></div></td>
+                                                <td class="py-4"><div>3/16 (목)</div></td>
+                                                <td class="py-4"><div>13.0°C</div></td>
+                                                <td class="py-4"><div>2.2°C</div></td>
+                                                <td class="py-4"><div>30%</div></td>
+                                                <td class="py-4"><div>13%</div></td>
+                                                <td class="py-4"><div>2</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date3"></div></td>
-                                                <td class="py-4"><div id="tmax3"></div></td>
-                                                <td class="py-4"><div id="tmin3"></div></td>
-                                                <td class="py-4"><div id="humid_now3"></div></td>
-                                                <td class="py-4"><div id="rainfall3"></div></td>
-                                                <td class="py-4"><div id="sky3"></div></td>
+                                                <td class="py-4"><div>3/17 (금)</div></td>
+                                                <td class="py-4"><div>11.5°C</div></td>
+                                                <td class="py-4"><div>3.7°C</div></td>
+                                                <td class="py-4"><div>35%</div></td>
+                                                <td class="py-4"><div>25%</div></td>
+                                                <td class="py-4"><div>2</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date4"></div></td>
-                                                <td class="py-4"><div id="tmax4"></div></td>
-                                                <td class="py-4"><div id="tmin4"></div></td>
-                                                <td class="py-4"><div id="humid_now4"></div></td>
-                                                <td class="py-4"><div id="rainfall4"></div></td>
-                                                <td class="py-4"><div id="sky4"></div></td>
+                                                <td class="py-4"><div>3/18 (토)</div></td>
+                                                <td class="py-4"><div>15.0°C</div></td>
+                                                <td class="py-4"><div>4.9°C</div></td>
+                                                <td class="py-4"><div>37%</div></td>
+                                                <td class="py-4"><div>25%</div></td>
+                                                <td class="py-4"><div>4</div></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -366,7 +372,7 @@
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-primary">중기 기상 데이터</h6>
+                                            <h4 class="m-0 font-weight-bold text-primary">중기 기상 데이터</h4>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
@@ -382,32 +388,32 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid2"></div></td>
-                                                <td class="py-4"><div id="tmax_mid2"></div></td>
-                                                <td class="py-4"><div id="tmin_mid2"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid2_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid2_pm"></div></td>
+                                                <td class="py-4"><div>3/19 (일)</div></td>
+                                                <td class="py-4"><div>16.9°C</div></td>
+                                                <td class="py-4"><div>1.2°C</div></td>
+                                                <td class="py-4"><div>32.5%</div></td>
+                                                <td class="py-4"><div>흐림</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid3"></div></td>
-                                                <td class="py-4"><div id="tmax_mid3"></div></td>
-                                                <td class="py-4"><div id="tmin_mid3"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid3_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid3_pm"></div></td>
+                                                <td class="py-4"><div>3/20 (월)</div></td>
+                                                <td class="py-4"><div>18.9°C</div></td>
+                                                <td class="py-4"><div>2.2°C</div></td>
+                                                <td class="py-4"><div>28.8%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid4"></div></td>
-                                                <td class="py-4"><div id="tmax_mid4"></div></td>
-                                                <td class="py-4"><div id="tmin_mid4"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid4_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid4_pm"></div></td>
+                                                <td class="py-4"><div>3/21 (화)</div></td>
+                                                <td class="py-4"><div>14.6°C</div></td>
+                                                <td class="py-4"><div>5.9°C</div></td>
+                                                <td class="py-4"><div>30.0%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div id="date_mid5"></div></td>
-                                                <td class="py-4"><div id="tmax_mid5"></div></td>
-                                                <td class="py-4"><div id="tmin_mid5"></div></td>
-                                                <td class="py-4"><div id="rainfall_mid5_pm"></div></td>
-                                                <td class="py-4"><div id="sky_mid5_pm"></div></td>
+                                                <td class="py-4"><div>3/22 (화)</div></td>
+                                                <td class="py-4"><div>12.4°C</div></td>
+                                                <td class="py-4"><div>9.3°C</div></td>
+                                                <td class="py-4"><div>19.7%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -415,7 +421,6 @@
                                     </div>
                                 </div>
                             </div>
-
                     </div>
                 </div>
 
@@ -429,7 +434,7 @@
                 </div>
                     <div class="row mt-2 mb-4">
                      <div class="col-xl-6">
-                        <div class="card text-center shadow">
+                        <div class="card text-center shadow mb-4">
                              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h3 class="m-0 font-weight-bold text-primary">월평균 기온</h3>
                             </div>
@@ -1098,35 +1103,35 @@
                                                 </tr>
                                                  <tr>
                                                     <td><input type="checkbox" id="toggle" hidden>
-                                                        <label for="toggle" class="toggleSwitch">
+                                                        <label for="toggle" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle1" hidden>
-                                                        <label for="toggle1" class="toggleSwitch">
+                                                        <label for="toggle1" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle2" hidden>
-                                                        <label for="toggle2" class="toggleSwitch">
+                                                        <label for="toggle2" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle3" hidden>
-                                                        <label for="toggle3" class="toggleSwitch">
+                                                        <label for="toggle3" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle4" hidden>
-                                                        <label for="toggle4" class="toggleSwitch">
+                                                        <label for="toggle4" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
@@ -1177,35 +1182,35 @@
                                                 </tr>
                                                 <tr>
                                                     <td><input type="checkbox" id="toggle5" hidden>
-                                                        <label for="toggle5" class="toggleSwitch">
+                                                        <label for="toggle5" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle6" hidden>
-                                                        <label for="toggle6" class="toggleSwitch">
+                                                        <label for="toggle6" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle7" hidden>
-                                                        <label for="toggle7" class="toggleSwitch">
+                                                        <label for="toggle7" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle8" hidden>
-                                                        <label for="toggle8" class="toggleSwitch">
+                                                        <label for="toggle8" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
                                                         </span>
                                                         </label></td>
                                                     <td><input type="checkbox" id="toggle9" hidden>
-                                                        <label for="toggle9" class="toggleSwitch">
+                                                        <label for="toggle9" class="toggleSwitch ml-0" style="width: 100%;">
                                                         <span class="toggleButton">
                                                         <span class="on">ON</span>
                                                         <span class="off">OFF</span>
