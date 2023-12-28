@@ -299,7 +299,7 @@ def home(request: Request):
 
 @app.get("/weather_short/{city}")
 # @cross_origin(origin='*')
-async def weather_short(city: str):
+def weather_short(city: str):
     # ----발표 날짜( 요청 날짜 , 페이지 열 때? 날짜)
     # KST = datetime.timezone(datetime.timedelta(hours=9))
     # today = datetime.datetime.today().astimezone(KST).strftime("%Y%m%d")  # 오늘날짜
@@ -653,8 +653,8 @@ def main():
     # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
     # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
     import uvicorn
-    # uvicorn.run(app, host="0.0.0.0", port=5000)
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
+    # uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
 if __name__ == '__main__':
