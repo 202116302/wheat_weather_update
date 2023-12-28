@@ -62,26 +62,31 @@ def what_day_is_it(date):
     return days[day]
 
 # 지역별 파라미터 + url 함수
+# def add_url_params(url, params):
+#     url = unquote(url)
+#     parsed_url = urlparse(url)  # urlparse == url을 인코딩해줌
+#     get_args = parsed_url.query
+#     parsed_get_args = dict(parse_qsl(get_args))
+#     parsed_get_args.update(params)
+#
+#     parsed_get_args.update(
+#         {k: dumps(v) for k, v in parsed_get_args.items()
+#          if isinstance(v, (bool, dict))}
+#     )
+#
+#     encoded_get_args = urlencode(parsed_get_args, doseq=True)
+#     new_url = ParseResult(
+#         parsed_url.scheme, parsed_url.netloc, parsed_url.path,
+#         parsed_url.params, encoded_get_args, parsed_url.fragment
+#     ).geturl()
+#     res = requests.get(new_url)
+#
+#     items = res.json().get('response').get('body').get('items').get('item')
+#     return items
+
 def add_url_params(url, params):
-    url = unquote(url)
-    parsed_url = urlparse(url)  # urlparse == url을 인코딩해줌
-    get_args = parsed_url.query
-    parsed_get_args = dict(parse_qsl(get_args))
-    parsed_get_args.update(params)
-
-    parsed_get_args.update(
-        {k: dumps(v) for k, v in parsed_get_args.items()
-         if isinstance(v, (bool, dict))}
-    )
-
-    encoded_get_args = urlencode(parsed_get_args, doseq=True)
-    new_url = ParseResult(
-        parsed_url.scheme, parsed_url.netloc, parsed_url.path,
-        parsed_url.params, encoded_get_args, parsed_url.fragment
-    ).geturl()
-    res = requests.get(new_url)
-
-    items = res.json().get('response').get('body').get('items').get('item')
+    contents = requests.get(url, params=params)
+    items = contents.json().get('response').get('body').get('items').get('item')
     return items
 
 
@@ -653,7 +658,7 @@ def main():
     # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
     # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    # uvicorn.run(app, host="0.0.0.0", port=5000)
     # uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
