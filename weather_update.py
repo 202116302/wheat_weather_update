@@ -2,11 +2,9 @@ import json
 from collections import Counter
 import statistics
 import requests
-from json import dumps
 from tinydb import TinyDB, Query, where
 import datetime
 import pandas as pd
-import redis
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -288,7 +286,7 @@ db2 = TinyDB('weather_data/db_present.json')
 db3 = TinyDB('weather_data/db_future.json')
 Station = Query()
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+
 
 templates = Jinja2Templates(directory="templates")
 
@@ -658,8 +656,8 @@ def main():
     # app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
     # app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
 if __name__ == '__main__':
