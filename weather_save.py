@@ -21,14 +21,15 @@ Station = Query()
 
 ##현재기상## city는 한글
 def weather_now(city, city_k):
-    # KST = datetime.timezone(datetime.timedelta(hours=9))
-    # time = datetime.datetime.now().astimezone(KST)
+    KST = datetime.timezone(datetime.timedelta(hours=8))
+    time = datetime.datetime.now().astimezone(KST)
     ## 익산없음 전주로 대체 (20240123)
     if city_k == '익산':
         city_k = '전주'
 
-    time = datetime.datetime.now()
-    date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    # time = datetime.datetime.now()
+    # date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    date_time = time.strftime('%Y-%m-%d %H:%M')
     url4 = "https://www.weather.go.kr/w//renew2021/rest/main/current-weather-obs.do"
     url5 = 'https://www.weather.go.kr/wgis-nuri/aws/buoy?date='
 
@@ -208,8 +209,10 @@ def sky(loc):
 
 ## 단기예보 ###
 def weather_short(city):
-    today = datetime.datetime.today().strftime("%Y%m%d")
-    date = datetime.datetime.today()
+    KST = datetime.timezone(datetime.timedelta(hours=8))
+    date = datetime.datetime.today().astimezone(KST)
+    today = date.strftime("%Y%m%d")
+    # date = datetime.datetime.today()
     y = date - datetime.timedelta(days=1)
     yesterday = y.strftime("%Y%m%d")
     now = datetime.datetime.now()
@@ -292,8 +295,11 @@ def weather_short(city):
 
 ###중기예보###
 def weather_mid(city, id):
-    today = datetime.datetime.now().strftime("%Y%m%d")
-    time = datetime.datetime.now()
+    KST = datetime.timezone(datetime.timedelta(hours=8))
+    time = datetime.datetime.now().astimezone(KST)
+    today = time.strftime("%Y%m%d")
+    # today = datetime.datetime.now().strftime("%Y%m%d")
+    # time = datetime.datetime.now()
     y = time - datetime.timedelta(days=1)
     f = datetime.date.today() + datetime.timedelta(days=3)
     yesterday = y.strftime("%Y%m%d")  # 어제날짜
