@@ -457,8 +457,7 @@ def weather_now(city=str):
 
     if city == "namwon":
         w_now = [x for x in content_now if x['stnKo'] == '남원']
-        w_now[0][
-            'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+        w_now[0]['now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
         w_now[0]['ta'] = w_now[0]['ta'] + "°C"
         w_now[0]['ws'] = w_now[0]['ws'] + "m/s"
         w_now[0]['log'] = log
@@ -634,7 +633,7 @@ def weather_mid(city=str):
         future_weather = []
 
     if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        return weather_mid
+        return future_weather[0]['json_content']
     else:
         if city == 'namwon':
             db3.insert({"name": "namwon", "date": today, 'json_content': weather_mid})
