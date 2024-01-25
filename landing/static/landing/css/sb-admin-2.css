@@ -11201,6 +11201,7 @@ a:focus {
     min-width: 10rem;
     font-size: 0.85rem;
     margin: 0 0 1rem 0;
+
 }
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-header,
@@ -12607,7 +12608,23 @@ input:checked + .slider:before {
 
     .sidebar.toggled {
         display: block !important; /* 원래 토글됐을 때는 block으로 설정되어야 함 */
-        width: 6.5rem !important;
+        width: 10rem !important;
+    }
+
+    .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after {
+        width: 1rem;
+        text-align: center;
+        float: right;
+        vertical-align: 0;
+        border: 0;
+        font-weight: 900;
+        /*content: '\f107';*/
+        font-family: 'Font Awesome 5 Free';
+
     }
 
     .table th, .table td {
@@ -12629,6 +12646,9 @@ input:checked + .slider:before {
     .table-responsive {
         overflow-x: auto;
     }
+
+
+
 }
 
 .navbar-mobile {
@@ -12663,6 +12683,7 @@ input:checked + .slider:before {
   transition: 0.3s;
 
 }
+
 
 .navbar-mobile a,
 .navbar-mobile a:focus {
@@ -12738,3 +12759,4 @@ input:checked + .slider:before {
 .navbar-mobile .nav-item .collapsing .collapse-inner .collapse-item:hover {
     background-color: #eaecf4;
 }
+

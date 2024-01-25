@@ -191,12 +191,12 @@
             $(this).toggleClass('bi-list bi-x');
           });
 
-          $(document).on('click', '.navbar .dropdown > a', function(e) {
-            if ($('#accordionSidebar').hasClass('navbar-mobile')) {
-              e.preventDefault();
-              $(this).next().toggleClass('dropdown-active');
-            }
-          });
+          {#$(document).on('click', '.navbar .dropdown > a', function(e) {#}
+          {# if ($('#accordionSidebar').hasClass('navbar-mobile')) {#}
+          {#   e.preventDefault();#}
+          {#   $(this).next().toggleClass('dropdown-active');#}
+          {# }#}
+
 
         </script>
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
