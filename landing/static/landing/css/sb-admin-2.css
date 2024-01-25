@@ -50,7 +50,8 @@
 html {
     font-family: sans-serif;
     line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
+    /*-webkit-text-size-adjust: 100%;*/
+    -webkit-text-size-adjust: auto;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -12461,12 +12462,6 @@ input:checked + .slider:before {
 
 
 
-
-
-
-
-
-
 #toggle1:checked ~ .toggleSwitch {
     background: #5a9ad4;
 }
@@ -12557,11 +12552,6 @@ input:checked + .slider:before {
 }
 
 
-
-
-
-
-
 /* Rounded sliders */
 
 .toggleSwitch.round {
@@ -12599,13 +12589,46 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 991px) {
-  .mobile-nav-toggle {
-    display: block;
-  }
+    .mobile-nav-toggle {
+        display: block;
+    }
 
-  .navbar ul {
-    display: none;
-  }
+    /*.navbar-mobile ul{*/
+    /*    display: none;*/
+
+    /*}*/
+
+    .sidebar {
+        display: none;
+        left: -300px;
+        transition: all 0.4s ease;
+
+    }
+
+    .sidebar.toggled {
+        display: block !important; /* 원래 토글됐을 때는 block으로 설정되어야 함 */
+        width: 6.5rem !important;
+    }
+
+    .table th, .table td {
+        font-size: 12px; /* 적절한 글꼴 크기로 조절 */
+    }
+
+    .th.px-1{
+        font-size: 5px;
+    }
+
+    h4, h3 {
+        font-size: 20px;
+    }
+
+    h5{
+        font-size: 12px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
 }
 
 .navbar-mobile {
@@ -12624,6 +12647,7 @@ input:checked + .slider:before {
   position: absolute;
   top: 15px;
   right: 15px;
+
 }
 
 .navbar-mobile ul {
@@ -12637,6 +12661,7 @@ input:checked + .slider:before {
   background-color: #fff;
   overflow-y: auto;
   transition: 0.3s;
+
 }
 
 .navbar-mobile a,
@@ -12651,11 +12676,6 @@ input:checked + .slider:before {
 .navbar-mobile li:hover>a {
   color: #151515;
   background-color: #9ec5fe;
-}
-
-.navbar-mobile .getstarted,
-.navbar-mobile .getstarted:focus {
-  margin: 15px;
 }
 
 .navbar-mobile .dropdown ul {
@@ -12693,4 +12713,28 @@ input:checked + .slider:before {
   display: block;
 }
 
+.navbar-mobile .nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+}
 
+.navbar-mobile .nav-link:hover, .nav-link:focus {
+    text-decoration: none;
+}
+
+.navbar-mobile .nav-link.disabled {
+    color: #858796;
+    pointer-events: none;
+    cursor: default;
+}
+
+.navbar-mobile .nav-tabs {
+    border-bottom: 1px solid #dddfeb;
+}
+
+
+
+.navbar-mobile .nav-item .collapse .collapse-inner .collapse-item:hover,
+.navbar-mobile .nav-item .collapsing .collapse-inner .collapse-item:hover {
+    background-color: #eaecf4;
+}

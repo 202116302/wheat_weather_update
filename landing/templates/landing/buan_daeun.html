@@ -29,7 +29,6 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
     <script src="https://kit.fontawesome.com/fc4a7565b8.js" crossorigin="anonymous"></script>
     <script src="{% static 'landing/js/sb-admin-2.js' %}"></script>
-    <script src="{% static 'landing/js/mobile_sidebar.js' %}"></script>
     <style>
         :root {
           --side-bar-width: 270px;
@@ -169,45 +168,43 @@
     }
     </script>
 <body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain()">
-    <style>
-        .closebtn {
-          position: absolute;
-          top: 0;
-          right: 25px;
-          font-size: 36px;
-          margin-left: 50px;
-        }
 
-        .openbtn {
-          font-size: 20px;
-          cursor: pointer;
-          background-color: #111;
-          color: white;
-          padding: 10px 15px;
-          border: none;
-        }
-
-        .openbtn:hover {
-        background-color: #444;
-        }
-
-    </style>
-    <!-- Page Wrapper -->
+{#    <!-- Page Wrapper -->#}
     <div id="wrapper">
 
 
+        <script>
+
+        $(document).ready(function () {
+            const toggleButton = $(".mobile-nav-toggle");
+            const mobileNavbar = $(".sidebar");
+
+            toggleButton.on("click", function () {
+                mobileNavbar.toggleClass("toggled");
+            });
+        });
+
+          $(document).on('click', '.mobile-nav-toggle', function(e) {
+              e.stopPropagation();
+              console.log('Icon clicked');
+            $('#accordionSidebar').toggleClass('navbar-mobile');
+            $(this).toggleClass('bi-list bi-x');
+          });
+
+          $(document).on('click', '.navbar .dropdown > a', function(e) {
+            if ($('#accordionSidebar').hasClass('navbar-mobile')) {
+              e.preventDefault();
+              $(this).next().toggleClass('dropdown-active');
+            }
+          });
+
+        </script>
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-{#            <a href="javascript:void(0)" onclick="closeNav()">X</a>#}
-{#            <a href="javascript:void(0)" onclick="closeNav()" style="color: white; font-size: 25px; visibility: visible; padding-left: 80px;">x</a>#}
-{#            <button class="openbtn" onclick="openNav()">☰ Open Sidebar</button>#}
-
-
 
             <!-- Heading -->
             <div class="sidebar-heading mt-4">
                 대시보드
             </div>
-
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -269,77 +266,22 @@
                     <i class="fas fa-fw fa-folder"></i>
                     <span>토양수분 계측 자료 (X)</span></a>
             </li>
-            <i class="mobile-nav-toggle"></i>
+
         </ul>
 
-        <script>
-        function openNav() {
-          document.getElementById("accordionSidebar").style.width = "250px";
-          document.getElementById("main").style.marginLeft = "250px";
-        }
-
-        function closeNav() {
-          document.getElementById("accordionSidebar").style.width = "0";
-          document.getElementById("main").style.marginLeft= "0";
-        }
-        </script>
-
-
-
-
         <div id="content-wrapper" class="d-flex flex-column">
-
-
-
-
-            <style>
-                .container {
-                  display: inline-block;
-                  cursor: pointer;
-                }
-
-                .bar1, .bar2, .bar3 {
-                  width: 25px;
-                  height: 5px;
-                  background-color: #333;
-                  margin: 6px 0;
-                  transition: 0.4s;
-                }
-
-                /* Rotate first bar */
-                .change .bar1 {
-                  transform: translate(0, 11px) rotate(-45deg);
-                }
-
-                /* Fade out the second bar */
-                .change .bar2 {opacity: 0;}
-
-                /* Rotate last bar */
-                .change .bar3 {
-                  transform: translate(0, -11px) rotate(45deg);
-                }
-            </style>
-
-            <script>
-                function myFunction(x) {
-                  x.classList.toggle("change");
-                }
-            </script>
-
-
             <div id="content">
-                <div class="container" onclick="myFunction(this)">
-                  <div class="bar1"></div>
-                  <div class="bar2"></div>
-                  <div class="bar3"></div>
-                </div>
 
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                 <h3 class="mt-3">부안 백산면 대수리</h3>
                 <div class="topbar-divider d-sm-block"></div>
                 <h4 class="mt-3" id="now_time"></h4>
-            </nav>
+                  <div class="mobile-nav-toggle-container">
+                    <i class="bi bi-list mobile-nav-toggle" style="color: black;"></i>
+                  </div>
+
+                </nav>
 
                 <div class="container-fluid">
 
@@ -368,37 +310,39 @@
                                             <h5 class='mb-0 mt-1'>(업데이트 3/15 18:00)</h5>
                                         </div>
                                         <!-- Card Body -->
-                                        <div class="card-body">
-                                            <table class="table fs-5 text-center" style="border-color:#f8f9fa; border-collapse:unset">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">온도</th>
-                                                    <th scope="col">습도</th>
-                                                    <th scope="col">날씨</th>
-                                                    <th scope="col">풍향</th>
-                                                    <th scope="col">풍속</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div>12.5°C</div>
-                                                    </td>
-                                                    <td>
-                                                        <div>40%</div>
-                                                    </td>
-                                                    <td>
-                                                        <div>맑음</div>
-                                                    </td>
-                                                    <td>
-                                                        <div>남서</div>
-                                                    </td>
-                                                    <td>
-                                                        <div>0.8m/s</div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <div style="overflow-x:auto;">
+                                            <div class="card-body">
+                                                <table class="table fs-5 text-center" style="border-color:#f8f9fa; border-collapse:unset">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">온도</th>
+                                                        <th scope="col">습도</th>
+                                                        <th scope="col">날씨</th>
+                                                        <th scope="col">풍향</th>
+                                                        <th scope="col">풍속</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div>12.5°C</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>40%</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>맑음</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>남서</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>0.8m/s</div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -407,50 +351,55 @@
                                 <div class="col-xl-12">
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
-                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h4 class="m-0 font-weight-bold text-primary">단기 기상 데이터</h4>
+                                        <div style="overflow-x:auto;">
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h4 class="m-0 font-weight-bold text-primary">단기 기상 데이터</h4>
+                                            </div>
                                         </div>
                                         <!-- Card Body -->
-                                        <div class="card-body">
-                                            <table class="table fs-6 text-center" style="border-color:#f8f9fa; border-collapse:unset">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col" class="px-1"></th>
-                                                <th scope="col" class="px-1">최고기온</th>
-                                                <th scope="col" class="px-1">최저기온</th>
-                                                <th scope="col" class="px-1">습도</th>
-                                                <th scope="col" class="px-1">강수확률</th>
-                                                <th scope="col" class="px-1">구름양</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="py-4"><div>3/16 (목)</div></td>
-                                                <td class="py-4"><div>13.0°C</div></td>
-                                                <td class="py-4"><div>2.2°C</div></td>
-                                                <td class="py-4"><div>30%</div></td>
-                                                <td class="py-4"><div>13%</div></td>
-                                                <td class="py-4"><div>2</div></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="py-4"><div>3/17 (금)</div></td>
-                                                <td class="py-4"><div>11.5°C</div></td>
-                                                <td class="py-4"><div>3.7°C</div></td>
-                                                <td class="py-4"><div>35%</div></td>
-                                                <td class="py-4"><div>25%</div></td>
-                                                <td class="py-4"><div>2</div></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="py-4"><div>3/18 (토)</div></td>
-                                                <td class="py-4"><div>15.0°C</div></td>
-                                                <td class="py-4"><div>4.9°C</div></td>
-                                                <td class="py-4"><div>37%</div></td>
-                                                <td class="py-4"><div>25%</div></td>
-                                                <td class="py-4"><div>4</div></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                        <div style="overflow-x:auto;">
+                                            <div class="card-body">
+                                                <table class="table fs-6 text-center" style="border-color:#f8f9fa; border-collapse:unset">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col" class="px-1"></th>
+                                                    <th scope="col" class="px-1">최고기온</th>
+                                                    <th scope="col" class="px-1">최저기온</th>
+                                                    <th scope="col" class="px-1">습도</th>
+                                                    <th scope="col" class="px-1">강수확률</th>
+                                                    <th scope="col" class="px-1">구름양</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="py-4"><div>3/16 (목)</div></td>
+                                                    <td class="py-4"><div>13.0°C</div></td>
+                                                    <td class="py-4"><div>2.2°C</div></td>
+                                                    <td class="py-4"><div>30%</div></td>
+                                                    <td class="py-4"><div>13%</div></td>
+                                                    <td class="py-4"><div>2</div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-4"><div>3/17 (금)</div></td>
+                                                    <td class="py-4"><div>11.5°C</div></td>
+                                                    <td class="py-4"><div>3.7°C</div></td>
+                                                    <td class="py-4"><div>35%</div></td>
+                                                    <td class="py-4"><div>25%</div></td>
+                                                    <td class="py-4"><div>2</div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-4"><div>3/18 (토)</div></td>
+                                                    <td class="py-4"><div>15.0°C</div></td>
+                                                    <td class="py-4"><div>4.9°C</div></td>
+                                                    <td class="py-4"><div>37%</div></td>
+                                                    <td class="py-4"><div>25%</div></td>
+                                                    <td class="py-4"><div>4</div></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 </div>
