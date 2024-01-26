@@ -1,130 +1,0 @@
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'
-  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 406, in <module>
-    main()
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 400, in main
-    weather_short(x)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 278, in weather_short
-    json_content = sky(new_param_namwon)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 118, in sky
-    items = add_url_params(url, loc)
-  File "/home/hj5258/wheat_weather_update/weather_save.py", line 112, in add_url_params
-    items = contents.json().get('response').get('body').get('items').get('item')
-AttributeError: 'NoneType' object has no attribute 'get'

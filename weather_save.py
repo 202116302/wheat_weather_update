@@ -10,13 +10,11 @@ from tqdm import tqdm
 if not os.path.exists('home/hj5258/wheat_weather_update/weather_data/'):
     os.mkdir('home/hj5258/wheat_weather_update/weather_data/')
 
-
 db_now = TinyDB('home/hj5258/wheat_weather_update/weather_data/db_now.json')
 db_short = TinyDB('home/hj5258/wheat_weather_update/weather_data/db_short.json')
 db_mid = TinyDB('home/hj5258/wheat_weather_update/weather_data/db_mid.json')
 
 Station = Query()
-
 
 
 ##현재기상## city는 한글
@@ -48,7 +46,8 @@ def weather_now(city, city_k):
     new_w = {}
     if city_k in ['남원', '익산', '부안']:
         w_now = [x for x in content_now if x['stnKo'] == f'{city_k}']
-        new_w['now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+        new_w[
+            'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
         new_w['ta'] = w_now[0]['ta'] + "°C"
         new_w['ws'] = w_now[0]['ws'] + "m/s"
         new_w['log'] = log
@@ -64,12 +63,10 @@ def weather_now(city, city_k):
     else:
         if len(now_weather) > 0:
             db_now.update({"name": f"{city}", "date": date_time, 'json_content': w_json})
-            return print(f'{city_k}:update')
+            print(f'{city_k}:update')
         else:
             db_now.insert({"name": f"{city}", "date": date_time, 'json_content': w_json})
-            return print(f'{city_k}:save')
-
-
+            print(f'{city_k}:save')
 
 
 ############ 단기예보 API ##################
@@ -106,6 +103,7 @@ def what_day_is_it(date):
     day = date.weekday()
 
     return days[day]
+
 
 def add_url_params(url, params):
     contents = requests.get(url, params=params)
@@ -202,9 +200,7 @@ def sky(loc):
 
     weather = [weather_date, days, time, rainfall, humid, sky, tmin, tmax]
 
-
     return json.dumps(weather, ensure_ascii=False)
-
 
 
 ## 단기예보 ###
@@ -245,63 +241,55 @@ def weather_short(city):
     new_param_iksan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
                        'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_iksan, 'ny': ny_iksan}
 
-
     new_param_pyeongchang = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
-               'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_pyeongchang, 'ny': nx_pyeongchang}
+                             'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_pyeongchang,
+                             'ny': nx_pyeongchang}
 
     new_param_buan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
                       'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_buan, 'ny': nx_buan}
 
-
     today_weather = db_short.search((where('name') == f"{city}") & (where('date') == today))
-
 
     if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
         if city == 'namwon':
             json_content = sky(new_param_namwon)
             db_short.update({"name": "namwon", "date": today, "json_content": json_content})
-	    print(f'{city}:update')
-            return json_content
+            print(f'{city}:update')
         elif city == "iksan":
             json_content = sky(new_param_iksan)
             db_short.update({"name": "iksan", "date": today, "json_content": json_content})
-	    print(f'{city}:update')
-            return json_content
+            print(f'{city}:update')
         elif city == "pyeongchang":
             json_content = sky(new_param_pyeongchang)
             db_short.update({"name": "pyeongchang", "date": today, "json_content": json_content})
-	    print(f'{city}:update')
-            return json_content
+            print(f'{city}:update')
         elif city == "buan":
             json_content = sky(new_param_buan)
             db_short.update({"name": "buan", "date": today, "json_content": json_content})
-	    print(f'{city}:update')
-            return json_content
+            print(f'{city}:update')
         else:
-            return "해당지역없음"
+            "해당지역없음"
+
     else:
         if city == 'namwon':
             json_content = sky(new_param_namwon)
             db_short.insert({"name": "namwon", "date": today, "json_content": json_content})
-	    print(f'{city}:save')
-            return json_content
+            print(f'{city}:save')
         elif city == "iksan":
             json_content = sky(new_param_iksan)
             db_short.insert({"name": "iksan", "date": today, "json_content": json_content})
-  	    print(f'{city}:save')
-            return json_content
+            print(f'{city}:save')
         elif city == "pyeongchang":
             json_content = sky(new_param_pyeongchang)
             db_short.insert({"name": "pyeongchang", "date": today, "json_content": json_content})
-	    print(f'{city}:save')
-            return json_content
+            print(f'{city}:save')
         elif city == "buan":
             json_content = sky(new_param_buan)
             db_short.insert({"name": "buan", "date": today, "json_content": json_content})
-	    print(f'{city}:save')
-            return json_content
+            print(f'{city}:save')
         else:
-            return "해당지역없음"
+            print("해당지역없음")
+
 
 ###중기예보###
 def weather_mid(city, id):
@@ -346,23 +334,18 @@ def weather_mid(city, id):
         'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
         'regId': f'{id}', 'tmFc': f'{today}0600'}
 
-
     response_land = requests.get(url, params=params_url)
     response_midta = requests.get(url2, params=params_url)
     weather_mid = filter_mid(response_land, response_midta)
 
-
     future_weather = db_mid.search((where('name') == f"{city}") & (where('date') == today))
-
 
     if len(future_weather) > 0:
         db_mid.update({"name": f"{city}", "date": today, 'json_content': weather_mid})
-	print(f'{city}:update')
-        return weather_mid
+        print(f'{city}:update')
     else:
         db_mid.insert({"name": f"{city}", "date": today, 'json_content': weather_mid})
-	print(f'{city}:save')
-
+        print(f'{city}:save')
 
 
 def filter_mid(response_land, response_midta):
@@ -400,14 +383,11 @@ def filter_mid(response_land, response_midta):
     return weather_mid
 
 
-
-
-
 def main():
     loc = [('namwon', '남원', '11F10401'),
            ('iksan', '익산', '11F10202'),
            ('buan', '부안', '21F10602'),
-           ('pyeongchang', '평창', '11D10503'),]
+           ('pyeongchang', '평창', '11D10503'), ]
 
     for x, y, z in tqdm(loc):
         weather_short(x)
