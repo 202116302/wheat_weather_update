@@ -21,7 +21,7 @@ Station = Query()
 
 ##현재기상## city는 한글
 def weather_now(city, city_k):
-    KST = datetime.timezone(datetime.timedelta(hours=8))
+    KST = datetime.timezone(datetime.timedelta(hours=9))
     time = datetime.datetime.now().astimezone(KST)
     ## 익산없음 전주로 대체 (20240123)
     if city_k == '익산':
@@ -209,9 +209,11 @@ def sky(loc):
 
 ## 단기예보 ###
 def weather_short(city):
-    KST = datetime.timezone(datetime.timedelta(hours=8))
+    KST = datetime.timezone(datetime.timedelta(hours=9))
     date = datetime.datetime.today().astimezone(KST)
+    print(date)
     today = date.strftime("%Y%m%d")
+    print(today)
     # date = datetime.datetime.today()
     y = date - datetime.timedelta(days=1)
     yesterday = y.strftime("%Y%m%d")
@@ -295,7 +297,7 @@ def weather_short(city):
 
 ###중기예보###
 def weather_mid(city, id):
-    KST = datetime.timezone(datetime.timedelta(hours=8))
+    KST = datetime.timezone(datetime.timedelta(hours=9))
     time = datetime.datetime.now().astimezone(KST)
     today = time.strftime("%Y%m%d")
     # today = datetime.datetime.now().strftime("%Y%m%d")
