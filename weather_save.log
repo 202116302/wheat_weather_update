@@ -1,0 +1,6 @@
+  File "/home/hj5258/wheat_weather_update/weather_save.py", line 261
+    print(f'{city}:update')
+TabError: inconsistent use of tabs and spaces in indentation
+  File "/home/hj5258/wheat_weather_update/weather_save.py", line 261
+    print(f'{city}:update')
+TabError: inconsistent use of tabs and spaces in indentation
