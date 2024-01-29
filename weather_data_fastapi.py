@@ -34,7 +34,7 @@ db_mid = TinyDB('forecast_data/db_mid.json')
 def weather_now(city=str):
     if city == 'namwon':
         now_weather = db_now.search((where('name') == "namwon"))
-    elif city == 'iksan':
+    elif city == 'buan':
         now_weather = db_now.search((where('name') == "buan"))
     else:
         now_weather = []
@@ -51,19 +51,19 @@ def weather_short(city: str):
     date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
-        today_weather = db_short.search((where('name') == "namwon") & (where('date') == today))
+        today_weather = db_short.search((where('name') == "namwon"))
     elif city == 'iksan':
-        today_weather = db_short.search((where('name') == "iksan") & (where('date') == today))
+        today_weather = db_short.search((where('name') == "iksan"))
     elif city == 'pyeongchang':
-        today_weather = db_short.search((where('name') == "pyeongchang") & (where('date') == today))
+        today_weather = db_short.search((where('name') == "pyeongchang"))
     elif city == 'buan':
-        today_weather = db_short.search((where('name') == "buan") & (where('date') == today))
+        today_weather = db_short.search((where('name') == "buan"))
     else:
         today_weather = []
 
 
     if len(today_weather) > 0:
-        return today_weather[0]['json_content']
+        return today_weather[-1]['json_content']
     else:
         return "해당지역없음"
 
@@ -74,18 +74,18 @@ def weather_mid(city=str):
     date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
-        future_weather = db_mid.search((where('name') == "namwon") & (where('date') == today))
+        future_weather = db_mid.search((where('name') == "namwon"))
     elif city == 'iksan':
-        future_weather = db_mid.search((where('name') == "iksan") & (where('date') == today))
+        future_weather = db_mid.search((where('name') == "iksan"))
     elif city == 'pyeongchang':
-        future_weather = db_mid.search((where('name') == "pyeongchang") & (where('date') == today))
+        future_weather = db_mid.search((where('name') == "pyeongchang"))
     elif city == 'buan':
-        future_weather = db_mid.search((where('name') == "buan") & (where('date') == today))
+        future_weather = db_mid.search((where('name') == "buan"))
     else:
         future_weather = []
 
     if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        return future_weather[0]['json_content']
+        return future_weather[-1]['json_content']
     else:
         return "해당지역없음"
 
