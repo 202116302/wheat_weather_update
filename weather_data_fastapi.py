@@ -24,9 +24,74 @@ app.add_middleware(
 
 templates = Jinja2Templates(directory="templates")
 
-db_now = TinyDB('weather_data/db_now.json')
-db_short = TinyDB('weather_data/db_short.json')
-db_mid = TinyDB('weather_data/db_mid.json')
+db_now = TinyDB('forecast_data/db_now.json')
+db_short = TinyDB('forecast_data/db_short.json')
+db_mid = TinyDB('forecast_data/db_mid.json')
+
+
+
+@app.get("/weather_now/{city}")
+def weather_now(city=str):
+    if city == 'namwon':
+        now_weather = db_now.search((where('name') == "namwon"))
+    elif city == 'iksan':
+        now_weather = db_now.search((where('name') == "buan"))
+    else:
+        now_weather = []
+
+    if len(now_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
+        return now_weather[-1]['json_content']
+    else:
+        return "해당지역없음"
+
+
+@app.get("/weather_short/{city}")
+def weather_short(city: str):
+    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    date = datetime.datetime.today().astimezone(KST)
+    today = date.strftime("%Y%m%d")
+    if city == 'namwon':
+        today_weather = db_short.search((where('name') == "namwon") & (where('date') == today))
+    elif city == 'iksan':
+        today_weather = db_short.search((where('name') == "iksan") & (where('date') == today))
+    elif city == 'pyeongchang':
+        today_weather = db_short.search((where('name') == "pyeongchang") & (where('date') == today))
+    elif city == 'buan':
+        today_weather = db_short.search((where('name') == "buan") & (where('date') == today))
+    else:
+        today_weather = []
+
+
+    if len(today_weather) > 0:
+        return today_weather[0]['json_content']
+    else:
+        return "해당지역없음"
+
+
+@app.get("/weather_mid/{city}")
+def weather_mid(city=str):
+    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    date = datetime.datetime.today().astimezone(KST)
+    today = date.strftime("%Y%m%d")
+    if city == 'namwon':
+        future_weather = db_mid.search((where('name') == "namwon") & (where('date') == today))
+    elif city == 'iksan':
+        future_weather = db_mid.search((where('name') == "iksan") & (where('date') == today))
+    elif city == 'pyeongchang':
+        future_weather = db_mid.search((where('name') == "pyeongchang") & (where('date') == today))
+    elif city == 'buan':
+        future_weather = db_mid.search((where('name') == "buan") & (where('date') == today))
+    else:
+        future_weather = []
+
+    if len(future_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
+        return future_weather[0]['json_content']
+    else:
+        return "해당지역없음"
+
+
+################################# 과거기상 ############################
+
 
 
 # 날짜 10월 ~ 6월 추출
@@ -248,8 +313,8 @@ def load_weather(city=str):
 
 
 def main():
-    uvicorn.run(app, host="127.0.0.1", port=8000)
-
+    # uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
 
 if __name__ == '__main__':
     main()
