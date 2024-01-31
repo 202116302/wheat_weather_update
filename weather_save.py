@@ -56,7 +56,7 @@ def weather_now(city, city_k):
 
     w_json = json.dumps(new_w, ensure_ascii=False)
 
-    now_weather = db_now.search((where('name') == f"{city}") & (where('date') == date_time))
+    now_weather = db_now.search((where('name') == f"{city}"))
 
     if city == 'pyeonchang':
         pass
@@ -248,7 +248,7 @@ def weather_short(city):
     new_param_buan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
                       'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_buan, 'ny': nx_buan}
 
-    today_weather = db_short.search((where('name') == f"{city}") & (where('date') == today))
+    today_weather = db_short.search((where('name') == f"{city}"))
 
     if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
         if city == 'namwon':
@@ -318,11 +318,6 @@ def weather_mid(city, id):
     # 중기육상예보
     # 전라북도 : 11F10000
 
-    params_url = {
-        'serviceKey': 'HbVUz1YOQ5weklXi+6FnG74Ggi4wiKqvNNncv7HCNL+n4ZuTa3uB4nd3GdcRT9nOzYhlCcvw0cHkz9ZXUelYvQ==',
-        'pageNo': '1', 'numOfRows': '10', 'dataType': 'JSON',
-        'regId': '11F10000', 'tmFc': f'{today}0600'}
-
     # regIdd , 중기기온조회
     # 남원 : 11F10401
     # 익산 : 11F10202
@@ -338,7 +333,7 @@ def weather_mid(city, id):
     response_midta = requests.get(url2, params=params_url)
     weather_mid = filter_mid(response_land, response_midta)
 
-    future_weather = db_mid.search((where('name') == f"{city}") & (where('date') == today))
+    future_weather = db_mid.search((where('name') == f"{city}"))
 
     if len(future_weather) > 0:
         db_mid.update({"name": f"{city}", "date": today, 'json_content': weather_mid})
