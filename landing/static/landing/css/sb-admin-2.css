@@ -12590,25 +12590,27 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 991px) {
+
     .mobile-nav-toggle {
         display: block;
     }
 
-    /*.navbar-mobile ul{*/
-    /*    display: none;*/
-
-    /*}*/
+    .sidebar-heading {
+        text-align: left;
+    }
 
     .sidebar {
         display: none;
-        left: -300px;
-        transition: all 0.4s ease;
+        /*left: -300px;*/
+        /*transition: all 0.4s ease;*/
+        /*width: 100%;*/
 
     }
 
     .sidebar.toggled {
         display: block !important; /* 원래 토글됐을 때는 block으로 설정되어야 함 */
-        width: 10rem !important;
+        width: 100% !important;
+
     }
 
     .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after {
@@ -12616,13 +12618,12 @@ input:checked + .slider:before {
     }
 
     .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after {
-        width: 1rem;
+        width: 10rem;
         text-align: center;
         float: right;
         vertical-align: 0;
         border: 0;
         font-weight: 900;
-        /*content: '\f107';*/
         font-family: 'Font Awesome 5 Free';
 
     }
@@ -12653,7 +12654,7 @@ input:checked + .slider:before {
 
 .navbar-mobile {
   position: fixed;
-  overflow: hidden;
+  overflow: visible;
   top: 0;
   right: 0;
   left: 0;
@@ -12661,6 +12662,9 @@ input:checked + .slider:before {
   background: rgba(0, 0, 0, 0.9);
   transition: 0.3s;
   z-index: 999;
+    /*left: -450px;*/
+    /*transition: all 0.4s ease;*/
+
 }
 
 .navbar-mobile .mobile-nav-toggle {
@@ -12670,20 +12674,20 @@ input:checked + .slider:before {
 
 }
 
+
 .navbar-mobile ul {
-  display: block;
-  position: absolute;
-  top: 55px;
-  right: 15px;
-  bottom: 15px;
-  left: 15px;
-  padding: 10px 0;
-  background-color: #fff;
-  overflow-y: auto;
-  transition: 0.3s;
-
+    display: block;
+    position: fixed; /* 수정: absolute 대신 fixed 사용 */
+    top: 55px;
+    right: 15px;
+    bottom: 15px;
+    left: 15px;
+    padding: 10px 0;
+    background-color: #fff;
+    overflow-y: auto;
+    transition: 0.3s;
+    width: 100%; /* 가로 너비 조절 */
 }
-
 
 .navbar-mobile a,
 .navbar-mobile a:focus {
@@ -12724,12 +12728,6 @@ input:checked + .slider:before {
   font-size: 12px;
 }
 
-.navbar-mobile .dropdown ul a:hover,
-.navbar-mobile .dropdown ul .active:hover,
-.navbar-mobile .dropdown ul li:hover>a {
-  background-color: #9ec5fe;
-}
-
 .navbar-mobile .dropdown>.dropdown-active {
   display: block;
 }
@@ -12755,8 +12753,8 @@ input:checked + .slider:before {
 
 
 
-.navbar-mobile .nav-item .collapse .collapse-inner .collapse-item:hover,
-.navbar-mobile .nav-item .collapsing .collapse-inner .collapse-item:hover {
-    background-color: #eaecf4;
-}
+/*.navbar-mobile .nav-item .collapse .collapse-inner .collapse-item:hover,*/
+/*.navbar-mobile .nav-item .collapsing .collapse-inner .collapse-item:hover {*/
+/*    background-color: #eaecf4;*/
+/*}*/
 

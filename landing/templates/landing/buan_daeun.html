@@ -175,39 +175,53 @@
 
         <script>
 
-        $(document).ready(function () {
+         $(document).ready(function () {
             const toggleButton = $(".mobile-nav-toggle");
             const mobileNavbar = $(".sidebar");
 
-            toggleButton.on("click", function () {
-                mobileNavbar.toggleClass("toggled");
-            });
-        });
-
-          $(document).on('click', '.mobile-nav-toggle', function(e) {
+            toggleButton.on("click", function (e) {
               e.stopPropagation();
               console.log('Icon clicked');
-            $('#accordionSidebar').toggleClass('navbar-mobile');
-            $(this).toggleClass('bi-list bi-x');
+              mobileNavbar.toggleClass("toggled");
+              $('#accordionSidebar').toggleClass('navbar-mobile');
+              toggleButton.toggleClass('bi-list bi-x');
+            });
+
+            // Close Icon 클릭 시
+            $(document).on('click', '.x', function (e) {
+              e.stopPropagation();
+              console.log('Close Icon clicked');
+              mobileNavbar.removeClass('toggled');
+              $('#accordionSidebar').removeClass('navbar-mobile');
+              toggleButton.removeClass('bi-list').addClass('bi-x');
+               toggleButton.addClass('bi-list').removeClass('bi-x');
+            });
           });
-
-          {#$(document).on('click', '.navbar .dropdown > a', function(e) {#}
-          {# if ($('#accordionSidebar').hasClass('navbar-mobile')) {#}
-          {#   e.preventDefault();#}
-          {#   $(this).next().toggleClass('dropdown-active');#}
-          {# }#}
-
-
         </script>
+
+        <style>
+
+        </style>
+
+
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <div class="mobile-nav-toggle-container" style="display: flex; justify-content: flex-end;">
+            <div class="x" style="display: flex; justify-content: flex-end;">
+                <i class="bi bi-x mobile-nav-toggle" style="color: white; font-size: 24px; "></i>
+
+            </div>
+            </div>
 
             <!-- Heading -->
-            <div class="sidebar-heading mt-4">
+              <div class="sidebar-heading mt-4">
                 대시보드
             </div>
 
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
+
+
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-circle"></i>
