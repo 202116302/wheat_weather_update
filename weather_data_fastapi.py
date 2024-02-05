@@ -6,6 +6,7 @@ import datetime
 import pandas as pd
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -29,6 +30,9 @@ db_short = TinyDB('forecast_data/db_short.json')
 db_mid = TinyDB('forecast_data/db_mid.json')
 
 
+@app.get("/")
+async def home(request: Request):
+    return templates.TemplateResponse("landing.html",{"request":request})
 
 @app.get("/weather_now/{city}")
 def weather_now(city=str):
