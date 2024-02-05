@@ -36,6 +36,8 @@ def weather_now(city=str):
         now_weather = db_now.search((where('name') == "namwon"))
     elif city == 'buan':
         now_weather = db_now.search((where('name') == "buan"))
+    elif city == 'iksan':
+        now_weather = db_now.search((where('name') == "iksan"))
     else:
         now_weather = []
 
@@ -122,7 +124,7 @@ def result_tolist(data):
 
 
 ### 지역별 40년치 기온 상위 25%, 75% ###
-@app.get("/{city}/past/temp")
+@app.get("/past/temp/{city}")
 def past_temp(city):
     df = pd.read_csv(f'past_data/{city}_2004_2023.csv')
 
@@ -162,7 +164,7 @@ def past_temp(city):
 
 
 ### 지역별 특정일자 기온 상위 25%, 75% ###
-@app.get("/{city}/temp/{date}")
+@app.get("/temp/{date}/{city}")
 def past_temp_by_day(city=str, date=str):
     df = pd.read_csv(f'past_data/{city}_2004_2023.csv')
 
@@ -184,7 +186,7 @@ def past_temp_by_day(city=str, date=str):
 
 
 ### 지역별 40년치 강수량 상위 25%, 75% ###
-@app.get("/{city}/past/rainfall")
+@app.get("/past/rainfall/{city}")
 def past_rainfall(city=str):
     df = pd.read_csv(f'past_data/{city}_2004_2023.csv')
 
@@ -231,7 +233,7 @@ def past_rainfall(city=str):
 
 
 ### 지역별 2023-10 ~ 오늘까지 기온 상위 25%, 75% ###
-@app.get("/{city}/today/temp")
+@app.get("/today/temp/{city}")
 def loc_today_temp(city=str):
     start_year = 2023
     end_year = 2024
@@ -260,7 +262,7 @@ def loc_today_temp(city=str):
 
 
 ### 지역별 2023-10 ~ 오늘까지 강수량 상위 25%, 75% ###
-@app.get("/{city}/today/rainfall")
+@app.get("/today/rainfall/{city}")
 def loc_today_rainfall(city=str):
     start_year = 2023
     end_year = 2024
@@ -296,7 +298,7 @@ def loc_today_rainfall(city=str):
     return monthly_rainfall_dict
 
 
-@app.get("/{city}/forecast")
+@app.get("/forecast/{city}")
 def load_weather(city=str):
     date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     now_weather = db_now.search((where('name') == f"{city}"))

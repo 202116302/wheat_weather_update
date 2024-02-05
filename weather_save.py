@@ -7,19 +7,19 @@ import datetime
 import os
 from tqdm import tqdm
 
-if not os.path.exists('home/hj5258/wheat_weather_update/weather_data/'):
-    os.mkdir('home/hj5258/wheat_weather_update/weather_data/')
+# if not os.path.exists('home/hj5258/wheat_weather_update/weather_data/'):
+#    os.mkdir('home/hj5258/wheat_weather_update/weather_data/')
 
-db_now = TinyDB('home/hj5258/wheat_weather_update/weather_data/db_now.json')
-db_short = TinyDB('home/hj5258/wheat_weather_update/weather_data/db_short.json')
-db_mid = TinyDB('home/hj5258/wheat_weather_update/weather_data/db_mid.json')
+db_now = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_now.json')
+db_short = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_short.json')
+db_mid = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_mid.json')
 
 Station = Query()
 
 
 ##현재기상## city는 한글
 def weather_now(city, city_k):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    KST = datetime.timezone(datetime.timedelta(hours=1))
     time = datetime.datetime.now().astimezone(KST)
     ## 익산없음 전주로 대체 (20240123)
     if city_k == '익산':
@@ -44,7 +44,7 @@ def weather_now(city, city_k):
     content_now = data_now['data']
 
     new_w = {}
-    if city_k in ['남원', '익산', '부안']:
+    if city_k in ['남원', '전주', '부안']:
         w_now = [x for x in content_now if x['stnKo'] == f'{city_k}']
         new_w[
             'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
@@ -56,17 +56,12 @@ def weather_now(city, city_k):
 
     w_json = json.dumps(new_w, ensure_ascii=False)
 
-    now_weather = db_now.search((where('name') == f"{city}"))
 
     if city == 'pyeonchang':
         pass
     else:
-        if len(now_weather) > 0:
-            db_now.update({"name": f"{city}", "date": date_time, 'json_content': w_json})
-            print(f'{city_k}:update')
-        else:
-            db_now.insert({"name": f"{city}", "date": date_time, 'json_content': w_json})
-            print(f'{city_k}:save')
+        db_now.insert({"name": f"{city}", "date": date_time, 'json_content': w_json})
+        print(f'{city_k}:save')
 
 
 ############ 단기예보 API ##################
@@ -205,11 +200,9 @@ def sky(loc):
 
 ## 단기예보 ###
 def weather_short(city):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    KST = datetime.timezone(datetime.timedelta(hours=1))
     date = datetime.datetime.today().astimezone(KST)
-    print(date)
     today = date.strftime("%Y%m%d")
-    print(today)
     # date = datetime.datetime.today()
     y = date - datetime.timedelta(days=1)
     yesterday = y.strftime("%Y%m%d")
@@ -250,50 +243,29 @@ def weather_short(city):
 
     today_weather = db_short.search((where('name') == f"{city}"))
 
-    if len(today_weather) > 0:  # 오늘날짜 / 남원 혹은 익산 자료가 있으면, 있는 자료로 리턴
-        if city == 'namwon':
-            json_content = sky(new_param_namwon)
-            db_short.update({"name": "namwon", "date": today, "json_content": json_content})
-            print(f'{city}:update')
-        elif city == "iksan":
-            json_content = sky(new_param_iksan)
-            db_short.update({"name": "iksan", "date": today, "json_content": json_content})
-            print(f'{city}:update')
-        elif city == "pyeongchang":
-            json_content = sky(new_param_pyeongchang)
-            db_short.update({"name": "pyeongchang", "date": today, "json_content": json_content})
-            print(f'{city}:update')
-        elif city == "buan":
-            json_content = sky(new_param_buan)
-            db_short.update({"name": "buan", "date": today, "json_content": json_content})
-            print(f'{city}:update')
-        else:
-            "해당지역없음"
-
+    if city == 'namwon':
+        json_content = sky(new_param_namwon)
+        db_short.insert({"name": "namwon", "date": today, "json_content": json_content})
+        print(f'{city}:save')
+    elif city == "iksan":
+        json_content = sky(new_param_iksan)
+        db_short.insert({"name": "iksan", "date": today, "json_content": json_content})
+        print(f'{city}:save')
+    elif city == "pyeongchang": 
+        json_content = sky(new_param_pyeongchang)
+        db_short.insert({"name": "pyeongchang", "date": today, "json_content": json_content})
+        print(f'{city}:save')
+    elif city == "buan":
+        json_content = sky(new_param_buan)
+        db_short.insert({"name": "buan", "date": today, "json_content": json_content})
+        print(f'{city}:save')
     else:
-        if city == 'namwon':
-            json_content = sky(new_param_namwon)
-            db_short.insert({"name": "namwon", "date": today, "json_content": json_content})
-            print(f'{city}:save')
-        elif city == "iksan":
-            json_content = sky(new_param_iksan)
-            db_short.insert({"name": "iksan", "date": today, "json_content": json_content})
-            print(f'{city}:save')
-        elif city == "pyeongchang":
-            json_content = sky(new_param_pyeongchang)
-            db_short.insert({"name": "pyeongchang", "date": today, "json_content": json_content})
-            print(f'{city}:save')
-        elif city == "buan":
-            json_content = sky(new_param_buan)
-            db_short.insert({"name": "buan", "date": today, "json_content": json_content})
-            print(f'{city}:save')
-        else:
-            print("해당지역없음")
+        print("해당지역없음")
 
 
 ###중기예보###
 def weather_mid(city, id):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    KST = datetime.timezone(datetime.timedelta(hours=1))
     time = datetime.datetime.now().astimezone(KST)
     today = time.strftime("%Y%m%d")
     # today = datetime.datetime.now().strftime("%Y%m%d")
@@ -344,7 +316,7 @@ def weather_mid(city, id):
 
 
 def filter_mid(response_land, response_midta):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    KST = datetime.timezone(datetime.timedelta(hours=1))
     time = datetime.datetime.now().astimezone(KST)
     item_land = response_land.content.decode('utf-8')
     item_midta = response_midta.content.decode('utf-8')
@@ -389,6 +361,7 @@ def main():
         weather_now(x, y)
         weather_mid(x, z)
 
+    db_short.close()	
 
 if __name__ == '__main__':
     main()
