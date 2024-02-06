@@ -50,6 +50,8 @@ def weather_now(city, city_k):
             'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
         new_w['ta'] = w_now[0]['ta'] + "°C"
         new_w['ws'] = w_now[0]['ws'] + "m/s"
+        new_w['wdKo'] = w_now[0]['wdKo']
+        new_w['wwKo'] = w_now[0]['wwKo']
         new_w['log'] = log
     else:
         pass
