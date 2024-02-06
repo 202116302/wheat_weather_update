@@ -1,13 +1,14 @@
 import uvicorn
 from datetime import datetime, timedelta
 import requests
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, where
 import datetime
 import pandas as pd
-from fastapi import FastAPI, Request
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+import json
 
 app = FastAPI()
 
@@ -317,6 +318,57 @@ def load_weather(city=str):
 
     return data
 
+
+############################# 토양수분센서 ###################
+
+def read_json_data(deviceEui,  searchStartDate, searchEndDate):
+    get_json_file(deviceEui, searchStartDate, searchEndDate)
+    with open('all_df.json', 'r') as json_file:
+        data = json.load(json_file)
+
+    df = pd.DataFrame(data)
+    return df
+
+def get_json_file(deviceEui, searchStartDate, searchEndDate):
+    url = "http://iotplanet.co.kr/iotplanet/api/v1/rawdata/selectList"
+
+    header = {
+        'accept': '*/*',
+        'Content-Type': "application/json"
+    }
+
+    params = {
+        "apiKey": "LvVDkuL95BLo1KL3S2BY317q40mPCkcsz3ocriNQQqwP4MxYeePWuo2yStSLTtNSL",
+        "deviceEui": deviceEui,
+        "modelIdx": 288,
+        "searchStartDate": searchStartDate,
+        "searchEndDate": searchEndDate
+    }
+
+    response = requests.post(url, headers=header, data=json.dumps(params))
+    if response.status_code == 200:  # 성공적인 응답
+        data = response.json()  # 응답 데이터를 JSON으로 파싱
+        print(response)
+
+        dataMap = data['dataMap']['rawDataList']
+
+        all_df = pd.DataFrame()
+
+        for idx in range(len(dataMap)):
+            each_dict = dataMap[idx]
+            each_df = pd.DataFrame([each_dict])
+            all_df = pd.concat([all_df, each_df])
+        all_df = all_df.reset_index()
+        all_df = all_df.drop('index', axis=1)
+
+        all_df.to_json('all_df.json', orient='columns')
+
+
+## 토양수분센서 (zentra)
+@app.get("/api/zentra/{divice}")
+def load_soilsensor(divice=str):
+    df = pd.read_csv(f'sensor_data/{divice}_data.csv')
+    return df.to_dict()
 
 def main():
     # uvicorn.run(app, host="127.0.0.1", port=8000)
