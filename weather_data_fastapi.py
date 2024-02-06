@@ -54,7 +54,7 @@ def weather_now(city=str):
 
 @app.get("/weather_short/{city}")
 def weather_short(city=str):
-    KST = datetime.timezone(timedelta(hours=-8))
+    KST = datetime.datetime.timezone(timedelta(hours=-8))
     date = datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
@@ -76,7 +76,7 @@ def weather_short(city=str):
 
 @app.get("/weather_mid/{city}")
 def weather_mid(city=str):
-    KST = datetime.timezone(timedelta(hours=-8))
+    KST = datetime.datetime.timezone(timedelta(hours=-8))
     date = datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
@@ -370,7 +370,7 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
 
 @app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
 async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
-    KST = datetime.timezone(timedelta(hours=-8))
+    KST = datetime.datetime.timezone(timedelta(hours=-8))
     date = datetime.today().astimezone(KST)
     # 대조구4번 광산파
     if deviceEui == 'd4k':
