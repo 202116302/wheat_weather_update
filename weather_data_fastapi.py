@@ -2,7 +2,6 @@ import uvicorn
 from datetime import datetime, timedelta
 import requests
 from tinydb import TinyDB, where
-import datetime
 import pandas as pd
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
@@ -33,7 +32,8 @@ db_mid = TinyDB('forecast_data/db_mid.json')
 
 @app.get("/")
 async def home(request: Request):
-    return templates.TemplateResponse("landing.html",{"request":request})
+    return templates.TemplateResponse("landing.html", {"request": request})
+
 
 @app.get("/weather_now/{city}")
 def weather_now(city=str):
@@ -53,9 +53,9 @@ def weather_now(city=str):
 
 
 @app.get("/weather_short/{city}")
-def weather_short(city: str):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
-    date = datetime.datetime.today().astimezone(KST)
+def weather_short(city=str):
+    KST = datetime.timezone(timedelta(hours=-8))
+    date = datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
         today_weather = db_short.search((where('name') == "namwon"))
@@ -68,7 +68,6 @@ def weather_short(city: str):
     else:
         today_weather = []
 
-
     if len(today_weather) > 0:
         return today_weather[-1]['json_content']
     else:
@@ -77,8 +76,8 @@ def weather_short(city: str):
 
 @app.get("/weather_mid/{city}")
 def weather_mid(city=str):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
-    date = datetime.datetime.today().astimezone(KST)
+    KST = datetime.timezone(timedelta(hours=-8))
+    date = datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
         future_weather = db_mid.search((where('name') == "namwon"))
@@ -98,7 +97,6 @@ def weather_mid(city=str):
 
 
 ################################# 과거기상 ############################
-
 
 
 # 날짜 10월 ~ 6월 추출
@@ -237,13 +235,19 @@ def past_rainfall(city=str):
     return result_dict
 
 
-### 지역별 2023-10 ~ 오늘까지 기온 상위 25%, 75% ###
+### 지역별 2023-10 ~ 오늘까지 평균 기온  ###
 @app.get("/today/temp/{city}")
 def loc_today_temp(city=str):
+    if city == 'buan':
+        num = 243
+    elif city == 'iksan':
+        num = 146
+    else:
+        num = 146
     start_year = 2023
     end_year = 2024
-    filename = f"{city}_{start_year}_{end_year}.csv"
-    URL = f"https://api.taegon.kr/stations/243/?sy={start_year}&ey={end_year}&format=csv"
+    filename = f"past_data/{city}_{start_year}_{end_year}.csv"
+    URL = f"https://api.taegon.kr/stations/{146}/?sy={start_year}&ey={end_year}&format=csv"
 
     res = requests.get(URL)
     with open(filename, "w", newline="") as f:
@@ -269,10 +273,16 @@ def loc_today_temp(city=str):
 ### 지역별 2023-10 ~ 오늘까지 강수량 상위 25%, 75% ###
 @app.get("/today/rainfall/{city}")
 def loc_today_rainfall(city=str):
+    if city == 'buan':
+        num = 243
+    elif city == 'iksan':
+        num = 146
+    else:
+        num = 146
     start_year = 2023
     end_year = 2024
-    filename = f"{city}_{start_year}_{end_year}.csv"
-    URL = f"https://api.taegon.kr/stations/243/?sy={start_year}&ey={end_year}&format=csv"
+    filename = f"past_data/{city}_{start_year}_{end_year}.csv"
+    URL = f"https://api.taegon.kr/stations/{num}/?sy={start_year}&ey={end_year}&format=csv"
 
     res = requests.get(URL)
     with open(filename, "w", newline="") as f:
@@ -305,10 +315,10 @@ def loc_today_rainfall(city=str):
 
 @app.get("/forecast/{city}")
 def load_weather(city=str):
-    date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    date_time = datetime.now().strftime('%Y-%m-%d %H:%M')
     now_weather = db_now.search((where('name') == f"{city}"))
 
-    today = datetime.datetime.now().strftime("%Y%m%d")
+    today = datetime.now().strftime("%Y%m%d")
     today_weather = db_short.search((where('name') == f"{city}"))
 
     future_weather = db_mid.search((where('name') == f"{city}"))
@@ -358,8 +368,8 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
 
 @app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
 async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
-    date = datetime.datetime.today().astimezone(KST)
+    KST = datetime.timezone(timedelta(hours=-8))
+    date = datetime.today().astimezone(KST)
     # 대조구4번 광산파
     if deviceEui == 'd4k':
         deviceEui = 'd02544fffefe5bf'
@@ -369,13 +379,13 @@ async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
 
     if searchStartDate == '1st' and searchEndDate == "today":
         today = date.strftime('%Y-%m-%d %H:%M:%S')
-        yeaterday = date - datetime.timedelta(days=1)
+        yeaterday = date - timedelta(days=1)
         yeaterday = yeaterday.strftime('%Y-%m-%d %H:%M:%S')
         get_json_file(deviceEui, yeaterday, today)
     else:
         get_json_file(deviceEui, searchStartDate, searchEndDate)
 
-    with open('all_df.json','r') as json_file:
+    with open('all_df.json', 'r') as json_file:
         json_data = json.load(json_file)
         del json_data['RAW_DATA']
         del json_data['IDX']
@@ -385,13 +395,13 @@ async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
         del json_data['INDEX']
         del json_data["DEVICE_NAME"]
 
-
         for key, values in json_data.items():
             value_list = []
             for value in values.values():
                 value_list.append(value)
             json_data[key] = value_list
     return json_data
+
 
 ## zentra
 @app.get("/api/zentra/{divice}")
@@ -402,9 +412,11 @@ def load_soilsensor(divice=str):
         new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
     return new_dict
 
+
 def main():
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=5000)
     #  uvicorn.run(app, host="0.0.0.0", port=5000)
+
 
 if __name__ == '__main__':
     main()
