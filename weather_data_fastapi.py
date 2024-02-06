@@ -320,15 +320,7 @@ def load_weather(city=str):
 
 
 ############################# 토양수분센서 ###################
-
-def read_json_data(deviceEui,  searchStartDate, searchEndDate):
-    get_json_file(deviceEui, searchStartDate, searchEndDate)
-    with open('all_df.json', 'r') as json_file:
-        data = json.load(json_file)
-
-    df = pd.DataFrame(data)
-    return df
-
+## iotplanet
 def get_json_file(deviceEui, searchStartDate, searchEndDate):
     url = "http://iotplanet.co.kr/iotplanet/api/v1/rawdata/selectList"
 
@@ -364,15 +356,55 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
         all_df.to_json('all_df.json', orient='columns')
 
 
-## 토양수분센서 (zentra)
+@app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
+async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
+    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    date = datetime.datetime.today().astimezone(KST)
+    # 대조구4번 광산파
+    if deviceEui == 'd4k':
+        deviceEui = 'd02544fffefe5bf'
+    # 시험구7번 세조파
+    elif deviceEui == 's7s':
+        deviceEui = 'd02544fffefe59a5'
+
+    if searchStartDate == '1st' and searchEndDate == "today":
+        today = date.strftime('%Y-%m-%d %H:%M:%S')
+        yeaterday = date - datetime.timedelta(days=1)
+        yeaterday = yeaterday.strftime('%Y-%m-%d %H:%M:%S')
+        get_json_file(deviceEui, yeaterday, today)
+    else:
+        get_json_file(deviceEui, searchStartDate, searchEndDate)
+
+    with open('all_df.json','r') as json_file:
+        json_data = json.load(json_file)
+        del json_data['RAW_DATA']
+        del json_data['IDX']
+        del json_data['PLANET_REGDATE']
+        del json_data['LORA_DATE']
+        del json_data["DEVICE_EUI"]
+        del json_data['INDEX']
+        del json_data["DEVICE_NAME"]
+
+
+        for key, values in json_data.items():
+            value_list = []
+            for value in values.values():
+                value_list.append(value)
+            json_data[key] = value_list
+    return json_data
+
+## zentra
 @app.get("/api/zentra/{divice}")
 def load_soilsensor(divice=str):
     df = pd.read_csv(f'sensor_data/{divice}_data.csv')
-    return df.to_dict()
+    new_dict = df.to_dict()
+    for i in df.columns:
+        new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
+    return new_dict
 
 def main():
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+    #  uvicorn.run(app, host="0.0.0.0", port=5000)
 
 if __name__ == '__main__':
     main()
