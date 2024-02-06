@@ -310,7 +310,9 @@ def loc_today_rainfall(city=str):
             monthly_rainfall_sum = round(group['rainfall'].sum(), 2)
             monthly_rainfall_dict[month] = monthly_rainfall_sum
 
-    return monthly_rainfall_dict
+    monthly_rainfall = list(monthly_rainfall_dict.values())
+
+    return monthly_rainfall
 
 
 @app.get("/forecast/{city}")
