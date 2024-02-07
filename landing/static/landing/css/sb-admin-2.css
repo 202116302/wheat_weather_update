@@ -50,7 +50,8 @@
 html {
     font-family: sans-serif;
     line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
+    /*-webkit-text-size-adjust: 100%;*/
+    -webkit-text-size-adjust: auto;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -11209,6 +11210,7 @@ a:focus {
     min-width: 10rem;
     font-size: 0.85rem;
     margin: 0 0 1rem 0;
+
 }
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-header,
@@ -12470,12 +12472,6 @@ input:checked + .slider:before {
 
 
 
-
-
-
-
-
-
 #toggle1:checked ~ .toggleSwitch {
     background: #5a9ad4;
 }
@@ -12566,11 +12562,6 @@ input:checked + .slider:before {
 }
 
 
-
-
-
-
-
 /* Rounded sliders */
 
 .toggleSwitch.round {
@@ -12591,3 +12582,188 @@ input:checked + .slider:before {
     opacity: 1;
     transition: 0.3s;
 }
+
+
+/**
+* Mobile Navigation
+*/
+
+
+.mobile-nav-toggle {
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  display: none;
+  line-height: 0;
+  transition: 0.5s;
+}
+
+@media (max-width: 991px) {
+
+    .mobile-nav-toggle {
+        display: block;
+    }
+
+    .sidebar-heading {
+        text-align: left;
+    }
+
+    .sidebar {
+        display: none;
+        /*left: -300px;*/
+        /*transition: all 0.4s ease;*/
+        /*width: 100%;*/
+
+    }
+
+    .sidebar.toggled {
+        display: block !important; /* 원래 토글됐을 때는 block으로 설정되어야 함 */
+        width: 100% !important;
+
+    }
+
+    .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after {
+        width: 10rem;
+        text-align: center;
+        float: right;
+        vertical-align: 0;
+        border: 0;
+        font-weight: 900;
+        font-family: 'Font Awesome 5 Free';
+
+    }
+
+    .table th, .table td {
+        font-size: 12px; /* 적절한 글꼴 크기로 조절 */
+    }
+
+    .th.px-1{
+        font-size: 5px;
+    }
+
+    h4, h3 {
+        font-size: 20px;
+    }
+
+    h5{
+        font-size: 12px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+
+
+}
+
+.navbar-mobile {
+  position: fixed;
+  overflow: visible;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  transition: 0.3s;
+  z-index: 999;
+    /*left: -450px;*/
+    /*transition: all 0.4s ease;*/
+
+}
+
+.navbar-mobile .mobile-nav-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+}
+
+
+.navbar-mobile ul {
+    display: block;
+    position: fixed; /* 수정: absolute 대신 fixed 사용 */
+    top: 55px;
+    right: 15px;
+    bottom: 15px;
+    left: 15px;
+    padding: 10px 0;
+    background-color: #fff;
+    overflow-y: auto;
+    transition: 0.3s;
+    width: 100%; /* 가로 너비 조절 */
+}
+
+.navbar-mobile a,
+.navbar-mobile a:focus {
+  padding: 10px 20px;
+  font-size: 15px;
+  color: #151515;
+}
+
+.navbar-mobile a:hover,
+.navbar-mobile .active,
+.navbar-mobile li:hover>a {
+  color: #151515;
+  background-color: #9ec5fe;
+}
+
+.navbar-mobile .dropdown ul {
+  position: static;
+  display: none;
+  margin: 10px 20px;
+  padding: 10px 0;
+  z-index: 99;
+  opacity: 1;
+  visibility: visible;
+  background: #fff;
+  box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+}
+
+.navbar-mobile .dropdown ul li {
+  min-width: 200px;
+}
+
+.navbar-mobile .dropdown ul a {
+  padding: 10px 20px;
+  color: #151515;
+}
+
+.navbar-mobile .dropdown ul a i {
+  font-size: 12px;
+}
+
+.navbar-mobile .dropdown>.dropdown-active {
+  display: block;
+}
+
+.navbar-mobile .nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-mobile .nav-link:hover, .nav-link:focus {
+    text-decoration: none;
+}
+
+.navbar-mobile .nav-link.disabled {
+    color: #858796;
+    pointer-events: none;
+    cursor: default;
+}
+
+.navbar-mobile .nav-tabs {
+    border-bottom: 1px solid #dddfeb;
+}
+
+
+
+/*.navbar-mobile .nav-item .collapse .collapse-inner .collapse-item:hover,*/
+/*.navbar-mobile .nav-item .collapsing .collapse-inner .collapse-item:hover {*/
+/*    background-color: #eaecf4;*/
+/*}*/
+

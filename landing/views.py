@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+def landing_d(request):
+    return render(request, "landing/buan_daeun.html")
 
 def landing(request):
     return render(request, "landing/iksan.html")

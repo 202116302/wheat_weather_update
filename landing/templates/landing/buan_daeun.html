@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>밀 생산성 향상 디지털농업 모델 개발</title>
+    <link href="{% static 'landing/vendor/fontawesome-free/css/all.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <!-- Custom styles for this template-->
+    <link href="{% static 'landing/css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'landing/css/sb-admin-2.css' %}" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/1fb217f3df.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
+    <script src="https://kit.fontawesome.com/fc4a7565b8.js" crossorigin="anonymous"></script>
+    <script src="{% static 'landing/js/sb-admin-2.js' %}"></script>
+    <style>
+        :root {
+          --side-bar-width: 270px;
+          --side-bar-height: 90vh;
+        }
+
+
+        /* 사이드바 너비의 80%만큼 왼쪽으로 이동 */
+        .side-bar {
+          border-radius: 20px;
+          transform: translate(calc(var(--side-bar-width) * -0.8), 0);  /* X축 이동, Y축 고정 */
+          transition: .5s;
+        }
+
+        .side-bar:hover {
+            transform: translate(-10px, 0);
+        }/* 둥근 모서리의 너비만큼 X축 이동, Y축 고정 */
+
+        {#@media (max-width: 768px) {#}
+        {#    .auto-resize-btn {#}
+        {#width: 100%;#}
+        {#  }#}
+        {#}#}
+    </style>
+</head>
+<script>
+        function weather_now() {
+
+            $.ajax({
+                type: "GET",
+                url: "http://web01.taegon.kr:5000/weather_now/buan",
+                success: now_result,
+                dataType: "json"
+            });
+         }
+
+        function now_result(data){
+            const data2 = JSON.parse(data);
+            $("#now_name").html(data2['stnKo'])
+            $("#now_sky").html(data2['wwKo'])
+            $("#now_tem").html(data2['ta'])
+            $("#now_wind_v").html(data2['ws'])
+            $("#now_wind").html(data2['wdKo'])
+            $("#now_time").html(data2['now_time'])
+            $("#now_log").html(data2['log'])
+
+            const displayedImage = document.getElementById('displayedImage');
+
+        }
+
+        function weather_short(){
+             $.ajax({
+              type: "GET",
+              url: "http://web01.taegon.kr:5000/weather_short/buan",
+              success: short_result,
+              dataType: "json"
+            });
+        }
+
+        function short_result(data){
+            const data2 = JSON.parse(data);
+            $("#date1").html(data2[2][0])
+            $("#date2").html(data2[2][1])
+            $("#date3").html(data2[2][2])
+            $("#date4").html(data2[2][3])
+            $("#date5").html(data2[2][4])
+            $("#sky1").html(data2[5][data2[0][0]])
+            $("#sky2").html(data2[5][data2[0][1]])
+            $("#sky3").html(data2[5][data2[0][2]])
+            $("#sky4").html(data2[5][data2[0][3]])
+            $("#sky5").html(data2[5][data2[0][4]])
+            $("#rainfall1").html(data2[3][data2[0][0]])
+            $("#rainfall2").html(data2[3][data2[0][1]])
+            $("#rainfall3").html(data2[3][data2[0][2]])
+            $("#rainfall4").html(data2[3][data2[0][3]])
+            $("#rainfall5").html(data2[3][data2[0][4]])
+            $("#tmin1").html(data2[6][data2[0][0]])
+            $("#tmin2").html(data2[6][data2[0][1]])
+            $("#tmin3").html(data2[6][data2[0][2]])
+            $("#tmin4").html(data2[6][data2[0][3]])
+            $("#tmin5").html(data2[6][data2[0][4]])
+            $("#tmax1").html(data2[7][data2[0][0]])
+            $("#tmax2").html(data2[7][data2[0][1]])
+            $("#tmax3").html(data2[7][data2[0][2]])
+            $("#tmax4").html(data2[7][data2[0][3]])
+            $("#tmax5").html(data2[7][data2[0][4]])
+            $("#humid_now").html(data2[4][data2[0][0]])
+            $("#humid_now2").html(data2[4][data2[0][1]])
+            $("#humid_now3").html(data2[4][data2[0][2]])
+            $("#humid_now4").html(data2[4][data2[0][3]])
+            $("#humid_now5").html(data2[4][data2[0][4]])
+
+
+        }
+
+        function weather_mid() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://web01.taegon.kr:5000/weather_mid/buan",
+                    success: mid_result,
+                    dataType: "json"
+                });
+             }
+
+        function mid_result(date){
+            const data2 = JSON.parse(date);
+            console.log(data2)
+            $("#date_mid2").html(data2['date'][1])
+            $("#tmax_mid2").html(data2[data2['name'][1]]['tamax_4'])
+            $("#tmin_mid2").html(data2[data2['name'][1]]['tamin_4'])
+            $("#rainfall_mid2_am").html(data2[data2['name'][1]]['rf_4_am'])
+            $("#rainfall_mid2_pm").html(data2[data2['name'][1]]['rf_4_pm'])
+            $("#sky_mid2_am").html(data2[data2['name'][1]]['wf_4_am'])
+            $("#sky_mid2_pm").html(data2[data2['name'][1]]['wf_4_pm'])
+            $("#date_mid3").html(data2['date'][2])
+            $("#tmax_mid3").html(data2[data2['name'][2]]['tamax_5'])
+            $("#tmin_mid3").html(data2[data2['name'][2]]['tamin_5'])
+            $("#rainfall_mid3_am").html(data2[data2['name'][2]]['rf_5_am'])
+            $("#rainfall_mid3_pm").html(data2[data2['name'][2]]['rf_5_pm'])
+            $("#sky_mid3_am").html(data2[data2['name'][2]]['wf_5_am'])
+            $("#sky_mid3_pm").html(data2[data2['name'][2]]['wf_5_pm'])
+            $("#date_mid4").html(data2['date'][3])
+            $("#tmax_mid4").html(data2[data2['name'][3]]['tamax_6'])
+            $("#tmin_mid4").html(data2[data2['name'][3]]['tamin_6'])
+            $("#rainfall_mid4_am").html(data2[data2['name'][3]]['rf_6_am'])
+            $("#rainfall_mid4_pm").html(data2[data2['name'][3]]['rf_6_pm'])
+            $("#sky_mid4_am").html(data2[data2['name'][3]]['wf_6_am'])
+            $("#sky_mid4_pm").html(data2[data2['name'][3]]['wf_6_pm'])
+            $("#date_mid5").html(data2['date'][4])
+            $("#tmax_mid5").html(data2[data2['name'][4]]['tamax_7'])
+            $("#tmin_mid5").html(data2[data2['name'][4]]['tamin_7'])
+            $("#rainfall_mid5_am").html(data2[data2['name'][4]]['rf_7_am'])
+            $("#rainfall_mid5_pm").html(data2[data2['name'][4]]['rf_7_pm'])
+            $("#sky_mid5_am").html(data2[data2['name'][4]]['wf_7_am'])
+            $("#sky_mid5_pm").html(data2[data2['name'][4]]['wf_7_pm'])
+
+    }
+    </script>
+<body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain()">
+
+{#    <!-- Page Wrapper -->#}
+    <div id="wrapper">
+
+
+        <script>
+
+         $(document).ready(function () {
+            const toggleButton = $(".mobile-nav-toggle");
+            const mobileNavbar = $(".sidebar");
+
+            toggleButton.on("click", function (e) {
+              e.stopPropagation();
+              console.log('Icon clicked');
+              mobileNavbar.toggleClass("toggled");
+              $('#accordionSidebar').toggleClass('navbar-mobile');
+              toggleButton.toggleClass('bi-list bi-x');
+            });
+
+            // Close Icon 클릭 시
+            $(document).on('click', '.x', function (e) {
+              e.stopPropagation();
+              console.log('Close Icon clicked');
+              mobileNavbar.removeClass('toggled');
+              $('#accordionSidebar').removeClass('navbar-mobile');
+              toggleButton.removeClass('bi-list').addClass('bi-x');
+               toggleButton.addClass('bi-list').removeClass('bi-x');
+            });
+          });
+        </script>
+
+        <style>
+
+        </style>
+
+
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <div class="mobile-nav-toggle-container" style="display: flex; justify-content: flex-end;">
+            <div class="x" style="display: flex; justify-content: flex-end;">
+                <i class="bi bi-x mobile-nav-toggle" style="color: white; font-size: 24px; "></i>
+
+            </div>
+            </div>
+
+            <!-- Heading -->
+              <div class="sidebar-heading mt-4">
+                대시보드
+            </div>
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+
+
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-circle"></i>
+                    <span>익산</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">일자</h6>
+                        <a class="collapse-item" href="/">과거현황(2023-03-15)</a>
+                        <a class="collapse-item" href="/2">과거현황(2023-06-20)</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-circle"></i>
+                    <span>부안</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">일자</h6>
+                        <a class="collapse-item" href="/buan">현재</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                분석자료
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+             <li class="nav-item">
+                <a class="nav-link" href="https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do?pgmNo=179">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>기상자료</span></a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+             <li class="nav-item">
+                <a class="nav-link" href="http://web01.taegon.kr:8505/">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>위성 NDVI</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="/buan">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>토양수분 계측 자료 (X)</span></a>
+            </li>
+
+        </ul>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <h3 class="mt-3">부안 백산면 대수리</h3>
+                <div class="topbar-divider d-sm-block"></div>
+                <h4 class="mt-3" id="now_time"></h4>
+                  <div class="mobile-nav-toggle-container">
+                    <i class="bi bi-list mobile-nav-toggle" style="color: black;"></i>
+                  </div>
+
+                </nav>
+
+                <div class="container-fluid">
+
+                    <div class="row justify-content-around">
+                    <!-- Area Chart -->
+                    <div id="content1" class="col-xl-6" style="position: relative;">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h4 class="m-0 font-weight-bold text-primary">포장배치도</h4>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <img class="img-fluid" src="{% static 'landing/img/buan.JPG' %}" width="100%;" alt="map">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="content2" class="col-xl-6" style="position: relative;">
+
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h4 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h4>
+                                            <h5 class='mb-0 mt-1'>(업데이트 3/15 18:00)</h5>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div style="overflow-x:auto;">
+                                            <div class="card-body">
+                                                <table class="table fs-5 text-center" style="border-color:#f8f9fa; border-collapse:unset">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">온도</th>
+                                                        <th scope="col">습도</th>
+                                                        <th scope="col">날씨</th>
+                                                        <th scope="col">풍향</th>
+                                                        <th scope="col">풍속</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div>12.5°C</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>40%</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>맑음</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>남서</div>
+                                                        </td>
+                                                        <td>
+                                                            <div>0.8m/s</div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div style="overflow-x:auto;">
+                                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                <h4 class="m-0 font-weight-bold text-primary">단기 기상 데이터</h4>
+                                            </div>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div style="overflow-x:auto;">
+                                            <div class="card-body">
+                                                <table class="table fs-6 text-center" style="border-color:#f8f9fa; border-collapse:unset">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col" class="px-1"></th>
+                                                    <th scope="col" class="px-1">최고기온</th>
+                                                    <th scope="col" class="px-1">최저기온</th>
+                                                    <th scope="col" class="px-1">습도</th>
+                                                    <th scope="col" class="px-1">강수확률</th>
+                                                    <th scope="col" class="px-1">구름양</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="py-4"><div>3/16 (목)</div></td>
+                                                    <td class="py-4"><div>13.0°C</div></td>
+                                                    <td class="py-4"><div>2.2°C</div></td>
+                                                    <td class="py-4"><div>30%</div></td>
+                                                    <td class="py-4"><div>13%</div></td>
+                                                    <td class="py-4"><div>2</div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-4"><div>3/17 (금)</div></td>
+                                                    <td class="py-4"><div>11.5°C</div></td>
+                                                    <td class="py-4"><div>3.7°C</div></td>
+                                                    <td class="py-4"><div>35%</div></td>
+                                                    <td class="py-4"><div>25%</div></td>
+                                                    <td class="py-4"><div>2</div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-4"><div>3/18 (토)</div></td>
+                                                    <td class="py-4"><div>15.0°C</div></td>
+                                                    <td class="py-4"><div>4.9°C</div></td>
+                                                    <td class="py-4"><div>37%</div></td>
+                                                    <td class="py-4"><div>25%</div></td>
+                                                    <td class="py-4"><div>4</div></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h4 class="m-0 font-weight-bold text-primary">중기 기상 데이터</h4>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <table class="table text-center fs-5">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col" class="px-1">최고기온</th>
+                                                <th scope="col" class="px-1">최저기온</th>
+                                                <th scope="col" class="px-1">강수확률</th>
+                                                <th scope="col" class="px-1">날씨</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="py-4"><div>3/19 (일)</div></td>
+                                                <td class="py-4"><div>16.9°C</div></td>
+                                                <td class="py-4"><div>1.2°C</div></td>
+                                                <td class="py-4"><div>32.5%</div></td>
+                                                <td class="py-4"><div>흐림</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div>3/20 (월)</div></td>
+                                                <td class="py-4"><div>18.9°C</div></td>
+                                                <td class="py-4"><div>2.2°C</div></td>
+                                                <td class="py-4"><div>28.8%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div>3/21 (화)</div></td>
+                                                <td class="py-4"><div>14.6°C</div></td>
+                                                <td class="py-4"><div>5.9°C</div></td>
+                                                <td class="py-4"><div>30.0%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-4"><div>3/22 (화)</div></td>
+                                                <td class="py-4"><div>12.4°C</div></td>
+                                                <td class="py-4"><div>9.3°C</div></td>
+                                                <td class="py-4"><div>19.7%</div></td>
+                                                <td class="py-4"><div>맑음</div></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+
+                    <div class="row px-3 mt-3">
+                  <h1 style="font-weight: bolder;">과거기상비교
+                            <a target="_blank" href="https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do?pgmNo=179">
+                             <img id='btn' src="{% static 'landing/img/page_click2.png' %}" alt="graph" width="35px">
+                         </a>
+                  </h1>
+                </div>
+                    <div class="row mt-2 mb-4">
+                     <div class="col-xl-6">
+                        <div class="card text-center shadow mb-4">
+                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h3 class="m-0 font-weight-bold text-primary">월평균 기온</h3>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="main" class="mt-4" style="height:400px; text-align: center;"></div>
+                                <script>
+                                    function weather_past() {
+
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "http://web01.taegon.kr:5000/weather_past/namwon",
+                                            success: past_result,
+                                            dataType:'json',
+                                        });
+                                    }
+
+                                    var myChart = echarts.init(document.getElementById('main'));
+
+                                    function past_result(data) {
+                                        const data2 = JSON.parse(data);
+                                        var option = {
+                                            title: {
+                                            },
+                                            tooltip: {
+                                                trigger: 'axis',
+                                                position: function (pt) {
+                                                    return [pt[0], '100%'];
+                                                },
+
+                                            },
+                                            legend: {
+                                                data: ['하위25%', '현재평균', '상위25%'],
+                                            },
+                                            grid: {
+                                                left: '3%',
+                                                right: '4%',
+                                                bottom: '50',
+                                                containLabel: true
+                                            },
+                                            toolbox: {
+                                                feature: {
+                                                    dataZoom: {
+                                                        yAxisIndex: 'none'
+                                                    },
+                                                    restore: {},
+                                                    saveAsImage: {}
+                                                }
+                                            },
+                                            xAxis: {
+                                                type: 'category',
+                                                boundaryGap: false,
+                                                data: data2['result_23']['date']
+                                            },
+                                            yAxis: {
+                                                type: 'value',
+                                                boundaryGap: [0, '100%'],
+                                                min: -10,
+                                                max: 30
+                                            },
+                                            dataZoom: [
+                                                {
+                                                    show: true,
+                                                },
+                                                {
+                                                    type: 'inside',
+                                                }
+                                            ],
+                                            series: [
+                                                {
+                                                    name: '현재평균',
+                                                    type: 'line',
+                                                    data: data2['result_23']['tavg'],
+                                                    lineStyle: {normal: {color: '#74D36D'}},
+                                                    itemStyle: {normal: {color: '#74D36D'}}
+
+
+                                                },
+                                                {
+                                                    name: '상위25%',
+                                                    type: 'line',
+                                                    data: data2['result_23']['tmax'],
+                                                    lineStyle: {normal: {color: '#FF3636'}},
+                                                    itemStyle: {normal: {color: '#FF3636'}}
+                                                },
+                                                {
+                                                    name: '하위25%',
+                                                    type: 'line',
+                                                    data: data2['result_23']['tmin'],
+                                                    lineStyle: {normal: {color: '#6799FF'}},
+                                                    itemStyle: {normal: {color: '#6799FF'}}
+                                                },
+                                            ]
+                                        };
+
+                                        // 위에서 설정한 속성을 차트에 반영합니다.
+                                            myChart.setOption(option);
+
+
+
+                                       }
+
+                                       window.addEventListener('resize', function() {
+                                        myChart.resize();
+                                            });
+                                    </script>
+                            </div>
+                        </div>
+                    </div>
+ {#                         -------------------강수량 그래프 ---------------#}
+                     <div class="col-xl-6">
+                        <div class="card shadow">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h3 class="m-0 font-weight-bold text-primary">월평균 강수량</h3>
+                            </div>
+                            <div class="card-body text-center">
+                                <div id="rain" class="mt-4" style="height:400px; text-align: center;"></div>
+                                <script>
+                                    function weather_past_rain() {
+
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "http://web01.taegon.kr:5000/weather_past/namwon",
+                                            success: past_result_rain,
+                                            dataType:'json',
+                                            error: function (request, status, error) {
+                                                alert("error"); // 실패 시 처리
+                                            },
+                                        });
+                                    }
+
+                                    var rainfall = echarts.init(document.getElementById('rain'));
+
+
+                                    function past_result_rain(data) {
+                                        const data2 = JSON.parse(data);
+                                        const posList = [
+                                           'left',
+                                           'right',
+                                           'top',
+                                           'bottom',
+                                           'inside',
+                                           'insideTop',
+                                           'insideLeft',
+                                           'insideRight',
+                                           'insideBottom',
+                                           'insideTopLeft',
+                                           'insideTopRight',
+                                           'insideBottomLeft',
+                                           'insideBottomRight'
+
+                                       ];
+
+                                       rainfall.configParameters = {
+                                           rotate: {
+                                               min: -90,
+                                               max: 90
+                                           },
+                                           align: {
+                                               options: {
+                                                   left: 'left',
+                                                   center: 'center',
+                                                   right: 'right'
+                                               }
+                                           },
+                                           verticalAlign: {
+                                               options: {
+                                                   top: 'top',
+                                                   middle: 'middle',
+                                                   bottom: 'bottom'
+                                               }
+                                           },
+                                           position: {
+                                               options: posList.reduce(function (map, pos) {
+                                                   map[pos] = pos;
+                                                   return map;
+                                               }, {})
+                                           },
+                                           distance: {
+                                               min: 0,
+                                               max: 100
+                                           }
+                                       };
+
+                                       rainfall.config = {
+                                           rotate: 90,
+                                           align: 'left',
+                                           verticalAlign: 'middle',
+                                           position: 'insideBottom',
+                                           distance: 15,
+                                       };
+                                       option = {
+                                           title: {
+                                           },
+                                           tooltip: {
+                                               trigger: 'axis',
+                                               axisPointer: {
+                                                   type: 'shadow'
+                                               }
+                                           },
+                                           legend: {
+                                               data: ['하위25%', '현재', '상위25%']
+                                           },
+                                           toolbox: {
+                                               show: true,
+                                               orient: 'vertical',
+                                               left: 'right',
+                                               top: 'center',
+                                               feature: {
+                                                   mark: {show: true},
+                                                   dataView: {show: true, readOnly: false},
+                                                   magicType: {show: true, type: ['line', 'bar', 'stack']},
+                                                   restore: {show: true},
+                                                   saveAsImage: {show: true}
+                                               }
+                                           },
+                                           xAxis: [
+                                               {
+                                                   type: 'category',
+                                                   axisTick: {show: false},
+                                                   data: ['10월', '11월', '12월', '1월', '2월', '3월', '4월', '5월', '6월']
+                                               }
+                                           ],
+                                           yAxis: [
+                                               {
+                                                   type: 'value'
+                                               }
+                                           ],
+                                           series: [
+                                                {
+                                                   name: '하위25%',
+                                                   type: 'bar',
+                                                   emphasis: {
+                                                       focus: 'series'
+                                                   },
+                                                   data: data2['result_rain']['l'],
+                                                    itemStyle: {
+                                                        color: '#6e9dfe'
+                                                    }
+                                               },
+                                               {
+                                                   name: '현재',
+                                                   type: 'bar',
+                                                   emphasis: {
+                                                       focus: 'series'
+                                                   },
+                                                   data: data2['result_rain']['p_2023'],
+                                                   itemStyle: {
+                                                        color: '#55a431'
+                                                    }
+                                               },
+                                               {
+                                                   name: '상위25%',
+                                                   type: 'bar',
+                                                   barGap: 0,
+                                                   emphasis: {
+                                                       focus: 'series'
+                                                   },
+                                                   data: data2['result_rain']['m'],
+                                                   itemStyle: {
+                                                        color: '#bd4c4c'
+                                                    }
+                                               },
+                                           ],
+
+                                       };
+
+                                       rainfall.setOption(option);
+
+                                       }
+
+                                       window.addEventListener('resize', function() {
+                                        rainfall.resize();
+                                        });
+                                    </script>
+                            </div>
+                        </div>
+                        </div>
+                     </div>
+
+                    <div class="row px-3">
+                     <h1 style="font-weight: bolder;">모델예측</h1>
+                </div>
+                    <div class="row mt-2 mb-5">
+                        <div class="col-xl-6 mb-5">
+                            <div class="card shadow">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h3 class="m-0 font-weight-bold text-primary">생산량</h3>
+                            </div>
+                        <div class="card-body text-center">
+                            <img class="img-fluid" src="{% static 'landing/img/model_202308.png' %}" width="100%;" alt="map">
+                        </div>
+                    </div>
+                        </div>
+                        <div class="col-xl-6 mb-5">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h3 class="m-0 font-weight-bold text-primary">수분함량</h3>
+                                </div>
+                        <div class="card-body text-center">
+                            <img class="img-fluid" src="{% static 'landing/img/dashboard_rain_sws_namwon_current.png' %}" width="100%;" alt="map2">
+                        </div>
+                        </div>
+                    </div>
+                 </div>
+                    <div>
+                        <div style="opacity: 0.4;">
+                        <h2 style="font-weight: bolder;">수분 포텐셜 센서</h2>
+                        <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 1
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">1</th>
+                                                    <th scope="col">2</th>
+                                                    <th scope="col">3</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary text-uppercase mb-1 text-warning"
+                                             style="font-size: 20px;">
+                                            plot 2
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">4</th>
+                                                    <th scope="col">5</th>
+                                                    <th scope="col">6</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-warning text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 3
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">1</th>
+                                                    <th scope="col">2</th>
+                                                    <th scope="col">3</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 4
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">4</th>
+                                                    <th scope="col">5</th>
+                                                    <th scope="col">6</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        <div class="row">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 5
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">1</th>
+                                                    <th scope="col">2</th>
+                                                    <th scope="col">3</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-warning text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 6
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">4</th>
+                                                    <th scope="col">5</th>
+                                                    <th scope="col">6</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                       <div class="font-weight-bold text-warning text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 7
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">1</th>
+                                                    <th scope="col">2</th>
+                                                    <th scope="col">3</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
+                                             style="font-size: 20px;">
+                                            plot 8
+                                        </div>
+                                        <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">4</th>
+                                                    <th scope="col">5</th>
+                                                    <th scope="col">6</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12Ψ</td>
+                                                    <td>34Ψ</td>
+                                                    <td>32Ψ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>23Ψ</td>
+                                                    <td>17Ψ</td>
+                                                    <td>17Ψ</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <i class="fa-regular fa-droplet-degree"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        </div>
+                <div style="opacity: 0.4;">
+                <h2 style="font-weight: bolder;">토양 수분 센서</h2>
+                    <div class="row">
+                        <div class="col-xl-6 mb-4">
+                            <div class="card shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <span class="font-weight-bold text-primary text-uppercase mb-1">
+                                                plot 5 &ensp;
+                                            </span>
+                                            <span class="font-weight-bold text-warning text-uppercase mb-1">
+                                                plot 6
+                                            </span>
+                                           <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">6</th>
+                                                    <th scope="col">7</th>
+                                                    <th scope="col">8</th>
+                                                    <th scope="col">9</th>
+                                                    <th scope="col">0</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12%</td>
+                                                    <td>34%</td>
+                                                    <td>32%</td>
+                                                    <td>34%</td>
+                                                    <td>32%</td>
+                                                </tr>
+                                                 <tr>
+                                                    <td><input type="checkbox" id="toggle" hidden>
+                                                        <label for="toggle" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle1" hidden>
+                                                        <label for="toggle1" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle2" hidden>
+                                                        <label for="toggle2" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle3" hidden>
+                                                        <label for="toggle3" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle4" hidden>
+                                                        <label for="toggle4" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </div>
+                                        <div>
+                                            <i class="fa-regular fa-droplet-degree"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 mb-4">
+                            <div class="card shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                           <span class="font-weight-bold text-warning text-uppercase mb-1">
+                                                plot 7 &ensp;
+                                            </span>
+                                            <span class="font-weight-bold text-primary text-uppercase mb-1">
+                                                plot 8
+                                            </span>
+                                            <div class="row">
+                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">1</th>
+                                                    <th scope="col">2</th>
+                                                    <th scope="col">3</th>
+                                                    <th scope="col">4</th>
+                                                    <th scope="col">5</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>12%</td>
+                                                    <td>34%</td>
+                                                    <td>32%</td>
+                                                    <td>34%</td>
+                                                    <td>32%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="checkbox" id="toggle5" hidden>
+                                                        <label for="toggle5" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle6" hidden>
+                                                        <label for="toggle6" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle7" hidden>
+                                                        <label for="toggle7" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle8" hidden>
+                                                        <label for="toggle8" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                    <td><input type="checkbox" id="toggle9" hidden>
+                                                        <label for="toggle9" class="toggleSwitch ml-0" style="width: 100%;">
+                                                        <span class="toggleButton">
+                                                        <span class="on">ON</span>
+                                                        <span class="off">OFF</span>
+                                                        </span>
+                                                        </label></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </div>
+                                        <div>
+                                            <i class="fa-regular fa-droplet-degree"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+
+
+    <!-- Bootstrap core JavaScript-->
+<script src="{% static 'landing/vendor/jquery/jquery.min.js' %}"></script>\
+<script src="{% static 'landing/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'landing/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'landing/js/echarts.js' %}"></script>
+
+</body>
+
+</html>
