@@ -109,7 +109,7 @@ def select_date():
     current_date = start_date
     while current_date <= end_date:
         date_list.append(current_date.strftime('%Y-%m-%d'))
-        current_date += timedelta(days=1)
+        current_date += datetime.timedelta(days=1)
 
     return date_list
 
