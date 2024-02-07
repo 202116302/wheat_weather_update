@@ -1,5 +1,5 @@
 import uvicorn
-from datetime import datetime, timedelta
+import datetime
 import requests
 from tinydb import TinyDB, where
 import pandas as pd
@@ -54,8 +54,8 @@ def weather_now(city=str):
 
 @app.get("/weather_short/{city}")
 def weather_short(city=str):
-    KST = datetime.datetime.timezone(timedelta(hours=-8))
-    date = datetime.today().astimezone(KST)
+    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
         today_weather = db_short.search((where('name') == "namwon"))
@@ -76,8 +76,8 @@ def weather_short(city=str):
 
 @app.get("/weather_mid/{city}")
 def weather_mid(city=str):
-    KST = datetime.datetime.timezone(timedelta(hours=-8))
-    date = datetime.today().astimezone(KST)
+    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
         future_weather = db_mid.search((where('name') == "namwon"))
@@ -101,8 +101,8 @@ def weather_mid(city=str):
 
 # 날짜 10월 ~ 6월 추출
 def select_date():
-    start_date = datetime(2023, 10, 1)
-    end_date = datetime(2024, 6, 30)
+    start_date = datetime.datetime(2023, 10, 1)
+    end_date = datetime.datetime(2024, 6, 30)
 
     date_list = []
 
@@ -317,10 +317,10 @@ def loc_today_rainfall(city=str):
 
 @app.get("/forecast/{city}")
 def load_weather(city=str):
-    date_time = datetime.now().strftime('%Y-%m-%d %H:%M')
+    date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     now_weather = db_now.search((where('name') == f"{city}"))
 
-    today = datetime.now().strftime("%Y%m%d")
+    today = datetime.datetime.now().strftime("%Y%m%d")
     today_weather = db_short.search((where('name') == f"{city}"))
 
     future_weather = db_mid.search((where('name') == f"{city}"))
@@ -370,8 +370,8 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
 
 @app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
 async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
-    KST = datetime.datetime.timezone(timedelta(hours=-8))
-    date = datetime.today().astimezone(KST)
+    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    date = datetime.datetime.today().astimezone(KST)
     # 대조구4번 광산파
     if deviceEui == 'd4k':
         deviceEui = 'd02544fffefe5bf'
@@ -381,7 +381,7 @@ async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
 
     if searchStartDate == '1st' and searchEndDate == "today":
         today = date.strftime('%Y-%m-%d %H:%M:%S')
-        yeaterday = date - timedelta(days=1)
+        yeaterday = date - datetime.timedelta(days=1)
         yeaterday = yeaterday.strftime('%Y-%m-%d %H:%M:%S')
         get_json_file(deviceEui, yeaterday, today)
     else:
@@ -416,8 +416,8 @@ def load_soilsensor(divice=str):
 
 
 def main():
-    uvicorn.run(app, host="127.0.0.1", port=5000)
-    #  uvicorn.run(app, host="0.0.0.0", port=5000)
+    # uvicorn.run(app, host="127.0.0.1", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
 
 
 if __name__ == '__main__':
