@@ -135,7 +135,6 @@
 
         function mid_result(date){
             const data2 = JSON.parse(date);
-            console.log(data2)
             $("#date_mid2").html(data2['date'][1])
             $("#tmax_mid2").html(data2[data2['name'][1]]['tamax_4'])
             $("#tmin_mid2").html(data2[data2['name'][1]]['tamin_4'])
@@ -167,7 +166,7 @@
 
     }
     </script>
-<body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain()">
+<body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain(), sensordata()">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -266,7 +265,8 @@
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <img class="img-fluid" src="{% static 'landing/img/buan.JPG' %}" width="100%;" alt="map">
+                                <img class="img-fluid" src="{% static 'landing/img/buan_update.png' %}" width="100%;" alt="map2">
+                                <img class="img-fluid mt-2" src="{% static 'landing/img/buan.JPG' %}" width="100%;" alt="map">
                             </div>
                         </div>
                     </div>
@@ -278,7 +278,7 @@
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h4 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h4>
-                                            <h5 class='mb-0 mt-1'>(업데이트 3/15 18:00)</h5>
+                                            <h5 class='mb-0 mt-1' id="now_log"></h5>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
@@ -295,19 +295,19 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        <div>12.5°C</div>
+                                                        <div id="now_tem"></div>
                                                     </td>
                                                     <td>
-                                                        <div>40%</div>
+                                                        <div id="humid_now"></div>
                                                     </td>
                                                     <td>
-                                                        <div>맑음</div>
+                                                        <div id="now_sky"></div>
                                                     </td>
                                                     <td>
-                                                        <div>남서</div>
+                                                        <div id="now_wind"></div>
                                                     </td>
                                                     <td>
-                                                        <div>0.8m/s</div>
+                                                        <div id="now_wind_v"></div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -338,28 +338,28 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="py-4"><div>3/16 (목)</div></td>
-                                                <td class="py-4"><div>13.0°C</div></td>
-                                                <td class="py-4"><div>2.2°C</div></td>
-                                                <td class="py-4"><div>30%</div></td>
-                                                <td class="py-4"><div>13%</div></td>
-                                                <td class="py-4"><div>2</div></td>
+                                                <td class="py-4"><div id="date2"></div></td>
+                                                <td class="py-4"><div id="tmax2"></div></td>
+                                                <td class="py-4"><div id="tmin2"></div></td>
+                                                <td class="py-4"><div id="humid_now2"></div></td>
+                                                <td class="py-4"><div id="rainfall2"></div></td>
+                                                <td class="py-4"><div id="sky2"></div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div>3/17 (금)</div></td>
-                                                <td class="py-4"><div>11.5°C</div></td>
-                                                <td class="py-4"><div>3.7°C</div></td>
-                                                <td class="py-4"><div>35%</div></td>
-                                                <td class="py-4"><div>25%</div></td>
-                                                <td class="py-4"><div>2</div></td>
+                                                <td class="py-4"><div id="date3"></div></td>
+                                                <td class="py-4"><div id="tmax3"></div></td>
+                                                <td class="py-4"><div id="tmin3"></div></td>
+                                                <td class="py-4"><div id="humid_now3"></div></td>
+                                                <td class="py-4"><div id="rainfall3"></div></td>
+                                                <td class="py-4"><div id="sky3"></div></td>
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div>3/18 (토)</div></td>
-                                                <td class="py-4"><div>15.0°C</div></td>
-                                                <td class="py-4"><div>4.9°C</div></td>
-                                                <td class="py-4"><div>37%</div></td>
-                                                <td class="py-4"><div>25%</div></td>
-                                                <td class="py-4"><div>4</div></td>
+                                                <td class="py-4"><div id="date4"></div></td>
+                                                <td class="py-4"><div id="tmax4"></div></td>
+                                                <td class="py-4"><div id="tmin4"></div></td>
+                                                <td class="py-4"><div id="humid_now4"></div></td>
+                                                <td class="py-4"><div id="rainfall4"></div></td>
+                                                <td class="py-4"><div id="sky4"></div></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -383,37 +383,37 @@
                                                 <th scope="col" class="px-1">최고기온</th>
                                                 <th scope="col" class="px-1">최저기온</th>
                                                 <th scope="col" class="px-1">강수확률</th>
-                                                <th scope="col" class="px-1">날씨</th>
+{#                                                <th scope="col" class="px-1">날씨</th>#}
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="py-4"><div>3/19 (일)</div></td>
-                                                <td class="py-4"><div>16.9°C</div></td>
-                                                <td class="py-4"><div>1.2°C</div></td>
-                                                <td class="py-4"><div>32.5%</div></td>
-                                                <td class="py-4"><div>흐림</div></td>
+                                                <td class="py-4"><div id="date_mid2"></div></td>
+                                                <td class="py-4"><div id="tmax_mid2"></div></td>
+                                                <td class="py-4"><div id="tmin_mid2"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid2_pm"></div></td>
+{#                                                <td class="py-4"><div id="sky_mid2_pm"></div></td>#}
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div>3/20 (월)</div></td>
-                                                <td class="py-4"><div>18.9°C</div></td>
-                                                <td class="py-4"><div>2.2°C</div></td>
-                                                <td class="py-4"><div>28.8%</div></td>
-                                                <td class="py-4"><div>맑음</div></td>
+                                                <td class="py-4"><div id="date_mid3"></div></td>
+                                                <td class="py-4"><div id="tmax_mid3"></div></td>
+                                                <td class="py-4"><div id="tmin_mid3"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid3_pm"></div></td>
+{#                                                <td class="py-4"><div id="sky_mid3_pm"></div></td>#}
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div>3/21 (화)</div></td>
-                                                <td class="py-4"><div>14.6°C</div></td>
-                                                <td class="py-4"><div>5.9°C</div></td>
-                                                <td class="py-4"><div>30.0%</div></td>
-                                                <td class="py-4"><div>맑음</div></td>
+                                                <td class="py-4"><div id="date_mid4"></div></td>
+                                                <td class="py-4"><div id="tmax_mid4"></div></td>
+                                                <td class="py-4"><div id="tmin_mid4"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid4_pm"></div></td>
+{#                                                <td class="py-4"><div id="sky_mid4_pm"></div></td>#}
                                             </tr>
                                             <tr>
-                                                <td class="py-4"><div>3/22 (화)</div></td>
-                                                <td class="py-4"><div>12.4°C</div></td>
-                                                <td class="py-4"><div>9.3°C</div></td>
-                                                <td class="py-4"><div>19.7%</div></td>
-                                                <td class="py-4"><div>맑음</div></td>
+                                                <td class="py-4"><div id="date_mid5"></div></td>
+                                                <td class="py-4"><div id="tmax_mid5"></div></td>
+                                                <td class="py-4"><div id="tmin_mid5"></div></td>
+                                                <td class="py-4"><div id="rainfall_mid5_pm"></div></td>
+{#                                                <td class="py-4"><div id="sky_mid5_pm"></div></td>#}
                                             </tr>
                                             </tbody>
                                         </table>
@@ -441,20 +441,34 @@
                             <div class="card-body text-center">
                                 <div id="main" class="mt-4" style="height:400px; text-align: center;"></div>
                                 <script>
-                                    function weather_past() {
+                                function weather_past() {
+                                    var past_data;
+                                    var today_data;
 
+                                $.ajax({
+                                    type: "GET",
+                                    url: "http://web01.taegon.kr:5000/past/temp/buan",
+                                    success: function(data) {
+                                        past_data = data;
                                         $.ajax({
                                             type: "GET",
-                                            url: "http://web01.taegon.kr:5000/weather_past/namwon",
-                                            success: past_result,
-                                            dataType:'json',
+                                            url: "http://web01.taegon.kr:5000/today/temp/buan",
+                                            success: function(data) {
+                                                today_data = data;
+                                                past_result(past_data, today_data);
+                                            },
+                                            dataType: 'json'
                                         });
-                                    }
+                                    },
+                                    dataType: 'json'
+                                });
+                                }
+
+
 
                                     var myChart = echarts.init(document.getElementById('main'));
 
-                                    function past_result(data) {
-                                        const data2 = JSON.parse(data);
+                                    function past_result(past_data, today_data) {
                                         var option = {
                                             title: {
                                             },
@@ -486,7 +500,7 @@
                                             xAxis: {
                                                 type: 'category',
                                                 boundaryGap: false,
-                                                data: data2['result_23']['date']
+                                                data: past_data['date']
                                             },
                                             yAxis: {
                                                 type: 'value',
@@ -506,7 +520,7 @@
                                                 {
                                                     name: '현재평균',
                                                     type: 'line',
-                                                    data: data2['result_23']['tavg'],
+                                                    data: today_data,
                                                     lineStyle: {normal: {color: '#74D36D'}},
                                                     itemStyle: {normal: {color: '#74D36D'}}
 
@@ -515,14 +529,14 @@
                                                 {
                                                     name: '상위25%',
                                                     type: 'line',
-                                                    data: data2['result_23']['tmax'],
+                                                    data: past_data['25%'],
                                                     lineStyle: {normal: {color: '#FF3636'}},
                                                     itemStyle: {normal: {color: '#FF3636'}}
                                                 },
                                                 {
                                                     name: '하위25%',
                                                     type: 'line',
-                                                    data: data2['result_23']['tmin'],
+                                                    data: past_data['75%'],
                                                     lineStyle: {normal: {color: '#6799FF'}},
                                                     itemStyle: {normal: {color: '#6799FF'}}
                                                 },
@@ -553,23 +567,32 @@
                                 <div id="rain" class="mt-4" style="height:400px; text-align: center;"></div>
                                 <script>
                                     function weather_past_rain() {
+                                    var past_data;
+                                    var today_data;
 
+                                $.ajax({
+                                    type: "GET",
+                                    url: "http://web01.taegon.kr:5000/past/rainfall/buan",
+                                    success: function(data) {
+                                        past_data = data;
                                         $.ajax({
                                             type: "GET",
-                                            url: "http://web01.taegon.kr:5000/weather_past/namwon",
-                                            success: past_result_rain,
-                                            dataType:'json',
-                                            error: function (request, status, error) {
-                                                alert("error"); // 실패 시 처리
+                                            url: "http://web01.taegon.kr:5000/today/rainfall/buan",
+                                            success: function(data) {
+                                                today_data = data;
+                                                past_result_rain(past_data, today_data);
                                             },
+                                            dataType: 'json'
                                         });
-                                    }
+                                    },
+                                    dataType: 'json'
+                                });
+                                }
 
                                     var rainfall = echarts.init(document.getElementById('rain'));
 
 
-                                    function past_result_rain(data) {
-                                        const data2 = JSON.parse(data);
+                                    function past_result_rain(past_data, today_data) {
                                         const posList = [
                                            'left',
                                            'right',
@@ -669,7 +692,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: data2['result_rain']['l'],
+                                                   data: past_data['75%'],
                                                     itemStyle: {
                                                         color: '#6e9dfe'
                                                     }
@@ -680,7 +703,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: data2['result_rain']['p_2023'],
+                                                   data: today_data,
                                                    itemStyle: {
                                                         color: '#55a431'
                                                     }
@@ -692,7 +715,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: data2['result_rain']['m'],
+                                                   data: past_data['25%'],
                                                    itemStyle: {
                                                         color: '#bd4c4c'
                                                     }
@@ -740,78 +763,74 @@
                     </div>
                  </div>
                     <div>
-                        <div style="opacity: 0.4;">
-                        <h2 style="font-weight: bolder;">수분 포텐셜 센서</h2>
+                        <h2 style="font-weight: bolder;">토양수분 센서</h2>
+                        <script>
+                            function soilsensor(sensorNumber) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "http://web01.taegon.kr:5000/api/zentra/z6-20" + sensorNumber,
+                                        success: function(data) {
+                                            updateSensorData(sensorNumber, data);
+                                        },
+                                        dataType: "json"
+                                    });
+                                }
+
+                                function updateSensorData(sensorNumber, data) {
+                                    var lastIndex = data['Matric Potential_1'].length - 1;
+                                    $("#"+sensorNumber+"_1").html(data['Matric Potential_1'][lastIndex]);
+                                    $("#"+sensorNumber+"_2").html(data['Matric Potential_2'][lastIndex]);
+                                    $("#"+sensorNumber+"_3").html(data['Matric Potential_3'][lastIndex]);
+                                    $("#"+sensorNumber+"_4").html(data['Matric Potential_4'][lastIndex]);
+                                    $("#"+sensorNumber+"_5").html(data['Matric Potential_5'][lastIndex]);
+                                    $("#"+sensorNumber+"_6").html(data['Matric Potential_6'][lastIndex]);
+                                }
+
+                            function sensordata() {
+                                soilsensor("054");
+                                soilsensor("063");
+                                soilsensor("055");
+                                soilsensor("051");
+                                soilsensor("062");
+                                soilsensor("060");
+                                soilsensor("058");
+                            }
+
+                        </script>
                         <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 1
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">1</th>
-                                                    <th scope="col">2</th>
-                                                    <th scope="col">3</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>Plot 1</h3>
                     </div>
-
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="col-xl-8 col-md-6 mb-1">
+                        <div class="card shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="font-weight-bold text-primary text-uppercase mb-1 text-warning"
-                                             style="font-size: 20px;">
-                                            plot 2
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">4</th>
-                                                    <th scope="col">5</th>
-                                                    <th scope="col">6</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="063_3"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="063_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="063_1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="054_3"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="054_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="054_1"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div>
@@ -821,202 +840,44 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="font-weight-bold text-warning text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 3
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">1</th>
-                                                    <th scope="col">2</th>
-                                                    <th scope="col">3</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <i class="fa-regular fa-droplet-degree"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 4
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">4</th>
-                                                    <th scope="col">5</th>
-                                                    <th scope="col">6</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <i class="fa-regular fa-droplet-degree"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>관행</h3>
                     </div>
                 </div>
                         <div class="row">
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 5
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">1</th>
-                                                    <th scope="col">2</th>
-                                                    <th scope="col">3</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <i class="fa-regular fa-droplet-degree"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>Plot 2</h3>
                     </div>
-
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-8 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="font-weight-bold text-warning text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 6
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">4</th>
-                                                    <th scope="col">5</th>
-                                                    <th scope="col">6</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <i class="fa-regular fa-droplet-degree"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                       <div class="font-weight-bold text-warning text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 7
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">1</th>
-                                                    <th scope="col">2</th>
-                                                    <th scope="col">3</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="063_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="063_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="063_6"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="054_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="054_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="054_6"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div>
@@ -1026,213 +887,294 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="font-weight-bold text-primary text-uppercase mb-1"
-                                             style="font-size: 20px;">
-                                            plot 8
-                                        </div>
-                                        <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">4</th>
-                                                    <th scope="col">5</th>
-                                                    <th scope="col">6</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12Ψ</td>
-                                                    <td>34Ψ</td>
-                                                    <td>32Ψ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>23Ψ</td>
-                                                    <td>17Ψ</td>
-                                                    <td>17Ψ</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div>
-                                            <i class="fa-regular fa-droplet-degree"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>관행 + 시비</h3>
                     </div>
                 </div>
-                        </div>
-                <div style="opacity: 0.4;">
-                <h2 style="font-weight: bolder;">토양 수분 센서</h2>
-                    <div class="row">
-                        <div class="col-xl-6 mb-4">
-                            <div class="card shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <span class="font-weight-bold text-primary text-uppercase mb-1">
-                                                plot 5 &ensp;
-                                            </span>
-                                            <span class="font-weight-bold text-warning text-uppercase mb-1">
-                                                plot 6
-                                            </span>
-                                           <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">6</th>
-                                                    <th scope="col">7</th>
-                                                    <th scope="col">8</th>
-                                                    <th scope="col">9</th>
-                                                    <th scope="col">0</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12%</td>
-                                                    <td>34%</td>
-                                                    <td>32%</td>
-                                                    <td>34%</td>
-                                                    <td>32%</td>
-                                                </tr>
-                                                 <tr>
-                                                    <td><input type="checkbox" id="toggle" hidden>
-                                                        <label for="toggle" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle1" hidden>
-                                                        <label for="toggle1" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle2" hidden>
-                                                        <label for="toggle2" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle3" hidden>
-                                                        <label for="toggle3" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle4" hidden>
-                                                        <label for="toggle4" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                        <div class="row">
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>Plot 3</h3>
+                    </div>
+                    <div class="col-xl-8 col-md-6 mb-1">
+                        <div class="card shadow border-left-primary border-right-warning h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="062_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="062_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="062_6"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="060_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="060_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="060_6"></div>
+                                            </div>
                                         </div>
-                                        </div>
-                                        <div>
-                                            <i class="fa-regular fa-droplet-degree"></i>
-                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-xl-6 mb-4">
-                            <div class="card shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                           <span class="font-weight-bold text-warning text-uppercase mb-1">
-                                                plot 7 &ensp;
-                                            </span>
-                                            <span class="font-weight-bold text-primary text-uppercase mb-1">
-                                                plot 8
-                                            </span>
-                                            <div class="row">
-                                            <table class="table font-weight-bold text-center" style="font-size: 15px;">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">1</th>
-                                                    <th scope="col">2</th>
-                                                    <th scope="col">3</th>
-                                                    <th scope="col">4</th>
-                                                    <th scope="col">5</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>12%</td>
-                                                    <td>34%</td>
-                                                    <td>32%</td>
-                                                    <td>34%</td>
-                                                    <td>32%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><input type="checkbox" id="toggle5" hidden>
-                                                        <label for="toggle5" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle6" hidden>
-                                                        <label for="toggle6" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle7" hidden>
-                                                        <label for="toggle7" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle8" hidden>
-                                                        <label for="toggle8" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                    <td><input type="checkbox" id="toggle9" hidden>
-                                                        <label for="toggle9" class="toggleSwitch ml-0" style="width: 100%;">
-                                                        <span class="toggleButton">
-                                                        <span class="on">ON</span>
-                                                        <span class="off">OFF</span>
-                                                        </span>
-                                                        </label></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                    </div>
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>관행 + 관개 + 시비</h3>
+                    </div>
+                </div>
+                        <div class="row">
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>Plot 4</h3>
+                    </div>
+                    <div class="col-xl-8 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="062_1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="062_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="062_3"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="060_1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="060_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="060_3"></div>
+                                            </div>
                                         </div>
-                                        </div>
-                                        <div>
-                                            <i class="fa-regular fa-droplet-degree"></i>
-                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>관행 + 관개</h3>
+                    </div>
+                </div>
+                        <div class="row">
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>Plot 5</h3>
+                    </div>
+                    <div class="col-xl-8 col-md-6 mb-1">
+                        <div class="card shadow border-left-primary border-right-warning h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="058_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="058_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="058_6"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="055_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="055_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="055_6"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>파종(세조파)</h3>
+                    </div>
+                </div>
+                        <div class="row">
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>Plot 6</h3>
+                    </div>
+                    <div class="col-xl-8 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="058_1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="058_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="058_3"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="055_1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="055_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="055_3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>관행 + 시비</h3>
+                    </div>
+                </div>
+                        <div class="row">
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>Plot 7</h3>
+                    </div>
+                    <div class="col-xl-8 col-md-6 mb-1">
+                        <div class="card shadow border-left-primary border-right-warning h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="061_3">X</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="061_2">X</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="061_1">X</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>4</p>
+                                                <div id="051_4"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>5</p>
+                                                <div id="051_5"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>6</p>
+                                                <div id="051_6"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 mb-1 d-flex justify-content-center align-items-center">
+                            <h3>파종 + 관개 + 시비</h3>
+                    </div>
+                </div>
+                        <div class="row">
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>Plot 8</h3>
+                    </div>
+                    <div class="col-xl-8 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="061_1">X</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="061_2">X</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="061_3">X</div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>1</p>
+                                                <div id="051_1"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>2</p>
+                                                <div id="051_2"></div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p>3</p>
+                                                <div id="051_3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <i class="fa-regular fa-droplet-degree"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                            <h3>파종 + 관개</h3>
                     </div>
                 </div>
             </div>
-
-                </div>
+            </div>
                 <!-- /.container-fluid -->
 
             </div>
