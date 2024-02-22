@@ -59,6 +59,7 @@ def weather_short(city=str):
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
         today_weather = db_short.search((where('name') == "namwon"))
+        print(today_weather)
     elif city == 'iksan':
         today_weather = db_short.search((where('name') == "iksan"))
     elif city == 'pyeongchang':
@@ -409,21 +410,47 @@ async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
 @app.get("/api/zentra/{divice}")
 def load_soilsensor(divice=str):
     df = pd.read_csv(f'sensor_data/{divice}_data.csv')
-    df['mp_mean'] = df[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3','Matric Potential_4','Matric Potential_5','Matric Potential_6']].mean(axis=1)
+    df.dropna(inplace=True)
+    # 1시간 단위 데이터로 정리
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    df = df[df['datetime'].dt.minute == 0]
+
+    # 6개 센서 평균(1시간단위) 추가 (토양수분, 지온)
+    df['mp_mean'] = df[['Matric Potential_1_logdata', 'Matric Potential_2_logdata', 'Matric Potential_3_logdata','Matric Potential_4_logdata','Matric Potential_5_logdata','Matric Potential_6_logdata']].mean(axis=1)
     df['st_mean'] = df[
         ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
          'Soil Temperature_6']].mean(axis=1)
     df['mp_mean'] = round(df['mp_mean'], 2)
     df['st_mean'] = round(df['st_mean'], 2)
+
+    # dict 형태로 만들기
     new_dict = df.to_dict()
     for i in df.columns:
         new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
+
+
+    df['date'] = df['datetime'].dt.strftime('%Y-%m-%d')
+    df2 = df.groupby('date').mean()
+
+    df2['mp_mean_d'] = df2[['Matric Potential_1_logdata', 'Matric Potential_2_logdata', 'Matric Potential_3_logdata',
+                        'Matric Potential_4_logdata', 'Matric Potential_5_logdata', 'Matric Potential_6_logdata']].mean(
+        axis=1)
+    df2['st_mean_d'] = df2[
+        ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
+         'Soil Temperature_6']].mean(axis=1)
+
+    for i in range(1, 7):
+        new_dict[f'Matric Potential_{i}_logdata_d'] = df2[f'Matric Potential_{i}_logdata'].values.tolist()
+
+    new_dict['mp_mean_d'] = df2['mp_mean_d'].values.tolist()
+    new_dict['st_mean_d'] = df2['st_mean_d'].values.tolist()
+
     return new_dict
 
 
 def main():
-    # uvicorn.run(app, host="127.0.0.1", port=5000)
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="127.0.0.1", port=5000)
+    # uvicorn.run(app, host="0.0.0.0", port=5000)
 
 
 if __name__ == '__main__':
