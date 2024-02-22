@@ -409,6 +409,12 @@ async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
 @app.get("/api/zentra/{divice}")
 def load_soilsensor(divice=str):
     df = pd.read_csv(f'sensor_data/{divice}_data.csv')
+    df['mp_mean'] = df[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3','Matric Potential_4','Matric Potential_5','Matric Potential_6']].mean(axis=1)
+    df['st_mean'] = df[
+        ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
+         'Soil Temperature_6']].mean(axis=1)
+    df['mp_mean'] = round(df['mp_mean'], 2)
+    df['st_mean'] = round(df['st_mean'], 2)
     new_dict = df.to_dict()
     for i in df.columns:
         new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
