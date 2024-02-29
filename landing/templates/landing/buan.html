@@ -133,7 +133,7 @@
                 });
              }
 
-        function mid_result(date){
+        function mid_result(date) {
             const data2 = JSON.parse(date);
             $("#date_mid2").html(data2['date'][1])
             $("#tmax_mid2").html(data2[data2['name'][1]]['tamax_4'])
@@ -164,9 +164,57 @@
             $("#sky_mid5_am").html(data2[data2['name'][4]]['wf_7_am'])
             $("#sky_mid5_pm").html(data2[data2['name'][4]]['wf_7_pm'])
 
+        }
+
+         function hidediv(one, two, three) {
+            var div2 = document.getElementById(one);
+            var div3 = document.getElementById(two);
+            var div4 = document.getElementById(three);
+
+            div2.style.display = 'none';
+            div3.style.display = 'none';
+            div4.style.display = 'none';
+        }
+
+        function btnClick(div) {
+
+          const mydiv = document.getElementById(div);
+
+
+
+          if(mydiv.style.display === 'none') {
+
+            mydiv.style.display = 'block';
+
+          }else {
+
+            mydiv.style.display = 'none';
+
+          }
+
     }
-    </script>
-<body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain(), sensordata(), sensor_graph(), sensor_graph2()">
+        function divchange34() {
+            const div78 = document.getElementById('plot78');
+            const div34 = document.getElementById('plot34');
+
+            div78.style.display = 'none';
+            div34.style.display = 'block';
+
+
+        }
+
+        function divchange78() {
+            const div78 = document.getElementById('plot78');
+            const div34 = document.getElementById('plot34');
+
+            div34.style.display = 'none';
+            div78.style.display = 'block';
+
+
+        }
+
+</script>
+<body id="page-top" onload="weather_now(), weather_short(), weather_mid(), weather_past(), weather_past_rain(), sensordata(), sensor_graph61(), sensor_graph51(), sensor_graph62(), sensor_graph60()">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -271,122 +319,372 @@
                         </div>
                     </div>
                     <div id="content2" class="col-xl-6" style="position: relative;">
+                        <div class="d-flex mb-2">
+                         <h3 class="font-weight-bold">토양수분 현황(자세히)</h3>
+                        <div class="btn btn-success" onclick="divchange78()">Plot 7,8</div>
+                        <div class="btn btn-success" onclick="divchange34()">Plot 3,4</div>
+                            </div>
+                        <div id="plot78">
                         <div class="row">
                                 <div class="col-xl-12">
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h4 class="m-0 font-weight-bold text-primary text-center">Plot3 / Plot4</h4>
+                                            <h4 class="m-0 font-weight-bold text-primary text-center">z6-20061</h4>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor61_mean')">평균/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor61_mean_d')">평균/일</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor61_all')">고유/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor61_all_d')">고유/일</div>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
-                                            <div id="sensorgraph1" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor61_mean" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor61_mean_d" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor61_all" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor61_all_d" class="mt-4" style="height:400px; text-align: center;"></div>
                                             <script>
-                                                function sensor_graph() {
-                                                    var first_data;
-                                                    var second_data;
-
-                                                $.ajax({
-                                                    type: "GET",
-                                                    url: "http://web01.taegon.kr:5000/api/zentra/z6-20062",
-                                                    success: function(data) {
-                                                        first_data = data;
+                                                 function sensor_graph61() {
                                                         $.ajax({
                                                             type: "GET",
-                                                            url: "http://web01.taegon.kr:5000/api/zentra/z6-20060",
-                                                            success: function(data) {
-                                                                second_data = data;
-                                                                graph_result(first_data, second_data);
-                                                            },
+                                                            url: "http://web01.taegon.kr:5000/api/zentra/z6-20061",
+                                                            success: graph_result61,
                                                             dataType: 'json'
                                                         });
-                                                    },
-                                                    dataType: 'json'
-                                                });
-                                                }
+
+                                                        }
+
+                                                 var soil61_mean = echarts.init(document.getElementById('sensor61_mean'));
+                                                 var soil61_mean_d = echarts.init(document.getElementById('sensor61_mean_d'));
+                                                 var soil61_all = echarts.init(document.getElementById('sensor61_all'));
+                                                 var soil61_all_d = echarts.init(document.getElementById('sensor61_all_d'));
 
 
+                                                 function graph_result61(data) {
+                                                     hidediv("sensor61_mean_d","sensor61_all", "sensor61_all_d")
+                                                     var option = {
+                                                        title: {
+                                                            text: '1시간당 평균값',
 
-                                                    var soil = echarts.init(document.getElementById('sensorgraph1'));
-
-                                                    function graph_result(first_data, second_data) {
-                                                        var option = {
-                                                            title: {
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
                                                             },
-                                                            tooltip: {
-                                                                trigger: 'axis',
-                                                                position: function (pt) {
-                                                                    return [pt[0], '100%'];
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20061_mean'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
                                                                 },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20061_mean',
+                                                                type: 'line',
+                                                                data: data['mp_mean'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
 
+                                                     var option2 = {
+                                                        title: {
+                                                            text: '일별 평균값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
                                                             },
-                                                            legend: {
-                                                                data: ['z6-20062', 'z6-20050'],
-                                                            },
-                                                            grid: {
-                                                                left: '3%',
-                                                                right: '4%',
-                                                                bottom: '50',
-                                                                containLabel: true
-                                                            },
-                                                            toolbox: {
-                                                                feature: {
-                                                                    dataZoom: {
-                                                                        yAxisIndex: 'none'
-                                                                    },
-                                                                    restore: {},
-                                                                    saveAsImage: {}
-                                                                }
-                                                            },
-                                                            xAxis: {
-                                                                type: 'category',
-                                                                boundaryGap: false,
-                                                                data: first_data['datetime']
-                                                            },
-                                                            yAxis: {
-                                                                type: 'value',
-                                                                boundaryGap: [0, '100%'],
-                                                                min: -2,
-                                                                max: 2
-                                                            },
-                                                            dataZoom: [
-                                                                {
-                                                                    show: true,
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20061_mean_d'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
                                                                 },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20061_mean_d',
+                                                                type: 'line',
+                                                                data: data['mp_mean_d'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
+
+                                                     var option3 = {
+                                                        title: {
+                                                            text: '1시간당 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
                                                                 {
-                                                                    type: 'inside',
-                                                                }
-                                                            ],
-                                                            series: [
-                                                                {
-                                                                    name: 'z6-20062',
+                                                                    name: '1',
                                                                     type: 'line',
-                                                                    data: first_data['mp_mean'],
-                                                                    lineStyle: {normal: {color: '#6dc4d3'}},
-                                                                    itemStyle: {normal: {color: '#6dc4d3'}}
-
-
+                                                                    data: data['Matric Potential_1_logdata'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
                                                                 },
                                                                 {
-                                                                    name: 'z6-20050',
+                                                                    name: '2',
                                                                     type: 'line',
-                                                                    data: second_data['mp_mean'],
-                                                                    lineStyle: {normal: {color: '#3639ff'}},
-                                                                    itemStyle: {normal: {color: '#3639ff'}}
+                                                                    data: data['Matric Potential_2_logdata'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
                                                                 },
                                                             ]
-                                                        };
+                                                    };
 
-                                                        // 위에서 설정한 속성을 차트에 반영합니다.
-                                                            soil.setOption(option);
+                                                     var option4 = {
+                                                        title: {
+                                                            text: '일별 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
+                                                                {
+                                                                    name: '1',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_1_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
+                                                                },
+                                                            ]
+                                                    };
 
 
 
-                                                       }
+                                                    // 위에서 설정한 속성을 차트에 반영합니다.
+                                                        soil61_mean.setOption(option);
+                                                        soil61_mean_d.setOption(option2);
+                                                        soil61_all.setOption(option3);
+                                                        soil61_all_d.setOption(option4);
 
-                                                       window.addEventListener('resize', function() {
-                                                        soil.resize();
-                                                            });
+                                                   }
+                                                   window.addEventListener('resize', function() {
+                                                    soil61_mean.resize();
+                                                    soil61_mean_d.resize();
+                                                    soil61_all.resize();
+                                                    soil61_all_d.resize();
+                                                        });
+
+
+
+
                                             </script>
 
                                         </div>
@@ -398,261 +696,1111 @@
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Dropdown -->
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h4 class="m-0 font-weight-bold text-primary">Plot 7/ Plot 8</h4>
+                                            <h4 class="m-0 font-weight-bold text-primary text-center">z6-20051</h4>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor51_mean')">평균/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor51_mean_d')">평균/일</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor51_all')">고유/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor51_all_d')">고유/일</div>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
-                                            <div id="sensorgraph2" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor51_mean" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor51_mean_d" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor51_all" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor51_all_d" class="mt-4" style="height:400px; text-align: center;"></div>
                                             <script>
-                                                function sensor_graph2() {
+                                                 function sensor_graph51() {
                                                         $.ajax({
                                                             type: "GET",
                                                             url: "http://web01.taegon.kr:5000/api/zentra/z6-20051",
-                                                            success: graph_result2,
+                                                            success: graph_result51,
                                                             dataType: 'json'
                                                         });
 
                                                         }
 
+                                                 var soil51_mean = echarts.init(document.getElementById('sensor51_mean'));
+                                                 var soil51_mean_d = echarts.init(document.getElementById('sensor51_mean_d'));
+                                                 var soil51_all = echarts.init(document.getElementById('sensor51_all'));
+                                                 var soil51_all_d = echarts.init(document.getElementById('sensor51_all_d'));
 
 
-                                                    var soil2 = echarts.init(document.getElementById('sensorgraph2'));
+                                                 function graph_result51(data) {
+                                                     hidediv("sensor51_mean_d","sensor51_all", "sensor51_all_d")
+                                                     var option = {
+                                                        title: {
+                                                            text: '1시간당 평균값',
 
-                                                    function graph_result2(data) {
-                                                        var option = {
-                                                            title: {
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
                                                             },
-                                                            tooltip: {
-                                                                trigger: 'axis',
-                                                                position: function (pt) {
-                                                                    return [pt[0], '100%'];
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20051_mean'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
                                                                 },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20051_mean',
+                                                                type: 'line',
+                                                                data: data['mp_mean'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
 
+                                                     var option2 = {
+                                                        title: {
+                                                            text: '일별 평균값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
                                                             },
-                                                            legend: {
-                                                                data: ['z6-20061', 'z6-20051'],
-                                                            },
-                                                            grid: {
-                                                                left: '3%',
-                                                                right: '4%',
-                                                                bottom: '50',
-                                                                containLabel: true
-                                                            },
-                                                            toolbox: {
-                                                                feature: {
-                                                                    dataZoom: {
-                                                                        yAxisIndex: 'none'
-                                                                    },
-                                                                    restore: {},
-                                                                    saveAsImage: {}
-                                                                }
-                                                            },
-                                                            xAxis: {
-                                                                type: 'category',
-                                                                boundaryGap: false,
-                                                                data: data['datetime']
-                                                            },
-                                                            yAxis: {
-                                                                type: 'value',
-                                                                boundaryGap: [0, '100%'],
-                                                                min: -2,
-                                                                max: 2
-                                                            },
-                                                            dataZoom: [
-                                                                {
-                                                                    show: true,
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20051_mean_d'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
                                                                 },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20051_mean_d',
+                                                                type: 'line',
+                                                                data: data['mp_mean_d'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
+
+                                                     var option3 = {
+                                                        title: {
+                                                            text: '1시간당 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
                                                                 {
-                                                                    type: 'inside',
-                                                                }
-                                                            ],
-                                                            series: [
-                                                                {
-                                                                    name: 'z6-20051',
+                                                                    name: '1',
                                                                     type: 'line',
-                                                                    data: data['mp_mean'],
-                                                                    lineStyle: {normal: {color: '#3639ff'}},
-                                                                    itemStyle: {normal: {color: '#3639ff'}}
+                                                                    data: data['Matric Potential_1_logdata'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
                                                                 },
                                                             ]
-                                                        };
+                                                    };
 
-                                                        // 위에서 설정한 속성을 차트에 반영합니다.
-                                                            soil2.setOption(option);
+                                                     var option4 = {
+                                                        title: {
+                                                            text: '일별 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
+                                                                {
+                                                                    name: '1',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_1_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
+                                                                },
+                                                            ]
+                                                    };
 
 
 
-                                                       }
+                                                    // 위에서 설정한 속성을 차트에 반영합니다.
+                                                        soil51_mean.setOption(option);
+                                                        soil51_mean_d.setOption(option2);
+                                                        soil51_all.setOption(option3);
+                                                        soil51_all_d.setOption(option4);
 
-                                                       window.addEventListener('resize', function() {
-                                                        soil2.resize();
-                                                            });
+                                                   }
+                                                   window.addEventListener('resize', function() {
+                                                    soil51_mean.resize();
+                                                    soil51_mean_d.resize();
+                                                    soil51_all.resize();
+                                                    soil51_all_d.resize();
+                                                        });
+
+
+
+
                                             </script>
+
                                         </div>
                                     </div>
                                 </div>
                                 </div>
                         </div>
-{#                            <div class="row">#}
-{#                                <div class="col-xl-12">#}
-{#                                    <div class="card shadow mb-4">#}
-{#                                        <!-- Card Header - Dropdown -->#}
-{#                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
-{#                                            <h4 class="m-0 font-weight-bold text-primary">현재 기상 데이터</h4>#}
-{#                                            <h5 class='mb-0 mt-1' id="now_log"></h5>#}
-{#                                        </div>#}
-{#                                        <!-- Card Body -->#}
-{#                                        <div class="card-body">#}
-{#                                            <table class="table fs-5 text-center" style="border-color:#f8f9fa; border-collapse:unset">#}
-{#                                                <thead>#}
-{#                                                <tr>#}
-{#                                                    <th scope="col">온도</th>#}
-{#                                                    <th scope="col">습도</th>#}
-{#                                                    <th scope="col">날씨</th>#}
-{#                                                    <th scope="col">풍향</th>#}
-{#                                                    <th scope="col">풍속</th>#}
-{#                                                </tr>#}
-{#                                                </thead>#}
-{#                                                <tbody>#}
-{#                                                <tr>#}
-{#                                                    <td>#}
-{#                                                        <div id="now_tem"></div>#}
-{#                                                    </td>#}
-{#                                                    <td>#}
-{#                                                        <div id="humid_now"></div>#}
-{#                                                    </td>#}
-{#                                                    <td>#}
-{#                                                        <div id="now_sky"></div>#}
-{#                                                    </td>#}
-{#                                                    <td>#}
-{#                                                        <div id="now_wind"></div>#}
-{#                                                    </td>#}
-{#                                                    <td>#}
-{#                                                        <div id="now_wind_v"></div>#}
-{#                                                    </td>#}
-{#                                                </tr>#}
-{#                                                </tbody>#}
-{#                                            </table>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <div class="row">#}
-{#                                <div class="col-xl-12">#}
-{#                                    <div class="card shadow mb-4">#}
-{#                                        <!-- Card Header - Dropdown -->#}
-{#                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
-{#                                            <h4 class="m-0 font-weight-bold text-primary">단기 기상 데이터</h4>#}
-{#                                        </div>#}
-{#                                        <!-- Card Body -->#}
-{#                                        <div class="card-body">#}
-{#                                            <table class="table fs-6 text-center" style="border-color:#f8f9fa; border-collapse:unset">#}
-{#                                            <thead>#}
-{#                                            <tr>#}
-{#                                                <th scope="col" class="px-1"></th>#}
-{#                                                <th scope="col" class="px-1">최고기온</th>#}
-{#                                                <th scope="col" class="px-1">최저기온</th>#}
-{#                                                <th scope="col" class="px-1">습도</th>#}
-{#                                                <th scope="col" class="px-1">강수확률</th>#}
-{#                                                <th scope="col" class="px-1">구름양</th>#}
-{#                                            </tr>#}
-{#                                            </thead>#}
-{#                                            <tbody>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date2"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax2"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin2"></div></td>#}
-{#                                                <td class="py-4"><div id="humid_now2"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall2"></div></td>#}
-{#                                                <td class="py-4"><div id="sky2"></div></td>#}
-{#                                            </tr>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date3"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax3"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin3"></div></td>#}
-{#                                                <td class="py-4"><div id="humid_now3"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall3"></div></td>#}
-{#                                                <td class="py-4"><div id="sky3"></div></td>#}
-{#                                            </tr>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date4"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax4"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin4"></div></td>#}
-{#                                                <td class="py-4"><div id="humid_now4"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall4"></div></td>#}
-{#                                                <td class="py-4"><div id="sky4"></div></td>#}
-{#                                            </tr>#}
-{#                                            </tbody>#}
-{#                                        </table>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                </div>#}
-{#                            <div class="row">#}
-{#                                <div class="col-xl-12">#}
-{#                                    <div class="card shadow mb-4">#}
-{#                                        <!-- Card Header - Dropdown -->#}
-{#                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
-{#                                            <h4 class="m-0 font-weight-bold text-primary">중기 기상 데이터</h4>#}
-{#                                        </div>#}
-{#                                        <!-- Card Body -->#}
-{#                                        <div class="card-body">#}
-{#                                            <table class="table text-center fs-5">#}
-{#                                            <thead>#}
-{#                                            <tr>#}
-{#                                                <th scope="col"></th>#}
-{#                                                <th scope="col" class="px-1">최고기온</th>#}
-{#                                                <th scope="col" class="px-1">최저기온</th>#}
-{#                                                <th scope="col" class="px-1">강수확률</th>#}
-{#                                                <th scope="col" class="px-1">날씨</th>#}
-{#                                            </tr>#}
-{#                                            </thead>#}
-{#                                            <tbody>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date_mid2"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax_mid2"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin_mid2"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall_mid2_pm"></div></td>#}
-{#                                                <td class="py-4"><div id="sky_mid2_pm"></div></td>#}
-{#                                            </tr>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date_mid3"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax_mid3"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin_mid3"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall_mid3_pm"></div></td>#}
-{#                                                <td class="py-4"><div id="sky_mid3_pm"></div></td>#}
-{#                                            </tr>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date_mid4"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax_mid4"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin_mid4"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall_mid4_pm"></div></td>#}
-{#                                                <td class="py-4"><div id="sky_mid4_pm"></div></td>#}
-{#                                            </tr>#}
-{#                                            <tr>#}
-{#                                                <td class="py-4"><div id="date_mid5"></div></td>#}
-{#                                                <td class="py-4"><div id="tmax_mid5"></div></td>#}
-{#                                                <td class="py-4"><div id="tmin_mid5"></div></td>#}
-{#                                                <td class="py-4"><div id="rainfall_mid5_pm"></div></td>#}
-{#                                                <td class="py-4"><div id="sky_mid5_pm"></div></td>#}
-{#                                            </tr>#}
-{#                                            </tbody>#}
-{#                                        </table>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
+                        <div id="plot34">
+                        <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h4 class="m-0 font-weight-bold text-primary text-center">z6-20062</h4>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor62_mean')">평균/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor62_mean_d')">평균/일</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor62_all')">고유/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor62_all_d')">고유/일</div>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div id="sensor62_mean" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor62_mean_d" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor62_all" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor62_all_d" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <script>
+                                                 function sensor_graph62() {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: "http://web01.taegon.kr:5000/api/zentra/z6-20062",
+                                                            success: graph_result62,
+                                                            dataType: 'json'
+                                                        });
+
+                                                        }
+
+                                                 var soil62_mean = echarts.init(document.getElementById('sensor62_mean'));
+                                                 var soil62_mean_d = echarts.init(document.getElementById('sensor62_mean_d'));
+                                                 var soil62_all = echarts.init(document.getElementById('sensor62_all'));
+                                                 var soil62_all_d = echarts.init(document.getElementById('sensor62_all_d'));
+
+
+                                                 function graph_result62(data) {
+                                                     hidediv("sensor62_mean_d","sensor62_all", "sensor62_all_d")
+                                                     var option = {
+                                                        title: {
+                                                            text: '1시간당 평균값',
+
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20062_mean'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20062_mean',
+                                                                type: 'line',
+                                                                data: data['mp_mean'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
+
+                                                     var option2 = {
+                                                        title: {
+                                                            text: '일별 평균값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20062_mean_d'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20062_mean_d',
+                                                                type: 'line',
+                                                                data: data['mp_mean_d'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
+
+                                                     var option3 = {
+                                                        title: {
+                                                            text: '1시간당 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
+                                                                {
+                                                                    name: '1',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_1_logdata'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
+                                                                },
+                                                            ]
+                                                    };
+
+                                                     var option4 = {
+                                                        title: {
+                                                            text: '일별 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
+                                                                {
+                                                                    name: '1',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_1_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
+                                                                },
+                                                            ]
+                                                    };
+
+
+
+                                                    // 위에서 설정한 속성을 차트에 반영합니다.
+                                                        soil62_mean.setOption(option);
+                                                        soil62_mean_d.setOption(option2);
+                                                        soil62_all.setOption(option3);
+                                                        soil62_all_d.setOption(option4);
+
+                                                   }
+                                                   window.addEventListener('resize', function() {
+                                                    soil62_mean.resize();
+                                                    soil62_mean_d.resize();
+                                                    soil62_all.resize();
+                                                    soil62_all_d.resize();
+                                                        });
+
+
+
+
+                                            </script>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h4 class="m-0 font-weight-bold text-primary text-center">z6-20060</h4>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor60_mean')">평균/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor60_mean_d')">평균/일</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor60_all')">고유/1시간</div>
+                                            <div class="btn btn-primary shadow-sm" onclick="btnClick('sensor60_all_d')">고유/일</div>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div id="sensor60_mean" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor60_mean_d" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor60_all" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <div id="sensor60_all_d" class="mt-4" style="height:400px; text-align: center;"></div>
+                                            <script>
+                                                 function sensor_graph60() {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: "http://web01.taegon.kr:5000/api/zentra/z6-20060",
+                                                            success: graph_result60,
+                                                            dataType: 'json'
+                                                        });
+
+                                                        }
+
+                                                 var soil60_mean = echarts.init(document.getElementById('sensor60_mean'));
+                                                 var soil60_mean_d = echarts.init(document.getElementById('sensor60_mean_d'));
+                                                 var soil60_all = echarts.init(document.getElementById('sensor60_all'));
+                                                 var soil60_all_d = echarts.init(document.getElementById('sensor60_all_d'));
+
+
+                                                 function graph_result60(data) {
+                                                     hidediv("sensor60_mean_d","sensor60_all", "sensor60_all_d")
+                                                     var option = {
+                                                        title: {
+                                                            text: '1시간당 평균값',
+
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20060_mean'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20060_mean',
+                                                                type: 'line',
+                                                                data: data['mp_mean'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
+
+                                                     var option2 = {
+                                                        title: {
+                                                            text: '일별 평균값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['z6-20060_mean_d'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series:
+                                                            {
+                                                                name: 'z6-20060_mean_d',
+                                                                type: 'line',
+                                                                data: data['mp_mean_d'],
+                                                                lineStyle: {normal: {color: '#d34949'}},
+                                                                itemStyle: {normal: {color: '#d34949'}}
+                                                            }
+                                                    };
+
+                                                     var option3 = {
+                                                        title: {
+                                                            text: '1시간당 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['datetime']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
+                                                                {
+                                                                    name: '1',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_1_logdata'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
+                                                                },
+                                                            ]
+                                                    };
+
+                                                     var option4 = {
+                                                        title: {
+                                                            text: '일별 고유값',
+                                                        },
+                                                        tooltip: {
+                                                            trigger: 'axis',
+                                                            position: function (pt) {
+                                                                return [pt[0], '100%'];
+                                                            },
+
+                                                        },
+                                                        legend: {
+                                                            data: ['1', '2', '3', '4', '5', '6'],
+                                                        },
+                                                        grid: {
+                                                            left: '3%',
+                                                            right: '4%',
+                                                            bottom: '50',
+                                                            containLabel: true
+                                                        },
+                                                        toolbox: {
+                                                            feature: {
+                                                                dataZoom: {
+                                                                    yAxisIndex: 'none'
+                                                                },
+                                                                restore: {},
+                                                                saveAsImage: {}
+                                                            }
+                                                        },
+                                                        xAxis: {
+                                                            type: 'category',
+                                                            boundaryGap: false,
+                                                            data: data['date']
+                                                        },
+                                                        yAxis: {
+                                                            type: 'value',
+                                                            boundaryGap: [0, '100%'],
+                                                            min: -6,
+                                                            max: 6
+                                                        },
+                                                        dataZoom: [
+                                                            {
+                                                                show: true,
+                                                            },
+                                                            {
+                                                                type: 'inside',
+                                                            }
+                                                        ],
+                                                        series: [
+                                                                {
+                                                                    name: '1',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_1_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#d34949'}},
+                                                                    itemStyle: {normal: {color: '#d34949'}}
+                                                                },
+                                                                {
+                                                                    name: '2',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_2_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#ec9b38'}},
+                                                                    itemStyle: {normal: {color: '#ec9b38'}}
+                                                                },
+                                                                {
+                                                                    name: '3',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_3_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#f1eb73'}},
+                                                                    itemStyle: {normal: {color: '#f1eb73'}}
+                                                                },
+                                                                {
+                                                                    name: '4',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_4_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#71d041'}},
+                                                                    itemStyle: {normal: {color: '#71d041'}}
+                                                                },
+                                                                {
+                                                                    name: '5',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_5_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#5759d5'}},
+                                                                    itemStyle: {normal: {color: '#5759d5'}}
+                                                                },
+                                                                {
+                                                                    name: '6',
+                                                                    type: 'line',
+                                                                    data: data['Matric Potential_6_logdata_d'],
+                                                                    lineStyle: {normal: {color: '#a23cd5'}},
+                                                                    itemStyle: {normal: {color: '#a23cd5'}}
+                                                                },
+                                                            ]
+                                                    };
+
+
+
+                                                    // 위에서 설정한 속성을 차트에 반영합니다.
+                                                        soil60_mean.setOption(option);
+                                                        soil60_mean_d.setOption(option2);
+                                                        soil60_all.setOption(option3);
+                                                        soil60_all_d.setOption(option4);
+
+                                                   }
+                                                   window.addEventListener('resize', function() {
+                                                    soil60_mean.resize();
+                                                    soil60_mean_d.resize();
+                                                    soil60_all.resize();
+                                                    soil60_all_d.resize();
+                                                        });
+
+
+
+
+                                            </script>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
                     </div>
-                </div>
-
-
+                    </div>
                     <div class="row px-3 mt-3">
-                  <h1 style="font-weight: bolder;">과거기상비교
+                    <h1 style="font-weight: bolder;">과거기상비교
                             <a target="_blank" href="https://data.kma.go.kr/climate/RankState/selectRankStatisticsDivisionList.do?pgmNo=179">
                              <img id='btn' src="{% static 'landing/img/page_click2.png' %}" alt="graph" width="35px">
                          </a>
                   </h1>
-                </div>
+                    </div>
                     <div class="row mt-2 mb-4">
                      <div class="col-xl-6">
                         <div class="card text-center shadow mb-4">
@@ -750,14 +1898,14 @@
                                                 {
                                                     name: '상위25%',
                                                     type: 'line',
-                                                    data: past_data['25%'],
+                                                    data: past_data['75%'],
                                                     lineStyle: {normal: {color: '#FF3636'}},
                                                     itemStyle: {normal: {color: '#FF3636'}}
                                                 },
                                                 {
                                                     name: '하위25%',
                                                     type: 'line',
-                                                    data: past_data['75%'],
+                                                    data: past_data['25%'],
                                                     lineStyle: {normal: {color: '#6799FF'}},
                                                     itemStyle: {normal: {color: '#6799FF'}}
                                                 },
@@ -913,7 +2061,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: past_data['75%'],
+                                                   data: past_data['25%'],
                                                     itemStyle: {
                                                         color: '#6e9dfe'
                                                     }
@@ -936,7 +2084,7 @@
                                                    emphasis: {
                                                        focus: 'series'
                                                    },
-                                                   data: past_data['25%'],
+                                                   data: past_data['75%'],
                                                    itemStyle: {
                                                         color: '#bd4c4c'
                                                     }
@@ -957,7 +2105,6 @@
                         </div>
                         </div>
                      </div>
-
                     <div class="row px-3">
                      <h1 style="font-weight: bolder;">모델예측</h1>
                 </div>
@@ -1015,6 +2162,7 @@
                                 soilsensor("062");
                                 soilsensor("060");
                                 soilsensor("058");
+                                soilsensor("061");
                             }
 
                         </script>
@@ -1312,15 +2460,15 @@
                                         <div class="row text-center">
                                             <div class="col-md-2">
                                                 <p>4</p>
-                                                <div id="061_3">X</div>
+                                                <div id="061_4"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <p>5</p>
-                                                <div id="061_2">X</div>
+                                                <div id="061_5"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <p>6</p>
-                                                <div id="061_1">X</div>
+                                                <div id="061_6"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <p>4</p>
@@ -1359,15 +2507,15 @@
                                         <div class="row text-center">
                                             <div class="col-md-2">
                                                 <p>1</p>
-                                                <div id="061_1">X</div>
+                                                <div id="061_1"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <p>2</p>
-                                                <div id="061_2">X</div>
+                                                <div id="061_2"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <p>3</p>
-                                                <div id="061_3">X</div>
+                                                <div id="061_3"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <p>1</p>
@@ -1395,26 +2543,14 @@
                     </div>
                 </div>
             </div>
+                </div>
             </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
-
-
     <!-- Bootstrap core JavaScript-->
 <script src="{% static 'landing/vendor/jquery/jquery.min.js' %}"></script>\
 <script src="{% static 'landing/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
