@@ -15,7 +15,8 @@ db_short = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_short.json
 db_mid = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_mid.json')
 
 Station = Query()
-
+KST = datetime.timezone(datetime.timedelta(hours=1))
+time = datetime.datetime.now().astimezone(KST)
 
 ##현재기상## city는 한글
 def weather_now(city, city_k):
@@ -64,6 +65,7 @@ def weather_now(city, city_k):
     else:
         db_now.insert({"name": f"{city}", "date": date_time, 'json_content': w_json})
         print(f'{city_k}:save')
+
 
 
 ############ 단기예보 API ##################
@@ -359,11 +361,18 @@ def main():
            ('pyeongchang', '평창', '11D10503'), ]
 
     for x, y, z in tqdm(loc):
-        weather_short(x)
-        weather_now(x, y)
-        weather_mid(x, z)
+        try:
+            weather_short(x)
+            weather_now(x, y)
+            weather_mid(x, z)
+        except json.decoder.JSONDecodeError:
+            print(time)
+            pass
 
-    db_short.close()	
+    db_short.close()
+    db_now.close()
+    db_mid.close()
+    print(time)
 
 if __name__ == '__main__':
     main()
