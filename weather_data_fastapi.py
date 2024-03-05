@@ -428,8 +428,9 @@ def load_soilsensor(divice=str):
     for i in df.columns:
         new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
 
-
+    # 일 단위 데이터 만들기
     df['date'] = df['datetime'].dt.strftime('%Y-%m-%d')
+    new_dict['date'] = df['date'].unique().tolist()
     df2 = df.groupby('date').mean()
 
     df2['mp_mean_d'] = df2[['Matric Potential_1_logdata', 'Matric Potential_2_logdata', 'Matric Potential_3_logdata',
