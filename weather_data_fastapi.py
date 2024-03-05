@@ -59,7 +59,6 @@ def weather_short(city=str):
     today = date.strftime("%Y%m%d")
     if city == 'namwon':
         today_weather = db_short.search((where('name') == "namwon"))
-        print(today_weather)
     elif city == 'iksan':
         today_weather = db_short.search((where('name') == "iksan"))
     elif city == 'pyeongchang':
@@ -428,6 +427,7 @@ def load_soilsensor(divice=str):
     for i in df.columns:
         new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
 
+
     # 일 단위 데이터 만들기
     df['date'] = df['datetime'].dt.strftime('%Y-%m-%d')
     new_dict['date'] = df['date'].unique().tolist()
@@ -450,8 +450,8 @@ def load_soilsensor(divice=str):
 
 
 def main():
-    uvicorn.run(app, host="127.0.0.1", port=5000)
-    # uvicorn.run(app, host="0.0.0.0", port=5000)
+    # uvicorn.run(app, host="127.0.0.1", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
 
 
 if __name__ == '__main__':
