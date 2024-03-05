@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿.idea
 __pycache__
 db_present.json
@@ -10,3 +11,11 @@ weather_data
 sensor_data
 forecast_data
 past_data
+=======
+node_modules
+.idea
+__pycache__
+_static
+db.sqlite3
+api_OUTput.csv
+>>>>>>> 6ba70addbcf1a8271e401596742287c881bea8e7
