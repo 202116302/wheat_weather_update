@@ -25,9 +25,9 @@ app.add_middleware(
 
 templates = Jinja2Templates(directory="templates")
 
-db_now = TinyDB('forecast_data/db_now.json')
-db_short = TinyDB('forecast_data/db_short.json')
-db_mid = TinyDB('forecast_data/db_mid.json')
+
+
+
 
 
 @app.get("/")
@@ -37,6 +37,7 @@ async def home(request: Request):
 
 @app.get("/weather_now/{city}")
 def weather_now(city=str):
+    db_now = TinyDB('forecast_data/db_now.json')
     if city == 'namwon':
         now_weather = db_now.search((where('name') == "namwon"))
     elif city == 'buan':
@@ -54,6 +55,7 @@ def weather_now(city=str):
 
 @app.get("/weather_short/{city}")
 def weather_short(city=str):
+    db_short = TinyDB('forecast_data/db_short.json')
     KST = datetime.timezone(datetime.timedelta(hours=-8))
     date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
@@ -76,6 +78,7 @@ def weather_short(city=str):
 
 @app.get("/weather_mid/{city}")
 def weather_mid(city=str):
+    db_mid = TinyDB('forecast_data/db_mid.json')
     KST = datetime.timezone(datetime.timedelta(hours=-8))
     date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
