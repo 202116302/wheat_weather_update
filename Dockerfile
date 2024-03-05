@@ -6,5 +6,5 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 
-## Install packages 
-RUN pip install -r requirements.txt 
+## Install packages
+RUN pip install -r requirements.txt
