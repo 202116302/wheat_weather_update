@@ -418,7 +418,7 @@ def load_soilsensor(divice=str):
     df = df[df['datetime'].dt.minute == 0]
 
     # 6개 센서 평균(1시간단위) 추가 (토양수분, 지온)
-    df['mp_mean'] = df[['Matric Potential_1_logdata', 'Matric Potential_2_logdata', 'Matric Potential_3_logdata','Matric Potential_4_logdata','Matric Potential_5_logdata','Matric Potential_6_logdata']].mean(axis=1)
+    df['mp_mean'] = df[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3','Matric Potential_4','Matric Potential_5','Matric Potential_6']].mean(axis=1)
     df['st_mean'] = df[
         ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
          'Soil Temperature_6']].mean(axis=1)
@@ -436,8 +436,8 @@ def load_soilsensor(divice=str):
     new_dict['date'] = df['date'].unique().tolist()
     df2 = df.groupby('date').mean()
 
-    df2['mp_mean_d'] = df2[['Matric Potential_1_logdata', 'Matric Potential_2_logdata', 'Matric Potential_3_logdata',
-                        'Matric Potential_4_logdata', 'Matric Potential_5_logdata', 'Matric Potential_6_logdata']].mean(
+    df2['mp_mean_d'] = df2[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3',
+                        'Matric Potential_4', 'Matric Potential_5', 'Matric Potential_6']].mean(
         axis=1)
     df2['st_mean_d'] = df2[
         ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
