@@ -446,7 +446,11 @@ def load_soilsensor(divice=str):
          'Soil Temperature_6']].mean(axis=1)
 
     for i in range(1, 7):
+        df2[f'Matric Potential_{i}'] = round(df2[f'Matric Potential_{i}'], 2)
         new_dict[f'Matric Potential_{i}_d'] = df2[f'Matric Potential_{i}'].values.tolist()
+
+    df2['mp_mean_d'] = round(df2['mp_mean_d'], 2)
+    df2['st_mean_d'] = round(df2['st_mean_d'], 2)
 
     new_dict['mp_mean_d'] = df2['mp_mean_d'].values.tolist()
     new_dict['st_mean_d'] = df2['st_mean_d'].values.tolist()
