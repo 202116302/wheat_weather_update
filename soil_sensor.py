@@ -38,7 +38,7 @@ def sensor_value(device):
                 new_data[f'{i}_{y + 1}'] = [content['data'][f'{i}'][y]['readings'][x]['value'] for x in range(per_page)]
                 if i == 'Matric Potential':
                     new_data[f'{i}_{y + 1}_logdata'] = [
-                        round(math.log((content['data'][f'{i}'][y]['readings'][x]['value'] * -1), 10), 2) for x in
+                        round((content['data'][f'{i}'][y]['readings'][x]['value'] * -1), 2) for x in
                         range(per_page)]
                 else:
                     pass

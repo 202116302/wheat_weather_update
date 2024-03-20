@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="test" style="width: 600px;height:400px;"></div>
+ <script>
+     function weather_now() {
+            var temp_n;
+            var rainfall_n;
+
+            $.ajax({
+              type: "GET",
+              url: "/weather_now/" + cityName,
+              success: function (data){
+                  temp_n = data;
+                  $.ajax({
+                      type: "GET",
+                      url: "/sdf",
+                      success: function (data) {
+                          rainfall_n = data;
+                          mixed_graph(temp_n, rainfall_n);
+                      },
+                      dataType: 'json'
+                  });
+              },
+              dataType: "json"
+                });
+            }
+            function mixed_graph(tem, rain) {
+                var lb_mixed = echarts.init(document.getElementById('test'));
+                 var option = {
+                      tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                          type: 'cross',
+                          crossStyle: {
+                            color: '#999'
+                          }
+                        }
+                      },
+                      toolbox: {
+                        feature: {
+                          dataView: { show: true, readOnly: false },
+                          magicType: { show: true, type: ['line', 'bar'] },
+                          restore: { show: true },
+                          saveAsImage: { show: true }
+                        }
+                      },
+                      legend: {
+                        data: ['Evaporation', 'Precipitation', 'Temperature']
+                      },
+                      xAxis: [
+                        {
+                          type: 'category',
+                          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                          axisPointer: {
+                            type: 'shadow'
+                          }
+                        }
+                      ],
+                      yAxis: [
+                        {
+                          type: 'value',
+                          name: 'Precipitation',
+                          min: 0,
+                          max: 250,
+                          interval: 50,
+                          axisLabel: {
+                            formatter: '{value} ml'
+                          }
+                        },
+                        {
+                          type: 'value',
+                          name: 'Temperature',
+                          min: 0,
+                          max: 25,
+                          interval: 5,
+                          axisLabel: {
+                            formatter: '{value} °C'
+                          }
+                        }
+                      ],
+                      series: [
+                        {
+                          name: 'Evaporation',
+                          type: 'bar',
+                          tooltip: {
+                            valueFormatter: function (value) {
+                              return value + ' ml';
+                            }
+                          },
+                          data: rain,
+                        },
+                        {
+                          name: 'Precipitation',
+                          type: 'bar',
+                          tooltip: {
+                            valueFormatter: function (value) {
+                              return value + ' ml';
+                            }
+                          },
+                          data: [
+                            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+                          ]
+                        },
+                        {
+                          name: 'Temperature',
+                          type: 'line',
+                          yAxisIndex: 1,
+                          tooltip: {
+                            valueFormatter: function (value) {
+                              return value + ' °C';
+                            }
+                          },
+                          data: tem
+                        }
+                      ]
+                    };
+                        lb_mixed.setOption(option)
+            }
+
+ </script>
+
+</body>
+</html>

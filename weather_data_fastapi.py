@@ -416,6 +416,8 @@ def load_soilsensor(divice=str):
     # 1시간 단위 데이터로 정리
     df['datetime'] = pd.to_datetime(df['datetime'])
     df = df[df['datetime'].dt.minute == 0]
+    for i in range(1, 7):
+        df[f"Matric Potential_{i}"] = df[f"Matric Potential_{i}"] * -1
 
     # 6개 센서 평균(1시간단위) 추가 (토양수분, 지온)
     df['mp_mean'] = df[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3','Matric Potential_4','Matric Potential_5','Matric Potential_6']].mean(axis=1)
@@ -444,7 +446,7 @@ def load_soilsensor(divice=str):
          'Soil Temperature_6']].mean(axis=1)
 
     for i in range(1, 7):
-        new_dict[f'Matric Potential_{i}_logdata_d'] = df2[f'Matric Potential_{i}_logdata'].values.tolist()
+        new_dict[f'Matric Potential_{i}_d'] = df2[f'Matric Potential_{i}'].values.tolist()
 
     new_dict['mp_mean_d'] = df2['mp_mean_d'].values.tolist()
     new_dict['st_mean_d'] = df2['st_mean_d'].values.tolist()
