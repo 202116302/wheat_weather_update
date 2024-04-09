@@ -373,7 +373,7 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
 
 @app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
 async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
-    KST = datetime.timezone(datetime.timedelta(hours=-8))
+    KST = datetime.timezone(datetime.timedelta(hours=+1))
     date = datetime.datetime.today().astimezone(KST)
     # 대조구4번 광산파
     if deviceEui == 'd4k':
@@ -405,6 +405,9 @@ async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
             for value in values.values():
                 value_list.append(value)
             json_data[key] = value_list
+
+    json_data['수분'] = [float(item.replace('A', '')) for item in json_data['수분']]
+
     return json_data
 
 
@@ -458,9 +461,15 @@ def load_soilsensor(divice=str):
     return new_dict
 
 
+# 그래프 테스트
+@app.get("/test")
+async def home(request: Request):
+    return templates.TemplateResponse("test_graph.html", {"request": request})
+
+
 def main():
     # uvicorn.run(app, host="127.0.0.1", port=5000)
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=7500)
 
 
 if __name__ == '__main__':
