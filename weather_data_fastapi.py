@@ -133,6 +133,21 @@ def collect_date(df):
 
     return today_value
 
+def collect_date_rain(df):
+    cut_today_df = df.set_index('date', drop=False)
+
+    cut_today_df['end_of_month'] = cut_today_df['date'] + pd.offsets.MonthEnd(0) == cut_today_df['date']
+
+    monthly_rainfall_dict = {}
+
+    for month, group in cut_today_df.groupby('month'):
+        if group['end_of_month'].any():
+            # sum_rainfall.append(group['rainfall'].sum())
+            # sum_rainfall.append({'month': month, 'rainfall_sum': group['rainfall'].sum()})
+            monthly_rainfall_sum = round(group['rainfall'].sum(), 2)
+            monthly_rainfall_dict[month] = monthly_rainfall_sum
+
+    return list(monthly_rainfall_dict.values())
 
 ### 지역별 40년치 기온 상위 25%, 75% ###
 @app.get("/past/temp/{city}")
@@ -233,24 +248,34 @@ def past_rainfall(city=str):
         'day'].astype(str).str.zfill(2)
     df['date'] = pd.to_datetime(df['date'])
     cut_date = pd.to_datetime('2023-10-01')
+    cut_date_iksan = pd.to_datetime('2022-10-01')
+    cut_date_iksan1 = pd.to_datetime('2023-03-15')
+    cut_date_iksan2 = pd.to_datetime('2023-06-30')
 
-    cut_today_df = df[df['date'] >= cut_date]
-    cut_today_df = cut_today_df.set_index('date', drop=False)
-    # cut_today_df['date'] = cut_today_df['date'].dt.strftime('%Y-%m-%d')
+    df_buan = df[df['date'] >= cut_date]
+    df_iksan1 = df[(cut_date_iksan <= df['date']) & (df['date'] <= cut_date_iksan1)]
+    df_iksan2 = df[(cut_date_iksan <= df['date']) & (df['date'] <= cut_date_iksan2)]
 
-    cut_today_df['end_of_month'] = cut_today_df['date'] + pd.offsets.MonthEnd(0) == cut_today_df['date']
+    # cut_today_df = df[df['date'] >= cut_date]
+    # cut_today_df = cut_today_df.set_index('date', drop=False)
+    #
+    # cut_today_df['end_of_month'] = cut_today_df['date'] + pd.offsets.MonthEnd(0) == cut_today_df['date']
+    #
+    # monthly_rainfall_dict = {}
+    #
+    # for month, group in cut_today_df.groupby('month'):
+    #     if group['end_of_month'].any():
+    #         # sum_rainfall.append(group['rainfall'].sum())
+    #         # sum_rainfall.append({'month': month, 'rainfall_sum': group['rainfall'].sum()})
+    #         monthly_rainfall_sum = round(group['rainfall'].sum(), 2)
+    #         monthly_rainfall_dict[month] = monthly_rainfall_sum
 
-    monthly_rainfall_dict = {}
+    value_buan_rain = collect_date_rain(df_buan)
+    value_iksan1_rain = collect_date_rain(df_iksan1)
+    value_iksan2_rain = collect_date_rain(df_iksan2)
 
-    for month, group in cut_today_df.groupby('month'):
-        if group['end_of_month'].any():
-            # sum_rainfall.append(group['rainfall'].sum())
-            # sum_rainfall.append({'month': month, 'rainfall_sum': group['rainfall'].sum()})
-            monthly_rainfall_sum = round(group['rainfall'].sum(), 2)
-            monthly_rainfall_dict[month] = monthly_rainfall_sum
-
-    result_dict = {'25%': list(r_25.values()), '75%': list(r_75.values()), 'now': list(monthly_rainfall_dict.values()),
-                   'date': list(r_25.keys())}
+    result_dict = {'25%': list(r_25.values()), '75%': list(r_75.values()), 'buan_value': value_buan_rain, 'iksan1_value': value_iksan1_rain,
+                   'iksan2_value': value_iksan2_rain, 'date': list(r_25.keys())}
 
     return result_dict
 
