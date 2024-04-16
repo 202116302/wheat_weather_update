@@ -26,10 +26,6 @@ app.add_middleware(
 templates = Jinja2Templates(directory="templates")
 
 
-
-
-
-
 @app.get("/")
 async def home(request: Request):
     return templates.TemplateResponse("landing.html", {"request": request})
@@ -103,9 +99,9 @@ def weather_mid(city=str):
 
 
 # 날짜 10월 ~ 6월 추출
-def select_date():
-    start_date = datetime.datetime(2023, 10, 1)
-    end_date = datetime.datetime(2024, 6, 30)
+def select_date(sy, sm, sd, ey, em, ed):
+    start_date = datetime.datetime(sy, sm, sd)
+    end_date = datetime.datetime(ey, em, ed)
 
     date_list = []
 
@@ -127,6 +123,15 @@ def result_tolist(data):
     list_all = list1 + list2
 
     return list_all
+
+
+def collect_date(df):
+    df = df.set_index('date', drop=False)
+    df['date'] = df['date'].dt.strftime('%Y-%m-%d')
+    result_dict = df[['date', 'tavg']].set_index('date').to_dict()['tavg']
+    today_value = list(result_dict.values())
+
+    return today_value
 
 
 ### 지역별 40년치 기온 상위 25%, 75% ###
@@ -154,17 +159,29 @@ def past_temp(city):
         'day'].astype(str).str.zfill(2)
     df['date'] = pd.to_datetime(df['date'])
     cut_date = pd.to_datetime('2023-10-01')
+    cut_date_iksan = pd.to_datetime('2022-10-01')
+    cut_date_iksan1 = pd.to_datetime('2023-03-15')
+    cut_date_iksan2 = pd.to_datetime('2023-06-30')
 
-    cut_today_df = df[df['date'] >= cut_date]
-    cut_today_df = cut_today_df.set_index('date', drop=False)
-    cut_today_df['date'] = cut_today_df['date'].dt.strftime('%Y-%m-%d')
-    result_dict = cut_today_df[['date', 'tavg']].set_index('date').to_dict()['tavg']
-    today_value = list(result_dict.values())
+    df_buan = df[df['date'] >= cut_date]
+    df_iksan1 = df[(cut_date_iksan <= df['date']) & (df['date'] <= cut_date_iksan1)]
+    df_iksan2 = df[(cut_date_iksan <= df['date']) & (df['date'] <= cut_date_iksan2)]
+
+    buan_value = collect_date(df_buan)
+    iksan1_value = collect_date(df_iksan1)
+    iksan2_value = collect_date(df_iksan2)
 
     r_25 = result['25%'].to_dict()
     r_75 = result['75%'].to_dict()
 
-    result_dict = {'25%': result_tolist(r_25), '75%': result_tolist(r_75), 'now': today_value, 'date': select_date()}
+    if city == 'iksan':
+        result_dict = {'25%': result_tolist(r_25), '75%': result_tolist(r_75), 'iksan1': iksan1_value, 'iksan2': iksan2_value,
+                       'date': select_date(2022, 10, 1, 2023, 6, 30)}
+    elif city == 'buan':
+        result_dict = {'25%': result_tolist(r_25), '75%': result_tolist(r_75), 'buan': buan_value,
+                       'date': select_date(2023, 10, 1, 2024, 6, 30)}
+    else:
+        pass
 
     return result_dict
 
@@ -247,6 +264,7 @@ def loc_today_temp(city=str):
         num = 146
     else:
         num = 146
+
     start_year = 2023
     end_year = 2024
     filename = f"past_data/{city}_{start_year}_{end_year}.csv"
@@ -320,6 +338,10 @@ def loc_today_rainfall(city=str):
 
 @app.get("/forecast/{city}")
 def load_weather(city=str):
+    db_now = TinyDB('forecast_data/db_now.json')
+    db_short = TinyDB('forecast_data/db_short.json')
+    db_mid = TinyDB('forecast_data/db_mid.json')
+
     date_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     now_weather = db_now.search((where('name') == f"{city}"))
 
@@ -423,7 +445,9 @@ def load_soilsensor(divice=str):
         df[f"Matric Potential_{i}"] = df[f"Matric Potential_{i}"] * -1
 
     # 6개 센서 평균(1시간단위) 추가 (토양수분, 지온)
-    df['mp_mean'] = df[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3','Matric Potential_4','Matric Potential_5','Matric Potential_6']].mean(axis=1)
+    df['mp_mean'] = df[
+        ['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3', 'Matric Potential_4', 'Matric Potential_5',
+         'Matric Potential_6']].mean(axis=1)
     df['st_mean'] = df[
         ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
          'Soil Temperature_6']].mean(axis=1)
@@ -435,14 +459,13 @@ def load_soilsensor(divice=str):
     for i in df.columns:
         new_dict[f"{i}"] = list(new_dict[f"{i}"].values())
 
-
     # 일 단위 데이터 만들기
     df['date'] = df['datetime'].dt.strftime('%Y-%m-%d')
     new_dict['date'] = df['date'].unique().tolist()
     df2 = df.groupby('date').mean()
 
     df2['mp_mean_d'] = df2[['Matric Potential_1', 'Matric Potential_2', 'Matric Potential_3',
-                        'Matric Potential_4', 'Matric Potential_5', 'Matric Potential_6']].mean(
+                            'Matric Potential_4', 'Matric Potential_5', 'Matric Potential_6']].mean(
         axis=1)
     df2['st_mean_d'] = df2[
         ['Soil Temperature_1', 'Soil Temperature_2', 'Soil Temperature_3', 'Soil Temperature_4', 'Soil Temperature_5',
@@ -468,8 +491,8 @@ async def home(request: Request):
 
 
 def main():
-    # uvicorn.run(app, host="127.0.0.1", port=5000)
-    uvicorn.run(app, host="0.0.0.0", port=7500)
+    uvicorn.run(app, host="127.0.0.1", port=5000)
+    # uvicorn.run(app, host="0.0.0.0", port=7500)
 
 
 if __name__ == '__main__':
