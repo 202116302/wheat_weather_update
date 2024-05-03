@@ -422,14 +422,31 @@ def weather_now(city=str):
     result_now = response_now.text
     data_now = json.loads(result_now)
     content_now = data_now['data']
-    namwon_now = [x for x in content_now if x['stnKo'] == '남원']
-    namwon_now[0][
-        'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
-    namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
-    namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
-    namwon_now[0]['log'] = log
 
-    namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
+    if city == "namwon":
+        namwon_now = [x for x in content_now if x['stnKo'] == '남원']
+        namwon_now[0][
+            'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+        namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
+        namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
+        namwon_now[0]['log'] = log
+
+        namwon_json = json.dumps(namwon_now[0], ensure_ascii=False)
+
+
+    elif city == "iksan":
+        namwon_now = [x for x in content_now if x['stnKo'] == '익산']
+        namwon_now[0][
+            'now_time'] = f"{time.year}년 {time.month}월 {time.day}일 ({what_day_is_it(time)}) {time.strftime('%H')}:{time.strftime('%M')}"
+        namwon_now[0]['ta'] = namwon_now[0]['ta'] + "°C"
+        namwon_now[0]['ws'] = namwon_now[0]['ws'] + "m/s"
+        namwon_now[0]['log'] = log
+
+        iksan_json = json.dumps(namwon_now[0], ensure_ascii=False)
+
+    else:
+        pass
+
 
     if city == 'namwon':
         now_weather = db2.search((where('name') == "namwon") & (where('date') == time))
@@ -445,8 +462,8 @@ def weather_now(city=str):
             db2.insert({"name": "namwon", "date": date_time, 'json_content': namwon_json})
             return namwon_json
         elif city == "iksan":
-            db2.insert({"name": "iksan", "date": date_time})
-            return "공사중"
+            db2.insert({"name": "iksan", "date": date_time, 'json_content': iksan_json})
+            return iksan_json
         else:
             return "해당지역없음"
 
