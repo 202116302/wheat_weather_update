@@ -418,6 +418,7 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
         all_df.to_json('all_df.json', orient='columns')
 
 
+
 @app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
 async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
     KST = datetime.timezone(datetime.timedelta(hours=+1))
@@ -514,6 +515,28 @@ def load_soilsensor(divice=str):
 async def home(request: Request):
     return templates.TemplateResponse("test_graph.html", {"request": request})
 
+
+# 관개 제어
+@app.get("/api/planet/control/{signal}")
+def water_controller(signal=str):
+    url = "http://iotplanet.co.kr/iotplanet/api/v1/device/SendCommand"
+
+    header = {
+        'accept': '*/*',
+        'Content-Type': "application/json"
+    }
+
+    params = {
+        "apiKey": "LvVDkuL95BLo1KL3S2BY317q40mPCkcsz3ocriNQQqwP4MxYeePWuo2yStSLTtNSL",
+        "appEui": "0240771000000616",
+        "command": signal,
+        "deviceEui": "d02544fffefe5c6e",
+        "uKey": "d1RVaStBZ3BEOXQyOVBEbXN6YlZOajkzYTVtU095eU1ESGdabVFvbTZWVHh4VCtBbVVDOTR6WnpRZFJTSFdjVg=="
+    }
+
+    response = requests.post(url, headers=header, data=json.dumps(params))
+
+    return response.text
 
 def main():
     # uvicorn.run(app, host="127.0.0.1", port=5000)
