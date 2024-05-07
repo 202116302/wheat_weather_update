@@ -514,20 +514,19 @@ def load_soilsensor(divice=str):
     return new_dict
 
 
-def plot_mean(df1, df2, loc):
-    if loc == 4:
-        plot = (df1['Matric Potential_4'] + df1['Matric Potential_5'] + df1['Matric Potential_6'] + df2[
-            'Matric Potential_4'] + df2['Matric Potential_5'] + df2['Matric Potential_6']) / 6
+def plot_mean(df, loc, loc2, p):
+    if p == 4:
+        plot = (df[f'Matric Potential_4_{loc}'] + df[f'Matric Potential_5_{loc}'] + df[f'Matric Potential_6_{loc}'] + df[
+            f'Matric Potential_4_{loc2}'] + df[f'Matric Potential_5_{loc2}'] + df[f'Matric Potential_6_{loc2}']) / 6
 
-    elif loc == 1:
-        plot = (df1['Matric Potential_1'] + df1['Matric Potential_2'] + df1['Matric Potential_3'] + df2[
-            'Matric Potential_1'] + df2['Matric Potential_2'] + df2['Matric Potential_3']) / 6
-
+    elif p == 1:
+        plot = (df[f'Matric Potential_1_{loc}'] + df[f'Matric Potential_2_{loc}'] + df[f'Matric Potential_3_{loc}'] +
+                df[f'Matric Potential_1_{loc2}'] + df[f'Matric Potential_2_{loc2}'] + df[f'Matric Potential_3_{loc2}']) / 6
     else:
         pass
 
-    plot = round(plot, 2)
-    plot = [0 if np.isnan(x) else x for x in plot]
+    plot = plot * -1
+    plot = round(plot, 2).tolist()
 
     return plot
 
@@ -545,16 +544,35 @@ def plot_soilsensor():
     df_54 = pd.read_csv(f'sensor_data/z6-20054_data.csv').dropna()
 
     plots = [df_54, df_63, df_55, df_58, df_51, df_61, df_60, df_62]
+    plots_name = ['54', '63', '55', '58', '51', '61', '60', '62']
+
+    for i, x in zip(plots, plots_name):
+        new_columns = [f'{col}_{x}' if col != "datetime" else col for col in i.columns]
+        i.columns = new_columns
+
+    merged_63_54 = pd.merge(df_63, df_54, how='inner')
+    # plot1, plot2
+
+    merged_62_60 = pd.merge(df_62, df_60, how='inner')
+    # plot3, plot4
+
+    merged_58_55 = pd.merge(df_58, df_55, how='inner')
+    # plot5, plot6
+
+    merged_61_51 = pd.merge(df_61, df_51, how='inner')
+    # plot7, plot8
+
 
     # plot3
-    for x in plots:
+    for x , y in zip(plots, plots_name):
         for i in range(1, 7):
-            x[f"Matric Potential_{i}"] = x[f"Matric Potential_{i}"] * -1
+            x[f"Matric Potential_{i}_{y}"] = x[f"Matric Potential_{i}_{y}"] * -1
+            # print(x[f"Matric Potential_{i}_{y}"])
 
-    result = {'plot1': plot_mean(df_63, df_54, 1), 'plot2': plot_mean(df_63, df_54, 4),
-              'plot3': plot_mean(df_62, df_60, 4), 'plot4': plot_mean(df_62, df_60, 1),
-              'plot5': plot_mean(df_58, df_55, 4), 'plot6': plot_mean(df_58, df_55, 1),
-              'plot7': plot_mean(df_61, df_51, 1), 'plot8': plot_mean(df_61, df_51, 4)}
+    result = {'plot1': plot_mean(merged_63_54, '63', '54', 1), 'plot2': plot_mean(merged_63_54, '63', '54', 4),
+              'plot3': plot_mean(merged_62_60, '62', '60', 4), 'plot4': plot_mean(merged_62_60, '62', '60', 1),
+              'plot5': plot_mean(merged_58_55, '58', '55', 4), 'plot6': plot_mean(merged_58_55, '58', '55', 1),
+              'plot7': plot_mean(merged_61_51, '61', '51', 1), 'plot8': plot_mean(merged_61_51, '61', '51', 4)}
 
     return result
 
