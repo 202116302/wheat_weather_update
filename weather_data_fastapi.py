@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 import json
+import numpy as np
 
 app = FastAPI()
 
@@ -502,13 +503,13 @@ def load_soilsensor(divice=str):
 
     for i in range(1, 7):
         df2[f'Matric Potential_{i}'] = round(df2[f'Matric Potential_{i}'], 2)
-        new_dict[f'Matric Potential_{i}_d'] = df2[f'Matric Potential_{i}'].values.tolist()
+        new_dict[f'Matric Potential_{i}_d'] = df2[f'Matric Potential_{i}']
 
     df2['mp_mean_d'] = round(df2['mp_mean_d'], 2)
     df2['st_mean_d'] = round(df2['st_mean_d'], 2)
 
-    new_dict['mp_mean_d'] = df2['mp_mean_d'].values.tolist()
-    new_dict['st_mean_d'] = df2['st_mean_d'].values.tolist()
+    new_dict['mp_mean_d'] = df2['mp_mean_d']
+    new_dict['st_mean_d'] = df2['st_mean_d']
 
     return new_dict
 
@@ -526,6 +527,7 @@ def plot_mean(df1, df2, loc):
         pass
 
     plot = round(plot, 2)
+    plot = [0 if np.isnan(x) else x for x in plot]
 
     return plot
 
@@ -549,10 +551,10 @@ def plot_soilsensor():
         for i in range(1, 7):
             x[f"Matric Potential_{i}"] = x[f"Matric Potential_{i}"] * -1
 
-    result = {'plot1': plot_mean(df_63, df_54, 1).values.tolist(), 'plot2': plot_mean(df_63, df_54, 4).values.tolist(),
-              'plot3': plot_mean(df_62, df_60, 4).values.tolist(), 'plot4': plot_mean(df_62, df_60, 1).values.tolist(),
-              'plot5': plot_mean(df_58, df_55, 4).values.tolist(), 'plot6': plot_mean(df_58, df_55, 1).values.tolist(),
-              'plot7': plot_mean(df_61, df_51, 1).values.tolist(), 'plot8': plot_mean(df_61, df_51, 4).values.tolist()}
+    result = {'plot1': plot_mean(df_63, df_54, 1), 'plot2': plot_mean(df_63, df_54, 4),
+              'plot3': plot_mean(df_62, df_60, 4), 'plot4': plot_mean(df_62, df_60, 1),
+              'plot5': plot_mean(df_58, df_55, 4), 'plot6': plot_mean(df_58, df_55, 1),
+              'plot7': plot_mean(df_61, df_51, 1), 'plot8': plot_mean(df_61, df_51, 4)}
 
     return result
 
@@ -587,9 +589,8 @@ def water_controller(signal=str):
 
 
 def main():
-    uvicorn.run(app, host="127.0.0.1", port=5000)
-    # uvicorn.run(app, host="0.0.0.0", port=7500)
-
+    # uvicorn.run(app, host="127.0.0.1", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=7500)
 
 if __name__ == '__main__':
     main()
