@@ -133,6 +133,7 @@ def collect_date(df):
 
     return today_value
 
+
 def collect_date_rain(df):
     cut_today_df = df.set_index('date', drop=False)
 
@@ -148,6 +149,7 @@ def collect_date_rain(df):
             monthly_rainfall_dict[month] = monthly_rainfall_sum
 
     return list(monthly_rainfall_dict.values())
+
 
 ### 지역별 40년치 기온 상위 25%, 75% ###
 @app.get("/past/temp/{city}")
@@ -190,7 +192,8 @@ def past_temp(city):
     r_75 = result['75%'].to_dict()
 
     if city == 'iksan':
-        result_dict = {'25%': result_tolist(r_25), '75%': result_tolist(r_75), 'iksan1': iksan1_value, 'iksan2': iksan2_value,
+        result_dict = {'25%': result_tolist(r_25), '75%': result_tolist(r_75), 'iksan1': iksan1_value,
+                       'iksan2': iksan2_value,
                        'date': select_date(2022, 10, 1, 2023, 6, 30)}
     elif city == 'buan':
         result_dict = {'25%': result_tolist(r_25), '75%': result_tolist(r_75), 'buan': buan_value,
@@ -274,7 +277,8 @@ def past_rainfall(city=str):
     value_iksan1_rain = collect_date_rain(df_iksan1)
     value_iksan2_rain = collect_date_rain(df_iksan2)
 
-    result_dict = {'25%': list(r_25.values()), '75%': list(r_75.values()), 'buan_value': value_buan_rain, 'iksan1_value': value_iksan1_rain,
+    result_dict = {'25%': list(r_25.values()), '75%': list(r_75.values()), 'buan_value': value_buan_rain,
+                   'iksan1_value': value_iksan1_rain,
                    'iksan2_value': value_iksan2_rain, 'date': list(r_25.keys())}
 
     return result_dict
@@ -418,7 +422,6 @@ def get_json_file(deviceEui, searchStartDate, searchEndDate):
         all_df.to_json('all_df.json', orient='columns')
 
 
-
 @app.get('/api/planet/{deviceEui}/{searchStartDate}/{searchEndDate}')
 async def test(request: Request, deviceEui, searchStartDate, searchEndDate):
     KST = datetime.timezone(datetime.timedelta(hours=+1))
@@ -510,6 +513,50 @@ def load_soilsensor(divice=str):
     return new_dict
 
 
+def plot_mean(df1, df2, loc):
+    if loc == 4:
+        plot = (df1['Matric Potential_4'] + df1['Matric Potential_5'] + df1['Matric Potential_6'] + df2[
+            'Matric Potential_4'] + df2['Matric Potential_5'] + df2['Matric Potential_6']) / 6
+
+    elif loc == 1:
+        plot = (df1['Matric Potential_1'] + df1['Matric Potential_2'] + df1['Matric Potential_3'] + df2[
+            'Matric Potential_1'] + df2['Matric Potential_2'] + df2['Matric Potential_3']) / 6
+
+    else:
+        pass
+
+    plot = round(plot, 2)
+
+    return plot
+
+
+@app.get("/api/zentra/plot")
+def plot_soilsensor():
+    # plot별 센서값
+    df_62 = pd.read_csv(f'sensor_data/z6-20062_data.csv')
+    df_60 = pd.read_csv(f'sensor_data/z6-20060_data.csv')
+    df_61 = pd.read_csv(f'sensor_data/z6-20061_data.csv')
+    df_51 = pd.read_csv(f'sensor_data/z6-20051_data.csv')
+    df_58 = pd.read_csv(f'sensor_data/z6-20058_data.csv')
+    df_55 = pd.read_csv(f'sensor_data/z6-20055_data.csv')
+    df_63 = pd.read_csv(f'sensor_data/z6-20063_data.csv')
+    df_54 = pd.read_csv(f'sensor_data/z6-20054_data.csv')
+
+    plots = [df_54, df_63, df_55, df_58, df_51, df_61, df_60, df_62]
+
+    # plot3
+    for x in plots:
+        for i in range(1, 7):
+            x[f"Matric Potential_{i}"] = x[f"Matric Potential_{i}"] * -1
+
+    result = {'plot1': plot_mean(df_63, df_54, 1).values.tolist(), 'plot2': plot_mean(df_63, df_54, 4).values.tolist(),
+              'plot3': plot_mean(df_62, df_60, 4).values.tolist(), 'plot4': plot_mean(df_62, df_60, 1).values.tolist(),
+              'plot5': plot_mean(df_58, df_55, 4).values.tolist(), 'plot6': plot_mean(df_58, df_55, 1).values.tolist(),
+              'plot7': plot_mean(df_61, df_51, 1).values.tolist(), 'plot8': plot_mean(df_61, df_51, 4).values.tolist()}
+
+    return result
+
+
 # 그래프 테스트
 @app.get("/test")
 async def home(request: Request):
@@ -537,6 +584,7 @@ def water_controller(signal=str):
     response = requests.post(url, headers=header, data=json.dumps(params))
 
     return response.text
+
 
 def main():
     # uvicorn.run(app, host="127.0.0.1", port=5000)
