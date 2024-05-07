@@ -530,17 +530,17 @@ def plot_mean(df1, df2, loc):
     return plot
 
 
-@app.get("/api/zentra/plot")
+@app.get("/api/zentra/data/plot")
 def plot_soilsensor():
     # plot별 센서값
-    df_62 = pd.read_csv(f'sensor_data/z6-20062_data.csv')
-    df_60 = pd.read_csv(f'sensor_data/z6-20060_data.csv')
-    df_61 = pd.read_csv(f'sensor_data/z6-20061_data.csv')
-    df_51 = pd.read_csv(f'sensor_data/z6-20051_data.csv')
-    df_58 = pd.read_csv(f'sensor_data/z6-20058_data.csv')
-    df_55 = pd.read_csv(f'sensor_data/z6-20055_data.csv')
-    df_63 = pd.read_csv(f'sensor_data/z6-20063_data.csv')
-    df_54 = pd.read_csv(f'sensor_data/z6-20054_data.csv')
+    df_62 = pd.read_csv(f'sensor_data/z6-20062_data.csv').dropna()
+    df_60 = pd.read_csv(f'sensor_data/z6-20060_data.csv').dropna()
+    df_61 = pd.read_csv(f'sensor_data/z6-20061_data.csv').dropna()
+    df_51 = pd.read_csv(f'sensor_data/z6-20051_data.csv').dropna()
+    df_58 = pd.read_csv(f'sensor_data/z6-20058_data.csv').dropna()
+    df_55 = pd.read_csv(f'sensor_data/z6-20055_data.csv').dropna()
+    df_63 = pd.read_csv(f'sensor_data/z6-20063_data.csv').dropna()
+    df_54 = pd.read_csv(f'sensor_data/z6-20054_data.csv').dropna()
 
     plots = [df_54, df_63, df_55, df_58, df_51, df_61, df_60, df_62]
 
@@ -587,8 +587,8 @@ def water_controller(signal=str):
 
 
 def main():
-    # uvicorn.run(app, host="127.0.0.1", port=5000)
-    uvicorn.run(app, host="0.0.0.0", port=7500)
+    uvicorn.run(app, host="127.0.0.1", port=5000)
+    # uvicorn.run(app, host="0.0.0.0", port=7500)
 
 
 if __name__ == '__main__':
