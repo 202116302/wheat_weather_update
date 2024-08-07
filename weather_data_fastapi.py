@@ -8,7 +8,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 import json
-import numpy as np
 
 app = FastAPI()
 

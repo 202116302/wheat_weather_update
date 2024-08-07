@@ -5,10 +5,9 @@
     <title>Title</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 </head>
-<body>
-<div id="test" style="width: 600px;height:400px;"></div>
+<body onload="weather_now()">
+<div id="test" style="width: 600px; height:400px;"></div>
  <script>
      function weather_now() {
             var temp_n;
@@ -16,12 +15,12 @@
 
             $.ajax({
               type: "GET",
-              url: "/weather_now/" + cityName,
+              url: "/today/temp/buan",
               success: function (data){
                   temp_n = data;
                   $.ajax({
                       type: "GET",
-                      url: "/sdf",
+                      url: "/today/rainfall/buan",
                       success: function (data) {
                           rainfall_n = data;
                           mixed_graph(temp_n, rainfall_n);
@@ -32,6 +31,7 @@
               dataType: "json"
                 });
             }
+
             function mixed_graph(tem, rain) {
                 var lb_mixed = echarts.init(document.getElementById('test'));
                  var option = {
