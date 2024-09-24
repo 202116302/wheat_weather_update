@@ -1,5 +1,5 @@
 ### 지역별 현재 기상, 단기 예보, 중기 예보 API
-http://web01.taegon.kr:5000
+http://web01.taegon.kr:7500
 
 - 파라미터
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -7,7 +7,7 @@ http://web01.taegon.kr:5000
 
 지역 - 평창, 부안, 남원, 익산 
 
-ex) http://web01.taegon.kr:5000/weather_now/namwon
+ex) http://web01.taegon.kr:7500/weather_now/namwon
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - 현재기상 : 매시 00분, 30분에 업데이트
