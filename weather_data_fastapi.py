@@ -3,8 +3,7 @@ import datetime
 import requests
 from tinydb import TinyDB, where
 import pandas as pd
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 import json
@@ -33,7 +32,7 @@ async def home(request: Request):
 
 @app.get("/weather_now/{city}")
 def weather_now(city=str):
-    db_now = TinyDB('forecast_data/db_now.json')
+    db_now = TinyDB('forecast_data/db_now2.json')
     if city == 'namwon':
         now_weather = db_now.search((where('name') == "namwon"))
     elif city == 'buan':
@@ -51,7 +50,7 @@ def weather_now(city=str):
 
 @app.get("/weather_short/{city}")
 def weather_short(city=str):
-    db_short = TinyDB('forecast_data/db_short.json')
+    db_short = TinyDB('forecast_data/db_short2.json')
     KST = datetime.timezone(datetime.timedelta(hours=-8))
     date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")
@@ -74,7 +73,7 @@ def weather_short(city=str):
 
 @app.get("/weather_mid/{city}")
 def weather_mid(city=str):
-    db_mid = TinyDB('forecast_data/db_mid.json')
+    db_mid = TinyDB('forecast_data/db_mid2ㄴ.json')
     KST = datetime.timezone(datetime.timedelta(hours=-8))
     date = datetime.datetime.today().astimezone(KST)
     today = date.strftime("%Y%m%d")

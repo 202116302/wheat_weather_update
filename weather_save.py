@@ -10,9 +10,9 @@ from tqdm import tqdm
 # if not os.path.exists('home/hj5258/wheat_weather_update/weather_data/'):
 #    os.mkdir('home/hj5258/wheat_weather_update/weather_data/')
 
-db_now = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_now.json')
-db_short = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_short.json')
-db_mid = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_mid.json')
+db_now = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_now2.json')
+db_short = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_short2.json')
+db_mid = TinyDB('/home/hj5258/wheat_weather_update/forecast_data/db_mid2.json')
 
 Station = Query()
 KST = datetime.timezone(datetime.timedelta(hours=1))
@@ -53,6 +53,7 @@ def weather_now(city, city_k):
         new_w['ws'] = w_now[0]['ws'] + "m/s"
         new_w['wdKo'] = w_now[0]['wdKo']
         new_w['wwKo'] = w_now[0]['wwKo']
+        new_w['ww'] = w_now[0]['ww']
         new_w['log'] = log
     else:
         pass
