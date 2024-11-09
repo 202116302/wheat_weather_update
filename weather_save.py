@@ -54,6 +54,7 @@ def weather_now(city, city_k):
         new_w['wdKo'] = w_now[0]['wdKo']
         new_w['wwKo'] = w_now[0]['wwKo']
         new_w['ww'] = w_now[0]['ww']
+        new_w['wd'] = w_now[0]['wd']
         new_w['log'] = log
     else:
         pass
@@ -96,6 +97,10 @@ ny_pyeongchang = '126'
 nx_buan = '57'
 ny_buan = '86'
 
+# 김제시
+nx_gimjae = '59'
+ny_gimjae = '88'
+
 
 # 요일 나타내는 함수
 def what_day_is_it(date):
@@ -109,7 +114,6 @@ def add_url_params(url, params):
     contents = requests.get(url, params=params)
     items = contents.json().get('response').get('body').get('items').get('item')
     return items
-
 
 # 날씨 정보 추출 함수
 def sky(loc):
@@ -246,6 +250,9 @@ def weather_short(city):
     new_param_buan = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
                       'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_buan, 'ny': nx_buan}
 
+    new_param_gimjae = {'ServiceKey': serviceKey, 'pageNo': pageNo, 'numOfRows': numOfRaws,
+                      'dataType': datatype, 'base_date': today, 'base_time': time_hour, 'nx': nx_gimjae, 'ny': nx_gimjae}
+
     today_weather = db_short.search((where('name') == f"{city}"))
 
     if city == 'namwon':
@@ -263,6 +270,10 @@ def weather_short(city):
     elif city == "buan":
         json_content = sky(new_param_buan)
         db_short.insert({"name": "buan", "date": today, "json_content": json_content})
+        print(f'{city}:save')
+    elif city == "gimjae":
+        json_content = sky(new_param_gimjae)
+        db_short.insert({"name": "gimjae", "date": today, "json_content": json_content})
         print(f'{city}:save')
     else:
         print("해당지역없음")
@@ -359,7 +370,8 @@ def main():
     loc = [('namwon', '남원', '11F10401'),
            ('iksan', '익산', '11F10202'),
            ('buan', '부안', '21F10602'),
-           ('pyeongchang', '평창', '11D10503'), ]
+           ('pyeongchang', '평창', '11D10503'),
+           ('gimjae', '김제', '21F10502'),]
 
     for x, y, z in tqdm(loc):
         try:
