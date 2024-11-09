@@ -39,6 +39,7 @@ def weather_now(city=str):
         now_weather = db_now.search((where('name') == "buan"))
     elif city == 'iksan':
         now_weather = db_now.search((where('name') == "iksan"))
+
     else:
         now_weather = []
 
@@ -62,6 +63,8 @@ def weather_short(city=str):
         today_weather = db_short.search((where('name') == "pyeongchang"))
     elif city == 'buan':
         today_weather = db_short.search((where('name') == "buan"))
+    elif city == 'gimjae':
+        today_weather = db_short.search((where('name') == "gimjae"))
     else:
         today_weather = []
 
@@ -85,6 +88,8 @@ def weather_mid(city=str):
         future_weather = db_mid.search((where('name') == "pyeongchang"))
     elif city == 'buan':
         future_weather = db_mid.search((where('name') == "buan"))
+    elif city == 'gimjae':
+        future_weather = db_mid.search((where('name') == "gimjae"))
     else:
         future_weather = []
 
